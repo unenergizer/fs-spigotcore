@@ -1,0 +1,23 @@
+Database:
+   address: 127.0.0.1
+   port: 3306
+   dbname: forgestormdb
+   username: root
+   password: ""
+Features:
+   ServerSpawn: true
+   SimpleChat: false
+   UsergroupChat: true
+   LobbyPlayer: true
+   PlayerGreeting: true
+   PlayerListText: true
+   PlayerBossBar: true
+   CitizenManager: true
+   WorldSettings: true
+   NewChestLoot: false
+   ChestLoot: false
+   DragonEggLoot: false
+   HiddenPaths: true
+   MobManager: false
+   DoubleJump: true
+   Lantern: true
