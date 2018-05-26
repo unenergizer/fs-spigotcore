@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore;
+package com.forgestorm.spigotcore.feature;
 
 /**
  * Any "FeatureOptional" feature that implements this Interface will

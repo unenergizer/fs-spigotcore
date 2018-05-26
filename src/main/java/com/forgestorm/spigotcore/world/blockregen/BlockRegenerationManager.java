@@ -1,6 +1,6 @@
 package com.forgestorm.spigotcore.world.blockregen;
 
-import com.forgestorm.spigotcore.FeatureRequired;
+import com.forgestorm.spigotcore.feature.FeatureRequired;
 import com.forgestorm.spigotcore.SpigotCore;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * This is great for block regeneration.  Professions, explosions, and more can be tracked here and regenerated after some time.
  */
 @SuppressWarnings("WeakerAccess")
-public class BlockRegenerationManager extends FeatureRequired {
+public class BlockRegenerationManager implements FeatureRequired {
 
     /**
      * Default time for a block to respawn, if a time is not supplied.

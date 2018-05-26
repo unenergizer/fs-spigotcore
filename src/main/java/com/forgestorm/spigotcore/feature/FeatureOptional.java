@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore;
+package com.forgestorm.spigotcore.feature;
 
 /**
  * Provides a safe way to enable and disable features.

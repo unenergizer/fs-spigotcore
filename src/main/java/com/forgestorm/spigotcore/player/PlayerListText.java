@@ -1,6 +1,6 @@
 package com.forgestorm.spigotcore.player;
 
-import com.forgestorm.spigotcore.FeatureOptional;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.util.text.Text;
 import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;

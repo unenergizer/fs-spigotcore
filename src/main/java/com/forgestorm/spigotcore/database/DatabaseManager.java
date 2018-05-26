@@ -1,16 +1,18 @@
 package com.forgestorm.spigotcore.database;
 
-import com.forgestorm.spigotcore.FeatureRequired;
+import com.forgestorm.spigotcore.feature.AbstractDatabaseFeature;
+import com.forgestorm.spigotcore.feature.FeatureRequired;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseManager extends FeatureRequired {
+public class DatabaseManager implements FeatureRequired {
 
     private final Map<AbstractDatabaseFeature, DatabaseTemplate> blankDatabaseTemplates = new HashMap<>();
     private final HikariDataSource hikari = new HikariDataSource();
@@ -27,14 +29,14 @@ public class DatabaseManager extends FeatureRequired {
         hikari.addDataSourceProperty("databaseName", config.getString(configPath + "dbname"));
         hikari.addDataSourceProperty("user", config.getString(configPath + "username"));
         hikari.addDataSourceProperty("password", config.getString(configPath + "password"));
-        Console.sendMessage("[DatabaseManager] Setup complete");
+        Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Setup complete");
     }
 
     @Override
     public void onDisable() {
         hikari.close();
         blankDatabaseTemplates.clear();
-        Console.sendMessage("[DatabaseManager] Shut down");
+        Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Shut down");
     }
 
     /**
@@ -50,7 +52,6 @@ public class DatabaseManager extends FeatureRequired {
     /**
      * When we want to create a player profile, we copy this map of
      * AbstractDatabaseFeature classes and DatabaseTemplates to their profile.
-     *
      *
      * @return A copied list of unused DatabaseTemplates.
      */

@@ -5,6 +5,11 @@ import lombok.Setter;
 
 import java.sql.Connection;
 
+/**
+ * DatabaseTemplate is the base class for profile data classes.
+ * These classes hold per player data specific to a
+ * {@link com.forgestorm.spigotcore.feature.AbstractDatabaseFeature}
+ */
 public abstract class DatabaseTemplate {
 
     @Getter

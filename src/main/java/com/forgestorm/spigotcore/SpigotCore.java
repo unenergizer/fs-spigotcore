@@ -1,9 +1,10 @@
 package com.forgestorm.spigotcore;
 
 import com.forgestorm.spigotcore.citizen.CitizenManager;
-import com.forgestorm.spigotcore.database.AbstractDatabaseFeature;
+import com.forgestorm.spigotcore.citizen.CitizenMessages;
 import com.forgestorm.spigotcore.database.DatabaseManager;
 import com.forgestorm.spigotcore.database.ProfileManager;
+import com.forgestorm.spigotcore.feature.*;
 import com.forgestorm.spigotcore.player.*;
 import com.forgestorm.spigotcore.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.util.text.Console;
@@ -39,6 +40,7 @@ public class SpigotCore extends JavaPlugin {
      * Note: Our goal is to never have any features directly talk to
      * each other and to never access this map except to load and
      * unload our core features.
+     * </p>
      */
     private final Map<Class, FeatureOptional> features = new HashMap<>();
 
@@ -69,6 +71,7 @@ public class SpigotCore extends JavaPlugin {
         blockRegenerationManager.onEnable();
         worldObjectManager = new WorldObjectManager();
         worldObjectManager.onEnable();
+
 
         // Second, read optional features
         addFeature(new ServerSpawn());

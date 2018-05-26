@@ -1,10 +1,10 @@
 package com.forgestorm.spigotcore.world;
 
-import com.forgestorm.spigotcore.FeatureOptional;
-import com.forgestorm.spigotcore.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.io.File;
 
@@ -33,11 +33,15 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener {
     @Override
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getWorlds().get(0).setSpawnLocation(
+                (int) spawnLocation.getX(),
+                (int) spawnLocation.getY(),
+                spawnLocation.getBlockZ());
     }
 
     @Override
     public void onDisable() {
-        PlayerJoinEvent.getHandlerList().unregister(this);
+        PlayerSpawnLocationEvent.getHandlerList().unregister(this);
         EntityDamageEvent.getHandlerList().unregister(this);
     }
 
@@ -58,8 +62,8 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().teleport(spawnLocation);
+    public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
+        event.setSpawnLocation(spawnLocation);
     }
 
     @EventHandler
@@ -81,7 +85,7 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener {
 
                 player.teleport(spawnLocation);
                 player.setFallDistance(0F);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 4 * 20, 100));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 100));
                 CommonSounds.ACTION_FAILED.play(player);
 
                 cancel();

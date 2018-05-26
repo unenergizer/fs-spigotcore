@@ -1,10 +1,9 @@
 package com.forgestorm.spigotcore.player;
 
-import com.forgestorm.spigotcore.FeatureOptional;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.UserGroup;
-import com.forgestorm.spigotcore.database.AbstractDatabaseFeature;
-import com.forgestorm.spigotcore.database.DatabaseTemplate;
+import com.forgestorm.spigotcore.feature.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,14 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.sql.Connection;
 
 /**
  * Provides very basic chat formatting.
  */
-public class UsergroupChat extends AbstractDatabaseFeature implements FeatureOptional, Listener {
+public class UsergroupChat extends AbstractDatabaseFeature implements Listener {
 
     public UsergroupChat() {
         super(new UsergroupData());

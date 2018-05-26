@@ -36,13 +36,13 @@ public enum UserGroup {
 
 	private final String teamName;
 	private final String prefix;
-    private final ChatColor usernameColor;
+    private final ChatColor messageColor;
 
     //Constructor
-    UserGroup(String teamName, String prefix, ChatColor usernameColor) {
+    UserGroup(String teamName, String prefix, ChatColor messageColor) {
         this.teamName = teamName;
         this.prefix = ChatColor.translateAlternateColorCodes('&', prefix);
-        this.usernameColor = usernameColor;
+        this.messageColor = messageColor;
     }
 
     public String getTeamName() {

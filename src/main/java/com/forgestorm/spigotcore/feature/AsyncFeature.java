@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore;
+package com.forgestorm.spigotcore.feature;
 
 import org.bukkit.scheduler.BukkitRunnable;
 

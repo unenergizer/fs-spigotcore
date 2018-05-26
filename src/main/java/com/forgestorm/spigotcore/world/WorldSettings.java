@@ -1,16 +1,19 @@
 package com.forgestorm.spigotcore.world;
 
-import com.forgestorm.spigotcore.FeatureOptional;
-import com.forgestorm.spigotcore.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.block.Skull;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -75,7 +78,7 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
         clearEntitiesOnServerStart = config.getBoolean(path + "clearEntitiesOnServerStart");
         autoSaveWorld = config.getBoolean(path + "autoSaveWorld");
         preventNewChunks = config.getBoolean(path + "preventNewChunks");
-        allowPortal  = config.getBoolean(path + "allowPortal");
+        allowPortal = config.getBoolean(path + "allowPortal");
 
         // Set GameRules last. Config path updated here.
         path = path + "GameRules."; // update path!
@@ -117,10 +120,12 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
                 for (World world : Bukkit.getWorlds()) {
                     int count = 0;
                     for (Entity entity : world.getEntities()) {
-                        if (!(entity instanceof Player)) {
-                            entity.remove();
-                            count++;
-                        }
+                        if (entity instanceof ItemFrame) continue;
+                        if (entity instanceof Painting) continue;
+                        if (entity instanceof Skull) continue;
+                        if (entity instanceof Player) continue;
+                        entity.remove();
+                        count++;
                     }
                     Console.sendMessage("[WorldSettings] Cleared " + count + " entities in " + world.getName());
                 }

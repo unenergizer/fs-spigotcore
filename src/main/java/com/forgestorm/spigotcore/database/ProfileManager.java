@@ -1,6 +1,7 @@
 package com.forgestorm.spigotcore.database;
 
-import com.forgestorm.spigotcore.FeatureRequired;
+import com.forgestorm.spigotcore.feature.AbstractDatabaseFeature;
+import com.forgestorm.spigotcore.feature.FeatureRequired;
 import com.forgestorm.spigotcore.SpigotCore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ProfileManager extends FeatureRequired implements Listener {
+public class ProfileManager implements FeatureRequired, Listener {
 
     private Map<Player, Map<AbstractDatabaseFeature, DatabaseTemplate>> playerData = new ConcurrentHashMap<>();
 
@@ -41,7 +42,7 @@ public class ProfileManager extends FeatureRequired implements Listener {
      * @param player  The player to save data for.
      * @param feature The feature to save data for.
      */
-    void saveProfileData(Player player, AbstractDatabaseFeature feature) {
+    public void saveProfileData(Player player, AbstractDatabaseFeature feature) {
         SpigotCore.PLUGIN.getDatabaseManager().saveDatabaseTemplateData(getDatabaseTemplate(player, feature));
     }
 
@@ -51,7 +52,7 @@ public class ProfileManager extends FeatureRequired implements Listener {
      * @param player  The player to load data for.
      * @param feature The feature to load data for.
      */
-    void loadProfileData(Player player, AbstractDatabaseFeature feature) {
+    public void loadProfileData(Player player, AbstractDatabaseFeature feature) {
         SpigotCore.PLUGIN.getDatabaseManager().loadDatabaseTemplateData(getDatabaseTemplate(player, feature));
     }
 
@@ -62,7 +63,7 @@ public class ProfileManager extends FeatureRequired implements Listener {
      * @param feature The feature we want to get data for.
      * @return Profile data for player with data specific to {@link AbstractDatabaseFeature}
      */
-    DatabaseTemplate getProfileData(Player player, AbstractDatabaseFeature feature) {
+    public DatabaseTemplate getProfileData(Player player, AbstractDatabaseFeature feature) {
         if (!isProfileDataLoaded(player, feature))
             throw new RuntimeException("Tried to get DatabaseTemplate that has no loaded data.");
         return getDatabaseTemplate(player, feature);
@@ -75,7 +76,7 @@ public class ProfileManager extends FeatureRequired implements Listener {
      * @param feature The feature we want data for.
      * @return True if the data is loaded, false otherwise.
      */
-    boolean isProfileDataLoaded(Player player, AbstractDatabaseFeature feature) {
+    public boolean isProfileDataLoaded(Player player, AbstractDatabaseFeature feature) {
         return getDatabaseTemplate(player, feature).isDataLoaded();
     }
 

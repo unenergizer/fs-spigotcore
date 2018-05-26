@@ -6,3 +6,5 @@ author: Andrew Brown & Joseph Rugh
 website: http://www.forgestorm.com/
 load: POSTWORLD
 depend: [TitleManager, Citizens]
+commands:
+   cmsg:

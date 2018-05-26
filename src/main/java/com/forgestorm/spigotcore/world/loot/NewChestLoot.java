@@ -1,6 +1,6 @@
 package com.forgestorm.spigotcore.world.loot;
 
-import com.forgestorm.spigotcore.FeatureOptional;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.util.text.Console;
@@ -73,7 +73,7 @@ public class NewChestLoot implements FeatureOptional, Listener {
 
     /***
      * This class contains data that represents a chest world object.
-     * BaseWorldObject is something that our WorldSettings class can spawn in our world.
+     * BaseWorldObject is registerCommand that our WorldSettings class can spawn in our world.
      */
     private class Chest extends CooldownWorldObject {
 

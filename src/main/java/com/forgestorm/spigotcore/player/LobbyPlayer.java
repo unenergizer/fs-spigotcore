@@ -1,7 +1,7 @@
 package com.forgestorm.spigotcore.player;
 
-import com.forgestorm.spigotcore.FeatureOptional;
-import com.forgestorm.spigotcore.LoadsConfig;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import org.bukkit.Bukkit;

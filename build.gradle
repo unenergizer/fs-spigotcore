@@ -86,8 +86,21 @@ repositories {
     mavenCentral()
     jcenter()
 
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+//    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' } // Giving PaperSpigot a try. If it sucks, uncomment :)
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://hub.spigotmc.org/nexus/content/groups/public/" }
+
+    maven {
+        name 'destroystokyo-repo'
+        url 'https://repo.destroystokyo.com/repository/maven-public/'
+    }
+
+    maven {
+        name 'puharesource-repo'
+        url 'http://repo.puha.io/nexus/content/repositories/releases/'
+    }
 
 //    maven {
 //        name 'BungeeCord'
@@ -98,11 +111,6 @@ repositories {
 //        name 'sk89q-snapshots'
 //        url 'https://maven.sk89q.com/repo'
 //    }
-
-    maven {
-        name 'puharesource-repo'
-        url 'http://repo.puha.io/nexus/content/repositories/releases/'
-    }
 }
 
 // ========================= Dependencies ========================= //
@@ -111,10 +119,13 @@ dependencies {
 
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'
     compile group: 'io.puharesource.mc', name: 'TitleManager', version: '2.0.0'
+    compile "co.aikar:acf-core:0.5.0-SNAPSHOT"
+
+    compileOnly 'com.destroystokyo.paper:paper-api:1.12-R0.1-SNAPSHOT'
 
     provided 'org.projectlombok:lombok:1.16.20'
 
-    compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
+    //compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT' // Giving PaperSpigot a try. If it sucks, uncomment :)
 
     //provided group: 'net.md-5', name: 'bungeecord-api', version: '1.10-SNAPSHOT'
     //provided group: 'com.sk89q', name: 'worldedit', version: '6.0.0-SNAPSHOT'

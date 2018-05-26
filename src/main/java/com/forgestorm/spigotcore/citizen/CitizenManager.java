@@ -1,11 +1,12 @@
 package com.forgestorm.spigotcore.citizen;
 
-import com.forgestorm.spigotcore.FeatureOptional;
-import com.forgestorm.spigotcore.LoadsConfig;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.math.RandomChance;
+import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class CitizenManager implements FeatureOptional, LoadsConfig, Listener {
 
     private final Map<String, BasicCitizen> basicCitizenMap = new HashMap<>();
     private final ResetTimer resetTimer = new ResetTimer();
+    private final CitizenMessages citizenMessages = new CitizenMessages();
 
     @Override
     public void onEnable() {
@@ -36,6 +38,7 @@ public class CitizenManager implements FeatureOptional, LoadsConfig, Listener {
         resetTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 1);
 
         // Do additional citizen setup after server start
+        Console.sendMessage("[CitizenManager] Init delayed task for citizen setup.");
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(SpigotCore.PLUGIN, this::setupCitizen, SpigotCore.FEATURE_TASK_START_DELAY);
     }
 
@@ -87,6 +90,7 @@ public class CitizenManager implements FeatureOptional, LoadsConfig, Listener {
 
             basicCitizen.addTitleHologram(npc);
         }
+        Console.sendMessage("[CitizenManager] Finished setting up NPCs.");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -108,10 +112,13 @@ public class CitizenManager implements FeatureOptional, LoadsConfig, Listener {
         CitizenToggleEvent citizenToggleEvent = new CitizenToggleEvent(player, npc, basicCitizen.citizenType);
         Bukkit.getPluginManager().callEvent(citizenToggleEvent);
 
-        // Send a random saying to the player
-        String npcMessage = basicCitizen.getRandomChatMessage();
-        if (npcMessage != null) player.sendMessage(Text.color("&7[&9NPC&7] " + npcName + "&8: &r" + npcMessage));
+        // Send a clickable message
+        if (!citizenMessages.initCitizenMessage(player, ((Player) event.getRightClicked()).getDisplayName())) {
 
+            // Tries to send a clickable message first. Otherwise, send a random saying to the player
+            String npcMessage = basicCitizen.getRandomChatMessage();
+            if (npcMessage != null) player.sendMessage(Text.color("&7[&9NPC&7] " + npcName + "&8: &r" + npcMessage));
+        }
 
         // Play citizen sound
         int rand = RandomChance.randomInt(1, 100);

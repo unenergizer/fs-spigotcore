@@ -3,6 +3,7 @@ package com.forgestorm.spigotcore.constants;
 public enum FilePaths {
 
     CITIZENS("citizen/Citizens.yml"),
+    CITIZENS_MESSAGES("citizen/CitizenMessages.yml"),
 
     MOB_TYPES("mobs/MobTypes.yml"),
     MOB_SPAWNERS("mobs/MobSpawners.yml"),

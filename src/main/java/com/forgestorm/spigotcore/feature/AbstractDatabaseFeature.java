@@ -1,17 +1,19 @@
-package com.forgestorm.spigotcore.database;
+package com.forgestorm.spigotcore.feature;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.database.DatabaseManager;
+import com.forgestorm.spigotcore.database.DatabaseTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 /**
- * A type of {@link com.forgestorm.spigotcore.FeatureOptional} that needs
+ * A type of {@link FeatureOptional} that needs
  * database support.
  */
 @Getter
 @AllArgsConstructor
-public abstract class AbstractDatabaseFeature {
+public abstract class AbstractDatabaseFeature implements FeatureOptional {
 
     /**
      * Do NOT save data here!

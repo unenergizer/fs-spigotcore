@@ -1,6 +1,6 @@
 package com.forgestorm.spigotcore.world.worldobject;
 
-import com.forgestorm.spigotcore.FeatureRequired;
+import com.forgestorm.spigotcore.feature.FeatureRequired;
 import com.forgestorm.spigotcore.SpigotCore;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * from being saved to the chunk and/or from being placed in a chunk that might not be
  * loaded.
  */
-public class WorldObjectManager extends FeatureRequired {
+public class WorldObjectManager implements FeatureRequired {
 
     // Quick command to kill entites besides players. Will remove later.
     //TODO: /kill @e[type=!Player]
