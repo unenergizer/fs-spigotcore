@@ -1,7 +1,6 @@
 package com.forgestorm.spigotcore;
 
 import com.forgestorm.spigotcore.citizen.CitizenManager;
-import com.forgestorm.spigotcore.citizen.CitizenMessages;
 import com.forgestorm.spigotcore.database.DatabaseManager;
 import com.forgestorm.spigotcore.database.ProfileManager;
 import com.forgestorm.spigotcore.feature.*;
@@ -49,6 +48,9 @@ public class SpigotCore extends JavaPlugin {
      * after the server is fully loaded up. This is done mainly to give
      * the WorldSettings feature (if enabled) enough time to clear all
      * world entities without effecting ones we may spawn in.
+     * <p>
+     * Note: 20 ticks is 1 second.
+     * Example: 20 ticks * 5 = 5 seconds.
      */
     public static final int FEATURE_TASK_START_DELAY = 20 * 5;
 
@@ -71,7 +73,6 @@ public class SpigotCore extends JavaPlugin {
         blockRegenerationManager.onEnable();
         worldObjectManager = new WorldObjectManager();
         worldObjectManager.onEnable();
-
 
         // Second, read optional features
         addFeature(new ServerSpawn());

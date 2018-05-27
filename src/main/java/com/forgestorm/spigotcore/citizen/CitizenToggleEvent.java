@@ -8,6 +8,7 @@ import org.bukkit.event.HandlerList;
 /**
  * Called when a player clicks a Citizen NPC.
  */
+@SuppressWarnings("WeakerAccess")
 public class CitizenToggleEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();

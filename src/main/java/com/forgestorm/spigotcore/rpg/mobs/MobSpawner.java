@@ -12,7 +12,7 @@ import java.util.List;
 public class MobSpawner extends BaseWorldObject {
 
     private final Location spawnerLocation;
-    private List<SpawnerMobDetails> spawnerMobDetails = new ArrayList<>();
+    private final List<SpawnerMobDetails> spawnerMobDetails = new ArrayList<>();
 
     MobSpawner(Location spawnerLocation) {
         this.spawnerLocation = spawnerLocation;

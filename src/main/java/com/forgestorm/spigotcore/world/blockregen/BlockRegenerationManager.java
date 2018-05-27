@@ -24,7 +24,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     private static final int DEFAULT_REGEN_TIME = 60 * 3;
 
     /**
-     * A list of info that describes what blockregen will be regenerated.
+     * A list of info that describes what blockRegen will be regenerated.
      */
     private final List<RegenerationInfo> regenerationInfoList = new CopyOnWriteArrayList<>();
 
@@ -72,7 +72,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     /**
-     * Resets all blockregen back to their original state.
+     * Resets all blockRegen back to their original state.
      * This is mainly used for server reloads.
      */
     private void resetAllBlocks() {
@@ -89,7 +89,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     /**
-     * This will set a temporary block in a broken blockregen location.
+     * This will set a temporary block in a broken blockRegen location.
      *
      * @param type      The type of block broken.
      * @param data      The original block data.
@@ -101,7 +101,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     /**
-     * This will set a temporary block in a broken blockregen location.
+     * This will set a temporary block in a broken blockRegen location.
      *
      * @param type        The type of block broken.
      * @param data        The original block data.
@@ -114,7 +114,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     /**
-     * This will set a temporary block in a broken blockregen location.
+     * This will set a temporary block in a broken blockRegen location.
      *
      * @param type      The type of block broken.
      * @param data      The original block data.
@@ -127,7 +127,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     /**
-     * This will set a temporary block in a broken blockregen location.
+     * This will set a temporary block in a broken blockRegen location.
      *
      * @param type        The type of block broken.
      * @param data        The original block data.

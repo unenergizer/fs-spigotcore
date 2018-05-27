@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.player;
 
-import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.UserGroup;
 import com.forgestorm.spigotcore.feature.AbstractDatabaseFeature;

@@ -53,4 +53,7 @@ public enum UserGroup {
         return prefix + ChatColor.RESET + " ";
     }
 
+    public ChatColor getMessageColor() {
+        return messageColor;
+    }
 }

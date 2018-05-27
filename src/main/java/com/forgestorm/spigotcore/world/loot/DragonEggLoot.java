@@ -218,7 +218,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
          * Mainly used to teleport an admin to this location. This ID is the exact one found in
          * the file configuration.
          */
-        private int id;
+        private final int id;
 
         /**
          * This hologram places text over the egg, telling the player what it is.

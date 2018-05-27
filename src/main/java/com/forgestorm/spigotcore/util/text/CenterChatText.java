@@ -27,6 +27,7 @@ public class CenterChatText {
      * @param message The message that will be centered.
      * @return Returns a message that is perfectly (or near perfect) centered.
      */
+    @SuppressWarnings("WeakerAccess")
     public static String centerMessage(int width, String message) {
         if (message != null && !message.equals("")) {
             message = Text.color(message);

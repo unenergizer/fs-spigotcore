@@ -33,7 +33,7 @@ public class SimpleChat implements FeatureOptional, Listener {
 
         if (event.getPlayer().isOp()) {
             tag = tag + UserGroup.ADMINISTRATOR.getUserGroupPrefix();
-            messageColor = ChatColor.YELLOW;
+            messageColor = UserGroup.ADMINISTRATOR.getMessageColor();
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) {

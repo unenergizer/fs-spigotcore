@@ -46,7 +46,7 @@ class WorldTimer extends BukkitRunnable {
         // MIDNIGHT
         if (time == 18000) triggerEvent(TimeOfDay.MIDNIGHT);
 
-//            Animate blockregen
+//            Animate blockRegen
 //            plugin.getWorldAnimator().shouldAnimate(time);
         lastTime = time;
     }

@@ -155,8 +155,8 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
     }
 
     /**
-     * Prevent entities from changing blockregen. For instance, this would
-     * prevent Endermen from moving/removing blockregen.
+     * Prevent entities from changing blockRegen. For instance, this would
+     * prevent Endermen from moving/removing blockRegen.
      *
      * @param event Entity change block event.
      */

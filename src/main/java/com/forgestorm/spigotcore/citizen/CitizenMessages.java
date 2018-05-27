@@ -8,7 +8,6 @@ import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.JsonMessageConverter;
 import lombok.AllArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -81,7 +80,7 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
     boolean initCitizenMessage(Player player, String npcName) {
         if (!npcTopicsMap.containsKey(npcName)) return false;
 
-        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "- Click Messages Below to Interact -"));
+        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&c- &7Click Messages Below to Interact &c-"));
         return true;
     }
 
@@ -120,7 +119,7 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
         if (!label.equalsIgnoreCase("cmsg")) return false;
         if (Integer.parseInt(args[0]) != uniqueCommandKey) return false;
 
-        sendTopicMessage((Player) sender, args[1], args[2], CenterChatText.centerChatMessage("&5&l- - - - - -"));
+        sendTopicMessage((Player) sender, args[1], args[2], CenterChatText.centerChatMessage("&7&m- - ------ - -"));
         return true;
     }
 

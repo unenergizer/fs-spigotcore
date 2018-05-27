@@ -11,9 +11,9 @@ public enum CommonSounds {
     ACTION_SUCCESS(Sound.ENTITY_PLAYER_LEVELUP, 1, .8f),
     ACTION_FAILED(Sound.BLOCK_NOTE_BASS, 1F, .5F);
 
-    private Sound sound;
-    private float volume;
-    private float pitch;
+    private final Sound sound;
+    private final float volume;
+    private final float pitch;
 
     CommonSounds(Sound sound, float volume, float pitch) {
         this.sound = sound;
