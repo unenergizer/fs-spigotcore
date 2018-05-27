@@ -9,6 +9,7 @@ public enum FilePaths {
     MOB_SPAWNERS("mobs/MobSpawners.yml"),
 
     LOBBY_PLAYER("player/LobbyPlayer.yml"),
+    PLAYER_BOSS_BAR("player/BossBarText.yml"),
     PLAYER_GREETING("player/PlayerGreeting.yml"),
 
     CHEST_LOOT("world/ChestLootLocations.yml"),

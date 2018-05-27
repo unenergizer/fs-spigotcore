@@ -1,9 +1,9 @@
 package com.forgestorm.spigotcore.citizen;
 
-import com.forgestorm.spigotcore.feature.FeatureOptional;
-import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.Console;
@@ -13,7 +13,7 @@ import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -79,18 +79,17 @@ public class CitizenManager implements FeatureOptional, LoadsConfig, Listener {
      * The HP is displayed under the NPCs name.
      */
     private void setupCitizen() {
+        Console.sendMessage("&e[CitizenManager] Begin setting up NPCs.");
+        for (LivingEntity livingEntity : Bukkit.getWorlds().get(0).getLivingEntities()) {
 
-        for (Entity entity : Bukkit.getWorlds().get(0).getEntities()) {
+            if (!livingEntity.hasMetadata("NPC")) continue;
+            if (!(livingEntity instanceof Player)) continue;
 
-            if (!(entity instanceof Player)) return;
-            if (!entity.hasMetadata("NPC")) return;
-
-            Player npc = (Player) entity;
+            Player npc = (Player) livingEntity;
             BasicCitizen basicCitizen = basicCitizenMap.get(npc.getDisplayName());
-
             basicCitizen.addTitleHologram(npc);
         }
-        Console.sendMessage("[CitizenManager] Finished setting up NPCs.");
+        Console.sendMessage("&e[CitizenManager] Finished setting up NPCs.");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -154,7 +153,6 @@ public class CitizenManager implements FeatureOptional, LoadsConfig, Listener {
 
         void addTitleHologram(Player npc) {
             if (citizenType == CitizenType.NONE) return;
-
             List<String> hologramText = new ArrayList<>();
             hologramText.add(citizenType.getTitle());
             hologramText.add(ChatColor.BOLD + "RIGHT-CLICK");
