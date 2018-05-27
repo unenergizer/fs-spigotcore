@@ -12,6 +12,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Profile manager provides a structured decoupled way to access and save data on a per feature basis.
+ */
 public class ProfileManager implements FeatureRequired, Listener {
 
     private final Map<Player, Map<AbstractDatabaseFeature, DatabaseTemplate>> playerData = new ConcurrentHashMap<>();
