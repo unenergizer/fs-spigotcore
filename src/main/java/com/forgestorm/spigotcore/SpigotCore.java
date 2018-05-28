@@ -7,6 +7,7 @@ import com.forgestorm.spigotcore.feature.FeatureManager;
 import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.player.*;
 import com.forgestorm.spigotcore.rpg.mobs.MobManager;
+import com.forgestorm.spigotcore.util.imgmessage.EzImgMessage;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.world.ServerSpawn;
 import com.forgestorm.spigotcore.world.WorldHologram;
@@ -84,6 +85,7 @@ public class SpigotCore extends JavaPlugin {
         features.add(new DoubleJump());
         features.add(new Lantern());
         features.add(new WorldHologram());
+        features.add(new EzImgMessage());
 
         // Finally, add all features
         featureManager.addFeatures(features);

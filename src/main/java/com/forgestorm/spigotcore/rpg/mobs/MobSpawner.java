@@ -19,7 +19,6 @@ public class MobSpawner extends BaseWorldObject {
 
     @Override
     public void spawnWorldObject() {
-
         for (SpawnerMobDetails spawnerMobDetails : spawnerMobDetails) {
 
             // Spawn mobs who have no respawn time

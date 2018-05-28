@@ -12,6 +12,8 @@ public enum FilePaths {
     PLAYER_BOSS_BAR("player/BossBarText.yml"),
     PLAYER_GREETING("player/PlayerGreeting.yml"),
 
+    CHAT_ICONS("resources/chaticons/"),
+
     CHEST_LOOT("world/ChestLootLocations.yml"),
     DRAGON_EGG_LOOT("world/DragonEggLocations.yml"),
     LANTERNS("world/Lanterns.yml"),
