@@ -34,7 +34,7 @@ public class ChestLoot extends BukkitRunnable implements FeatureOptional, Listen
     private final List<Chest> chestList = new ArrayList<>();
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         loadLocations();
 
@@ -42,7 +42,7 @@ public class ChestLoot extends BukkitRunnable implements FeatureOptional, Listen
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         this.cancel(); // Cancel BukkitRunnable
         // Lets remove all the loot chests
         int chestsRemoved = 0;

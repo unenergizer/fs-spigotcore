@@ -6,7 +6,6 @@ import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.Configuration;
@@ -47,15 +46,13 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
     private boolean doWeatherCycle;
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-        initWorld();
-
-        Console.sendMessage(ChatColor.YELLOW + "[WorldSettings] Finished startup tasks.");
+        initWorld(manualEnable);
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         BlockIgniteEvent.getHandlerList().unregister(this);
         ChunkLoadEvent.getHandlerList().unregister(this);
         EntityChangeBlockEvent.getHandlerList().unregister(this);
@@ -89,7 +86,7 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
     /**
      * Init the world and configure it based off loaded settings.
      */
-    private void initWorld() {
+    private void initWorld(boolean manualEnable) {
         // Lets do some initial world cleanup
         Bukkit.setSpawnRadius(0);
 
@@ -104,7 +101,10 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
         world.setGameRuleValue("doDaylightCycle", Boolean.toString(doDaylightCycle));
         world.setGameRuleValue("doWeatherCycle", Boolean.toString(doWeatherCycle));
 
-        if (clearEntitiesOnServerStart) clearEntitiesOnServerStart();
+        // If we have manually enabled this feature, do not clear entities!
+        // This would remove any entities spawned by other features.
+        if (manualEnable) Console.sendMessage("&c[WorldSettings] Manually enabled. Not clearing entities!");
+        if (clearEntitiesOnServerStart && !manualEnable) clearEntitiesOnServerStart();
     }
 
     /**

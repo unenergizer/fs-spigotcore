@@ -1,5 +1,6 @@
 package com.forgestorm.spigotcore.world.worldobject;
 
+import com.forgestorm.spigotcore.feature.FeatureManager;
 import com.forgestorm.spigotcore.feature.FeatureRequired;
 import com.forgestorm.spigotcore.SpigotCore;
 import org.bukkit.Location;
@@ -32,14 +33,14 @@ public class WorldObjectManager implements FeatureRequired {
     private BukkitRunnable syncRunnable;
 
     @Override
-    public void onEnable() {
+    public void onServerStartup() {
         asyncRunnable = new BukkitRunnable() {
             @Override
             public void run() {
                 processWorldObjectsAsync();
             }
         };
-        asyncRunnable.runTaskTimerAsynchronously(SpigotCore.PLUGIN, SpigotCore.FEATURE_TASK_START_DELAY, 20);
+        asyncRunnable.runTaskTimerAsynchronously(SpigotCore.PLUGIN, FeatureManager.FEATURE_TASK_START_DELAY, 20);
 
         syncRunnable = new BukkitRunnable() {
             @Override
@@ -47,11 +48,11 @@ public class WorldObjectManager implements FeatureRequired {
                 processWorldObjectsSync();
             }
         };
-        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, SpigotCore.FEATURE_TASK_START_DELAY, 20);
+        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureManager.FEATURE_TASK_START_DELAY, 20);
     }
 
     @Override
-    public void onDisable() {
+    public void onServerShutdown() {
         asyncRunnable.cancel();
         syncRunnable.cancel();
         baseWorldObjectQueue.clear();

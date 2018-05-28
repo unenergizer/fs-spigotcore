@@ -16,12 +16,12 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class SimpleChat implements FeatureOptional, Listener {
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         AsyncPlayerChatEvent.getHandlerList().unregister(this);
     }
 

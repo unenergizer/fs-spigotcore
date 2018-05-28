@@ -27,7 +27,7 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, Listener {
     private BossBarUtil bossBarUtil;
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         bossBarUtil = new BossBarUtil(BAR_TEXT);
         bossBarUtil.setBossBarProgress(1);
 
@@ -40,7 +40,7 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, Listener {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerKickEvent.getHandlerList().unregister(this);

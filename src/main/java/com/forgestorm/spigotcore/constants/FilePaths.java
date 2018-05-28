@@ -16,6 +16,7 @@ public enum FilePaths {
     DRAGON_EGG_LOOT("world/DragonEggLocations.yml"),
     LANTERNS("world/Lanterns.yml"),
     SERVER_SPAWN("world/ServerSpawn.yml"),
+    WORLD_HOLOGRAM("world/WorldHolograms.yml"),
     WORLD_SETTINGS("world/WorldSettings.yml");
 
     private final String filePath;

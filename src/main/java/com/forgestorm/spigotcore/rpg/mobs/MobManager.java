@@ -1,9 +1,10 @@
 package com.forgestorm.spigotcore.rpg.mobs;
 
-import com.forgestorm.spigotcore.feature.FeatureOptional;
-import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.FeatureShutdown;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,13 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class MobManager implements FeatureOptional, LoadsConfig {
+public class MobManager implements FeatureOptional, FeatureShutdown, LoadsConfig {
 
     private final Map<String, MobType> mobTypes = new HashMap<>();
     private final Map<Location, MobSpawner> mobSpawners = new HashMap<>();
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         addSpawnersToWorldObjectManager();
 
         Console.sendMessage("[MobManager] MobTypes Loaded: " + Integer.toString(mobTypes.size()));
@@ -30,7 +31,12 @@ public class MobManager implements FeatureOptional, LoadsConfig {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
+        removeSpawnersFromWorldObjectManager();
+    }
+
+    @Override
+    public void onServerShutdown() {
         mobSpawners.clear();
         mobTypes.clear();
     }
@@ -42,7 +48,6 @@ public class MobManager implements FeatureOptional, LoadsConfig {
     }
 
     private void loadMobTypes() {
-
         File file = new File(FilePaths.MOB_TYPES.toString());
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
@@ -62,7 +67,6 @@ public class MobManager implements FeatureOptional, LoadsConfig {
     }
 
     private void loadMobSpawners() {
-
         File file = new File(FilePaths.MOB_SPAWNERS.toString());
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
@@ -82,13 +86,19 @@ public class MobManager implements FeatureOptional, LoadsConfig {
                 mobSpawner.addMob(mobTypes.get(mobType));
             }
 
-            mobSpawners.put(location, mobSpawner);
+            mobSpawners.put(location.add(0, 1, 0), mobSpawner);
         }
     }
 
     private void addSpawnersToWorldObjectManager() {
         for (Map.Entry<Location, MobSpawner> entry : mobSpawners.entrySet()) {
             SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private void removeSpawnersFromWorldObjectManager() {
+        for (Location location : mobSpawners.keySet()) {
+            SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(location);
         }
     }
 }

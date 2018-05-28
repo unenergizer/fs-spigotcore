@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.rpg.mobs;
 
-import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.world.worldobject.BaseWorldObject;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -26,7 +25,6 @@ public class MobSpawner extends BaseWorldObject {
             // Spawn mobs who have no respawn time
             if (spawnerMobDetails.respawnTimeLeft == spawnerMobDetails.mobType.getDefaultRespawnTime()) {
                 spawnerMobDetails.spawnEntity();
-                Console.sendMessage(ChatColor.BLUE + "Spawned: " + spawnerMobDetails.mobType.getMobName());
             }
         }
     }
@@ -36,7 +34,6 @@ public class MobSpawner extends BaseWorldObject {
         for (SpawnerMobDetails spawnerMobDetails : spawnerMobDetails) {
             if (spawnerMobDetails.spawnedEntity != null) {
                 spawnerMobDetails.removeEntity();
-                Console.sendMessage(ChatColor.DARK_BLUE + "Removed: " + spawnerMobDetails.mobType.getMobName());
             }
         }
     }

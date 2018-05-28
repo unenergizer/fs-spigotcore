@@ -1,7 +1,7 @@
 package com.forgestorm.spigotcore.world.blockregen;
 
-import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
@@ -28,35 +28,34 @@ import java.util.List;
  */
 public class HiddenPaths implements FeatureOptional, Listener {
 
-    private final List<Material> breakables = new ArrayList<>();
+    private static final List<Material> EXPLODABLES = new ArrayList<>();
+
+    static {
+        // Add items that TNT can destroy.
+        EXPLODABLES.add(Material.CLAY);
+        EXPLODABLES.add(Material.LONG_GRASS);
+        EXPLODABLES.add(Material.DEAD_BUSH);
+        EXPLODABLES.add(Material.DOUBLE_PLANT);
+        EXPLODABLES.add(Material.RED_MUSHROOM);
+        EXPLODABLES.add(Material.RED_ROSE);
+        EXPLODABLES.add(Material.SAPLING);
+        EXPLODABLES.add(Material.SUGAR_CANE);
+        EXPLODABLES.add(Material.SUGAR_CANE_BLOCK);
+        EXPLODABLES.add(Material.YELLOW_FLOWER);
+        EXPLODABLES.add(Material.WATER_LILY);
+    }
 
     @Override
-    public void onEnable() {
-        // Add items that TNT can destroy.
-        breakables.add(Material.CLAY);
-        breakables.add(Material.LONG_GRASS);
-        breakables.add(Material.DEAD_BUSH);
-        breakables.add(Material.DOUBLE_PLANT);
-        breakables.add(Material.RED_MUSHROOM);
-        breakables.add(Material.RED_ROSE);
-        breakables.add(Material.SAPLING);
-        breakables.add(Material.SUGAR_CANE);
-        breakables.add(Material.SUGAR_CANE_BLOCK);
-        breakables.add(Material.YELLOW_FLOWER);
-        breakables.add(Material.WATER_LILY);
-
-        // Register Events
+    public void onEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable() {
-        // Unregister Events
+    public void onDisable(boolean manualDisable) {
         EntityExplodeEvent.getHandlerList().unregister(this);
-        BlockBreakEvent.getHandlerList().unregister(this);
+        BlockPlaceEvent.getHandlerList().unregister(this);
     }
 
-    @SuppressWarnings("unused")
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
 
@@ -66,7 +65,7 @@ public class HiddenPaths implements FeatureOptional, Listener {
         event.getLocation().getWorld().playEffect(event.getLocation(), Effect.EXPLOSION_HUGE, null);
 
         for (Block block : event.blockList()) {
-            if (!breakables.contains(block.getType())) continue;
+            if (!EXPLODABLES.contains(block.getType())) continue;
 
             if (block.getType() == Material.CLAY) {
                 // Respawn clay walls slower
@@ -87,7 +86,6 @@ public class HiddenPaths implements FeatureOptional, Listener {
         }
     }
 
-    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();

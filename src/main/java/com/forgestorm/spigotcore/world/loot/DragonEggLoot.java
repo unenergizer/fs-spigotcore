@@ -1,8 +1,8 @@
 package com.forgestorm.spigotcore.world.loot;
 
-import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
@@ -41,7 +41,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     private boolean isSpawned = false;
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         loadLocations();
 
         hologramText.add("&5&lTP EGG GAME");
@@ -55,7 +55,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         // Remove the dragon egg from chunk manager
         SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(dragonEgg.location);
 
@@ -223,7 +223,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
         /**
          * This hologram places text over the egg, telling the player what it is.
          */
-        private Hologram hologram = new Hologram();
+        private Hologram hologram;
 
         /**
          * Their may sometimes be instances where the egg might spawn in mid air.  In order
@@ -260,7 +260,9 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
             double z = location.getZ() + .5;
 
             Location hologramLoc = new Location(location.getWorld(), x, y, z);
-            hologram.createHologram(hologramText, hologramLoc);
+
+            hologram = new Hologram(hologramText, hologramLoc);
+            hologram.spawnHologram();
         }
 
         @Override
@@ -275,7 +277,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
             }
 
             //Remove the hologram.
-            hologram.removeHologram();
+            hologram.despawnHologram();
         }
     }
 }

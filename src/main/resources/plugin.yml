@@ -7,4 +7,6 @@ website: http://www.forgestorm.com/
 load: POSTWORLD
 depend: [TitleManager, Citizens]
 commands:
+   feature:
    cmsg:
+   spawn:

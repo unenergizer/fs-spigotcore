@@ -16,19 +16,22 @@ import org.bukkit.event.player.*;
 public class DoubleJump implements FeatureOptional, Listener {
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+
+        Bukkit.getOnlinePlayers().forEach(this::setupPlayer);
     }
 
     @Override
-    public void onDisable() {
-        // Unregister listeners
+    public void onDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerKickEvent.getHandlerList().unregister(this);
         PlayerMoveEvent.getHandlerList().unregister(this);
         PlayerToggleFlightEvent.getHandlerList().unregister(this);
         EntityDamageEvent.getHandlerList().unregister(this);
+
+        Bukkit.getOnlinePlayers().forEach(this::removePlayer);
     }
 
     private void setupPlayer(Player player) {
@@ -96,7 +99,7 @@ public class DoubleJump implements FeatureOptional, Listener {
 
         // Launch the player
         player.setVelocity(player.getLocation().getDirection().multiply(2.0D).setY(0.9D));
-        player.getLocation().getWorld().playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1f, 1f);
+        player.getLocation().getWorld().playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1f, .7f);
 
     }
 

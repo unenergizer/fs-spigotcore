@@ -1,9 +1,9 @@
 package com.forgestorm.spigotcore.player;
 
-import com.forgestorm.spigotcore.feature.FeatureOptional;
-import com.forgestorm.spigotcore.feature.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.feature.FeatureOptional;
+import com.forgestorm.spigotcore.feature.LoadsConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.Configuration;
@@ -27,12 +27,18 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
     private boolean clearInventory;
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+
+        // Encase of reloads
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            if (player.hasMetadata("NPC")) continue;
+            setupPlayer(player);
+        }
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         FoodLevelChangeEvent.getHandlerList().unregister(this);
     }
@@ -47,16 +53,23 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
         clearInventory = config.getBoolean(path + "clearInventory");
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
+    /**
+     * Sets some very basic lobby attributes.
+     *
+     * @param player The player to setup.
+     */
+    private void setupPlayer(Player player) {
         player.setGameMode(GameMode.getByValue(gameMode));
         if (clearInventory) player.getInventory().clear();
 
         if (!fixHealth) return;
         player.setHealth(20);
         player.setFoodLevel(20);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        setupPlayer(event.getPlayer());
     }
 
     @EventHandler

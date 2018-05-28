@@ -80,7 +80,7 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
     boolean initCitizenMessage(Player player, String npcName) {
         if (!npcTopicsMap.containsKey(npcName)) return false;
 
-        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&c- &7Click Messages Below to Interact &c-"));
+        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&7&o[&c&o!&7&o] Click Colored Messages Below to Interact [&c&o!&7&o]"));
         return true;
     }
 
@@ -97,6 +97,7 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
 
         player.sendMessage(""); // Blank line to make messages easier to read
         player.sendMessage(messageHeader);
+        player.sendMessage(""); // Blank line to make messages easier to read
         for (String message : topicsMessages) {
             player.spigot().sendMessage(messageConverter.convert("&7[&9NPC&7] " + npcName + "&8: &r" + message, Integer.toString(uniqueCommandKey), npcName));
         }
@@ -119,7 +120,7 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
         if (!label.equalsIgnoreCase("cmsg")) return false;
         if (Integer.parseInt(args[0]) != uniqueCommandKey) return false;
 
-        sendTopicMessage((Player) sender, args[1], args[2], CenterChatText.centerChatMessage("&7&m- - ------ - -"));
+        sendTopicMessage((Player) sender, args[1], args[2], CenterChatText.centerChatMessage("&7- - - - &m---------&r&7 - - - -"));
         return true;
     }
 

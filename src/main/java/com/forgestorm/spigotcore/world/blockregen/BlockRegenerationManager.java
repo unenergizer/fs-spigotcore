@@ -31,7 +31,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     private BukkitRunnable syncRunnable;
 
     @Override
-    public void onEnable() {
+    public void onServerStartup() {
         syncRunnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -42,7 +42,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     @Override
-    public void onDisable() {
+    public void onServerShutdown() {
         syncRunnable.cancel();
         resetAllBlocks();
         regenerationInfoList.clear();

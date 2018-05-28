@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
@@ -15,54 +16,100 @@ import java.util.List;
  *
  * @author unenergizer
  */
-@SuppressWarnings("unused")
 public class Hologram {
 
+    private ArrayList<ArmorStand> armorStands = new ArrayList<>();
+    private String singleLineText;
+    private List<String> multilineText;
     @Getter
-    private final ArrayList<ArmorStand> armorStands = new ArrayList<>();
+    private Location location;
+    private boolean isSpawned = false;
 
     /**
-     * Creates a hologram with the given text at a given location.
+     * Creates a new instance of a Hologram that contains a single line of text.
      *
-     * @param name     The text to display in the hologram.
-     * @param location The location to spawn the hologram.
+     * @param singleLineText The text that will be displayed on the hologram.
+     * @param location       The location the hologram will be spawned.
      */
-    public void createHologram(String name, Location location) {
-        //Create armor stand and save it.
-        armorStands.add(spawnArmorStand(name, location));
+    public Hologram(String singleLineText, Location location) {
+        this.singleLineText = singleLineText;
+        this.location = location;
     }
 
     /**
-     * Creates a hologram with multiline text at a given location.
+     * Creates a new instance of a Hologram that contains multiline text.
      *
-     * @param stringList     A list of text to display in the hologram.
-     * @param location The location to spawn the hologram.
+     * @param multilineText The lines of text that will be displayed on the hologram.
+     * @param location      The location the hologram will be spawned.
      */
-    public void createHologram(List<String> stringList, Location location) {
+    public Hologram(List<String> multilineText, Location location) {
+        this.multilineText = multilineText;
+        this.location = location;
+    }
+
+    /**
+     * Spawns a hologram with single or multiline text at a given location.
+     */
+    public void spawnHologram() {
+        if (isSpawned) return;
+        isSpawned = true;
 
         double spotsMovedDown = 0;
 
-        //Create armor stand and save it.
-        for (String string : stringList) {
-            Location adjustedLocation = new Location(location.getWorld(), location.getX(), location.getY() - spotsMovedDown, location.getZ());
-            armorStands.add(spawnArmorStand(string, adjustedLocation));
+        if (singleLineText != null) {
+            // Single line hologram
+            armorStands.add(createArmorStand(singleLineText, location));
+        } else {
+            // Multiline hologram
+            for (String string : multilineText) {
+                Location adjustedLocation = new Location(location.getWorld(), location.getX(), location.getY() - spotsMovedDown, location.getZ());
+                armorStands.add(createArmorStand(string, adjustedLocation));
 
-            spotsMovedDown += .3;
+                spotsMovedDown += .3;
+            }
         }
+    }
+
+    /**
+     * This will despawn a hologram.
+     */
+    public void despawnHologram() {
+        if (!isSpawned) return;
+        isSpawned = false;
+        armorStands.forEach(Entity::remove);
+        armorStands.clear();
+    }
+
+    /**
+     * Completely removes and nullifies this hologram.
+     * After this happens, this hologram can no longer be used!
+     */
+    public void remove() {
+        despawnHologram();
+        singleLineText = null;
+        if (multilineText != null) {
+            multilineText.clear();
+            multilineText = null;
+        }
+        location = null;
+        armorStands = null;
     }
 
     /**
      * This will spawn an armor stand with a hologram type setup.
      *
-     * @param name     The name to display over the hologram.
+     * @param name     The singleLineText to display over the hologram.
      * @param location The location to spawn the hologram.
      * @return Returns the generated entity.
      */
-    private ArmorStand spawnArmorStand(String name, Location location) {
+    private ArmorStand createArmorStand(String name, Location location) {
+        if (!location.getChunk().isLoaded())
+            throw new RuntimeException("Tried to spawn a hologram in an unloaded chunk.");
+
         String worldName = location.getWorld().getName();
         ArmorStand stand = (ArmorStand) Bukkit.getWorld(worldName).spawnEntity(location, EntityType.ARMOR_STAND);
 
-        //Setup armor stand.
+        // Setup armor stand
         stand.setSmall(true);
         stand.setBasePlate(false);
         stand.setCanPickupItems(false);
@@ -72,23 +119,10 @@ public class Hologram {
         stand.setVisible(false);
         stand.setRemoveWhenFarAway(false);
 
-        //Set the armor stands name.
+        // Set the armor stands name
         stand.setCustomName(Text.color(name));
         stand.setCustomNameVisible(true);
 
         return stand;
-    }
-
-    /**
-     * This will completely remove and despawn a hologram.
-     */
-    public void removeHologram() {
-        //Loop through and delete hologram entities.
-        for (ArmorStand armorStand : armorStands) {
-            armorStand.remove();
-        }
-
-        //Clear array holograms.
-        armorStands.clear();
     }
 }

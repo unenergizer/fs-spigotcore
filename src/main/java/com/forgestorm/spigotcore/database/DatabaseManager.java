@@ -18,7 +18,7 @@ public class DatabaseManager implements FeatureRequired {
     private final HikariDataSource hikari = new HikariDataSource();
 
     @Override
-    public void onEnable() {
+    public void onServerStartup() {
         Configuration config = SpigotCore.PLUGIN.getConfig();
         String configPath = "Database.";
 
@@ -33,7 +33,7 @@ public class DatabaseManager implements FeatureRequired {
     }
 
     @Override
-    public void onDisable() {
+    public void onServerShutdown() {
         hikari.close();
         blankDatabaseTemplates.clear();
         Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Shut down");

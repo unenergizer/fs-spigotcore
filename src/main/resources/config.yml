@@ -20,4 +20,5 @@ Features:
    HiddenPaths: true
    MobManager: false
    DoubleJump: true
-   Lantern: true
+   Lantern: false
+   WorldHologram: true

@@ -20,12 +20,12 @@ public class ProfileManager implements FeatureRequired, Listener {
     private final Map<Player, Map<AbstractDatabaseFeature, DatabaseTemplate>> playerData = new ConcurrentHashMap<>();
 
     @Override
-    public void onEnable() {
+    public void onServerStartup() {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable() {
+    public void onServerShutdown() {
         saveAllProfileData();
 
         PlayerJoinEvent.getHandlerList().unregister(this);

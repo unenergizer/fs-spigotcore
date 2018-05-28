@@ -26,12 +26,12 @@ public class PlayerGreeting implements FeatureOptional, LoadsConfig, Listener {
     private boolean showPersonalLoginMessage = false;
 
     @Override
-    public void onEnable() {
+    public void onEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerKickEvent.getHandlerList().unregister(this);
