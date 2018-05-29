@@ -127,14 +127,6 @@ public class FeatureManager implements FeatureRequired, CommandExecutor {
             Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] File configuration loaded.");
         }
 
-        // Get blank database templates
-        if (featureOptional instanceof AbstractDatabaseFeature) {
-            SpigotCore.PLUGIN.getDatabaseManager().addDatabaseTemplate(
-                    (AbstractDatabaseFeature) featureOptional,
-                    ((AbstractDatabaseFeature) featureOptional).getBlankDatabaseTemplate());
-            Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] Database template loaded.");
-        }
-
         // Next enable the feature.
         featureOptional.onEnable(manualEnable);
 
@@ -168,9 +160,12 @@ public class FeatureManager implements FeatureRequired, CommandExecutor {
             Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] Configuration saved.");
         }
 
-        // Disable the feature now
+        if (featureOptional instanceof AbstractDatabaseFeature) {
+            // TODO: Do something here? Or remove?
+            Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] Database data saved.");
+        }
+
         featureOptional.onDisable(manualDisable);
-        featureData.isEnabled = false;
     }
 
     /**

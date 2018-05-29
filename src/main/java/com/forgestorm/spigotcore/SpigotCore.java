@@ -6,6 +6,7 @@ import com.forgestorm.spigotcore.database.ProfileManager;
 import com.forgestorm.spigotcore.feature.FeatureManager;
 import com.forgestorm.spigotcore.feature.FeatureOptional;
 import com.forgestorm.spigotcore.player.*;
+import com.forgestorm.spigotcore.player.UsergroupChat;
 import com.forgestorm.spigotcore.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.util.imgmessage.EzImgMessage;
 import com.forgestorm.spigotcore.util.text.Console;

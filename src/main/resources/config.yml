@@ -6,8 +6,8 @@ Database:
    password: ""
 Features:
    ServerSpawn: true
-   SimpleChat: true
-   UsergroupChat: false
+   SimpleChat: false
+   UsergroupChat: true
    LobbyPlayer: true
    PlayerGreeting: true
    PlayerListText: true

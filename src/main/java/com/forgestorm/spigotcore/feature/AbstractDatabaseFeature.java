@@ -1,63 +1,58 @@
 package com.forgestorm.spigotcore.feature;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.database.DatabaseManager;
-import com.forgestorm.spigotcore.database.DatabaseTemplate;
+import com.forgestorm.spigotcore.database.ProfileData;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 /**
- * A type of {@link FeatureOptional} that needs
- * database support.
+ * A type of {@link FeatureOptional} that needs database support.
  */
 @Getter
 @AllArgsConstructor
 public abstract class AbstractDatabaseFeature implements FeatureOptional {
 
-    /**
-     * Do NOT save data here!
-     * This is a blank DatabaseTemplate.
-     * This is solely for purpose of adding the template to the
-     * {@link DatabaseManager} for use later!
-     */
-    private final DatabaseTemplate blankDatabaseTemplate;
+    public abstract ProfileData databaseLoad(Player player, HikariDataSource hikariDataSource);
+
+    public abstract void databaseSave(Player player, ProfileData profileData, HikariDataSource hikariDataSource);
 
     /**
-     * Saves profile data for the player for a specific {@link AbstractDatabaseFeature}.
-     *
-     * @param player The player to save the data for.
-     */
-    protected void saveProfileData(Player player) {
-        SpigotCore.PLUGIN.getProfileManager().saveProfileData(player, this);
-    }
-
-    /**
-     * Loads profile data for the player for a specific {@link AbstractDatabaseFeature}.
-     *
-     * @param player The player to load the data for.
-     */
-    protected void loadProfileData(Player player) {
-        SpigotCore.PLUGIN.getProfileManager().loadProfileData(player, this);
-    }
-
-    /**
-     * Wrapper method to quickly get the databaseTemplate for this class.
+     * Gets ProfileData for the player from the ProfileManager for this specific feature.
      *
      * @param player The player we want to grab the template for.
-     * @return A DatabaseTemplate that contains saved information.
+     * @return A ProfileData that contains saved information.
      */
-    protected DatabaseTemplate getProfileData(Player player) {
+    protected ProfileData getProfileData(Player player) {
         return SpigotCore.PLUGIN.getProfileManager().getProfileData(player, this);
     }
 
     /**
-     * Wrapper method to see if a profile is loaded
+     * Checks to see if the players ProfileData was loaded for this feature.
      *
-     * @param player The player profile we want to test
-     * @return True if the profile is loaded, false otherwise.
+     * @param player The player to check for.
+     * @return True if the profile data was loaded.
      */
     protected boolean isProfileDataLoaded(Player player) {
         return SpigotCore.PLUGIN.getProfileManager().isProfileDataLoaded(player, this);
+    }
+
+    /**
+     * Async load data to MySQL using the DatabaseManager.
+     *
+     * @param player The player to load data for.
+     */
+    protected void asyncDatastoreLoad(Player player) {
+        SpigotCore.PLUGIN.getDatabaseManager().asyncDatastoreLoad(player, this);
+    }
+
+    /**
+     * Async save data to MySQL using the DatabaseManager.
+     *
+     * @param player The player to save data for.
+     */
+    protected void asyncDatastoreSave(Player player) {
+        SpigotCore.PLUGIN.getDatabaseManager().asyncDatastoreSave(player, this, getProfileData(player));
     }
 }

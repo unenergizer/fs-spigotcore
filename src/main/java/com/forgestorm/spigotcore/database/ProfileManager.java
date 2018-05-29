@@ -1,14 +1,14 @@
 package com.forgestorm.spigotcore.database;
 
+import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.feature.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.feature.FeatureRequired;
-import com.forgestorm.spigotcore.SpigotCore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,46 +17,16 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ProfileManager implements FeatureRequired, Listener {
 
-    private final Map<Player, Map<AbstractDatabaseFeature, DatabaseTemplate>> playerData = new ConcurrentHashMap<>();
+    private final Map<Player, Map<AbstractDatabaseFeature, ProfileData>> playerProfileDataMap = new ConcurrentHashMap<>();
 
     @Override
     public void onServerStartup() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onServerShutdown() {
-        saveAllProfileData();
-
-        PlayerJoinEvent.getHandlerList().unregister(this);
-    }
-
-    private void saveAllProfileData() {
-        for (Map.Entry<Player, Map<AbstractDatabaseFeature, DatabaseTemplate>> outerEntry : playerData.entrySet()) {
-            for (Map.Entry<AbstractDatabaseFeature, DatabaseTemplate> innerEntry : outerEntry.getValue().entrySet()) {
-                if (innerEntry.getValue().isDataLoaded()) saveProfileData(outerEntry.getKey(), innerEntry.getKey());
-            }
-        }
-    }
-
-    /**
-     * Saves player data for a specific {@link AbstractDatabaseFeature}
-     *
-     * @param player  The player to save data for.
-     * @param feature The feature to save data for.
-     */
-    public void saveProfileData(Player player, AbstractDatabaseFeature feature) {
-        SpigotCore.PLUGIN.getDatabaseManager().saveDatabaseTemplateData(getDatabaseTemplate(player, feature));
-    }
-
-    /**
-     * Loads player data for a specific {@link AbstractDatabaseFeature}
-     *
-     * @param player  The player to load data for.
-     * @param feature The feature to load data for.
-     */
-    public void loadProfileData(Player player, AbstractDatabaseFeature feature) {
-        SpigotCore.PLUGIN.getDatabaseManager().loadDatabaseTemplateData(getDatabaseTemplate(player, feature));
+        ProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     /**
@@ -66,10 +36,14 @@ public class ProfileManager implements FeatureRequired, Listener {
      * @param feature The feature we want to get data for.
      * @return Profile data for player with data specific to {@link AbstractDatabaseFeature}
      */
-    public DatabaseTemplate getProfileData(Player player, AbstractDatabaseFeature feature) {
+    public ProfileData getProfileData(Player player, AbstractDatabaseFeature feature) {
         if (!isProfileDataLoaded(player, feature))
-            throw new RuntimeException("Tried to get DatabaseTemplate that has no loaded data.");
-        return getDatabaseTemplate(player, feature);
+            throw new RuntimeException("Tried to get ProfileData that has no loaded data.");
+        return playerProfileDataMap.get(player).get(feature);
+    }
+
+    public void removeProfileData(Player player, AbstractDatabaseFeature feature) {
+        playerProfileDataMap.get(player).remove(feature);
     }
 
     /**
@@ -80,22 +54,16 @@ public class ProfileManager implements FeatureRequired, Listener {
      * @return True if the data is loaded, false otherwise.
      */
     public boolean isProfileDataLoaded(Player player, AbstractDatabaseFeature feature) {
-        return getDatabaseTemplate(player, feature).isDataLoaded();
-    }
-
-    /**
-     * Gets the DatabaseTemplate data that contains database information for this feature.
-     *
-     * @param player  The player to get the DatabaseTemplate for.
-     * @param feature The feature to get a DatabaseTemplate for.
-     * @return A set of data from the database specific to a given player and {@link AbstractDatabaseFeature}.
-     */
-    private DatabaseTemplate getDatabaseTemplate(Player player, AbstractDatabaseFeature feature) {
-        return playerData.get(player).get(feature);
+//        return playerProfileDataMap.get(player).get(feature) != null && playerProfileDataMap.get(player).get(feature).isDataLoaded();
+//        && playerProfileDataMap.get(player).containsKey(feature)
+        // TODO: Check if the isDataLoaded() var is true?
+        return playerProfileDataMap.get(player).get(feature) != null;
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        playerData.put(event.getPlayer(), SpigotCore.PLUGIN.getDatabaseManager().getCopyOfDatabaseTemplates());
+    public void onProfileDataLoadEvent(ProfileDataLoadEvent event) {
+        Player player = event.getPlayer();
+        if (!playerProfileDataMap.containsKey(player)) playerProfileDataMap.put(player, new HashMap<>());
+        playerProfileDataMap.get(player).put(event.getAbstractDatabaseFeature(), event.getProfileData());
     }
 }

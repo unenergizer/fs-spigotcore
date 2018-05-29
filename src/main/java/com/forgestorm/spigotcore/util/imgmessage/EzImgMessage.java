@@ -51,14 +51,14 @@ public class EzImgMessage implements FeatureOptional, CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!isEnabled) return false;
+        Player player = (Player) sender;
 
         if (args.length == 2) {
             switch (args[0].toLowerCase()) {
                 case "show":
                 case "display":
-                    System.out.println("Sending chat icon...");
                     sender.sendMessage("");
-                    new EzImgMessage().sendEzImgMessage((Player) sender, ChatIcons.valueOf(args[1].toUpperCase()), "This is test text!");
+                    new EzImgMessage().sendEzImgMessage(player, ChatIcons.valueOf(args[1].toUpperCase()), "Hi " + player.getName() + "!");
                     break;
             }
         } else if (args.length == 1) {
@@ -67,7 +67,7 @@ public class EzImgMessage implements FeatureOptional, CommandExecutor {
                 StringBuilder shownMessage = new StringBuilder();
                 for (ChatIcons chatIcons : ChatIcons.values()) {
                     if (shown >= 3) {
-                        sender.sendMessage(shownMessage.toString());
+                        player.sendMessage(shownMessage.toString());
                         shown = 0;
                         shownMessage = new StringBuilder();
                     }

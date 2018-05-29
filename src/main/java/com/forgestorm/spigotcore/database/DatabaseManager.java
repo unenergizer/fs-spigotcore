@@ -1,88 +1,97 @@
 package com.forgestorm.spigotcore.database;
 
+import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.feature.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.feature.FeatureRequired;
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
-
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class DatabaseManager implements FeatureRequired {
 
-    private final Map<AbstractDatabaseFeature, DatabaseTemplate> blankDatabaseTemplates = new HashMap<>();
-    private final HikariDataSource hikari = new HikariDataSource();
+    private final HikariDataSource hikariDataSource = new HikariDataSource();
 
     @Override
     public void onServerStartup() {
         Configuration config = SpigotCore.PLUGIN.getConfig();
         String configPath = "Database.";
 
-        hikari.setMaximumPoolSize(10);
-        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        hikari.addDataSourceProperty("serverName", config.getString(configPath + "address"));
-        hikari.addDataSourceProperty("port", config.getString(configPath + "port"));
-        hikari.addDataSourceProperty("databaseName", config.getString(configPath + "dbname"));
-        hikari.addDataSourceProperty("user", config.getString(configPath + "username"));
-        hikari.addDataSourceProperty("password", config.getString(configPath + "password"));
+        hikariDataSource.setMaximumPoolSize(10);
+        hikariDataSource.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        hikariDataSource.addDataSourceProperty("serverName", config.getString(configPath + "address"));
+        hikariDataSource.addDataSourceProperty("port", config.getString(configPath + "port"));
+        hikariDataSource.addDataSourceProperty("databaseName", config.getString(configPath + "dbname"));
+        hikariDataSource.addDataSourceProperty("user", config.getString(configPath + "username"));
+        hikariDataSource.addDataSourceProperty("password", config.getString(configPath + "password"));
         Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Setup complete");
     }
 
     @Override
     public void onServerShutdown() {
-        hikari.close();
-        blankDatabaseTemplates.clear();
+        hikariDataSource.close();
         Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Shut down");
     }
 
     /**
-     * Adds a database template to our collection of database templates.
+     * Async loads data from MySQL.
      *
-     * @param databaseTemplate The template we want to add.
+     * @param player  The player to get data for.
+     * @param feature The feature to get data for.
      */
-    public void addDatabaseTemplate(AbstractDatabaseFeature clazz, DatabaseTemplate databaseTemplate) {
-        if (blankDatabaseTemplates.containsKey(clazz)) return;
-        blankDatabaseTemplates.put(clazz, databaseTemplate);
+    public void asyncDatastoreLoad(Player player, AbstractDatabaseFeature feature) {
+        new AsyncLoad(player, feature).runTaskAsynchronously(SpigotCore.PLUGIN);
     }
 
     /**
-     * When we want to create a player profile, we copy this map of
-     * AbstractDatabaseFeature classes and DatabaseTemplates to their profile.
+     * Async saves data from MySQL.
      *
-     * @return A copied list of unused DatabaseTemplates.
+     * @param player  The player to save data for.
+     * @param feature The feature to save data for.
      */
-    Map<AbstractDatabaseFeature, DatabaseTemplate> getCopyOfDatabaseTemplates() {
-        return new HashMap<>(blankDatabaseTemplates);
+    public void asyncDatastoreSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
+        new AsyncSave(player, feature, profileData).runTaskAsynchronously(SpigotCore.PLUGIN);
     }
 
     /**
-     * Loads database information for the supplied database template.
-     *
-     * @param databaseTemplate Contains the data that will be loaded.
+     * Runs an {@link AbstractDatabaseFeature} MySQL load query.
      */
-    void loadDatabaseTemplateData(DatabaseTemplate databaseTemplate) {
-        try {
-            databaseTemplate.loadDatabaseData(hikari.getConnection());
-            databaseTemplate.setDataLoaded(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @AllArgsConstructor
+    private class AsyncLoad extends BukkitRunnable {
+
+        private Player player;
+        private AbstractDatabaseFeature feature;
+
+        @Override
+        public void run() {
+            ProfileData profileData = feature.databaseLoad(player, hikariDataSource);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new ProfileDataLoadEvent(player, feature, profileData));
+                }
+            }.runTask(SpigotCore.PLUGIN);
         }
     }
 
     /**
-     * Saves database information for the supplied database template.
-     *
-     * @param databaseTemplate Contains the data that will be saved.
+     * Runs an {@link AbstractDatabaseFeature} MySQL save query.
      */
-    void saveDatabaseTemplateData(DatabaseTemplate databaseTemplate) {
-        try {
-            databaseTemplate.saveDatabaseData(hikari.getConnection());
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @AllArgsConstructor
+    private class AsyncSave extends BukkitRunnable {
+
+        private Player player;
+        private AbstractDatabaseFeature feature;
+        private ProfileData profileData;
+
+        @Override
+        public void run() {
+            feature.databaseSave(player, profileData, hikariDataSource);
         }
     }
 }
