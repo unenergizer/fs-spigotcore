@@ -4,12 +4,12 @@ import org.bukkit.ChatColor;
 
 public enum UserGroup {
 
-    USER_GROUP_NEW("newPlayer", "&7[&aNew&7]", ChatColor.GRAY),
-    USER_GROUP_0("free", "", ChatColor.GRAY),//Free user
-    USER_GROUP_1("paid1", "&aVIP", ChatColor.WHITE),
-    USER_GROUP_2("paid2", "&aVIP+", ChatColor.WHITE),
-    USER_GROUP_3("paid3", "&bMVP", ChatColor.WHITE),
-    USER_GROUP_4("paid4", "&bMVP+", ChatColor.WHITE),
+    NEW_PLAYER("newPlayer", "&7[&aNew&7]", ChatColor.GRAY),
+    FREE_PLAYER("free", "", ChatColor.GRAY),//Free user
+    VIP("paid1", "&aVIP", ChatColor.WHITE),
+    VIP_PLUS("paid2", "&aVIP+", ChatColor.WHITE),
+    MVP("paid3", "&bMVP", ChatColor.WHITE),
+    MVP_PLUS("paid4", "&bMVP+", ChatColor.WHITE),
     MODERATOR("mod", "&9&lMOD", ChatColor.YELLOW),
     ADMINISTRATOR("admin", "&c&lADMIN", ChatColor.YELLOW),
     NPC("npc", "&7[&9NPC&7]", ChatColor.WHITE),

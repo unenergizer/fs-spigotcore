@@ -6,6 +6,7 @@ package com.forgestorm.spigotcore.util.imgmessage;
  * Time: 11:03 PM
  * https://github.com/bobacadodl/ImageMessage
  */
+@SuppressWarnings("SpellCheckingInspection")
 public enum ImageChar {
     BLOCK('\u2588'),
     DARK_SHADE('\u2593'),

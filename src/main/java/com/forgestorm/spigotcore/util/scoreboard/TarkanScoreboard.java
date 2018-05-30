@@ -33,7 +33,7 @@ public class TarkanScoreboard {
 //    }
 //
 //    public void updateScoreboard(Player player) {
-//        PlayerProfileData profileData = plugin.getProfileManager().getPlayerProfileData(player);
+//        PlayerProfileData profileData = plugin.getFeatureDataManager().getPlayerProfileData(player);
 //
 //        //Set Title
 //        api.setScoreboardTitle(player, ChatColor.YELLOW + "" + ChatColor.BOLD + "FORGESTORM");

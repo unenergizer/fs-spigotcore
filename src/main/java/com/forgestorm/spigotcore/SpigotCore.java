@@ -1,25 +1,31 @@
 package com.forgestorm.spigotcore;
 
-import com.forgestorm.spigotcore.citizen.CitizenManager;
-import com.forgestorm.spigotcore.database.DatabaseManager;
-import com.forgestorm.spigotcore.database.ProfileManager;
-import com.forgestorm.spigotcore.feature.FeatureManager;
-import com.forgestorm.spigotcore.feature.FeatureOptional;
-import com.forgestorm.spigotcore.player.*;
-import com.forgestorm.spigotcore.player.UsergroupChat;
-import com.forgestorm.spigotcore.rpg.mobs.MobManager;
-import com.forgestorm.spigotcore.util.imgmessage.EzImgMessage;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import com.forgestorm.spigotcore.features.optional.chat.EzImgMessage;
+import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
+import com.forgestorm.spigotcore.features.optional.chat.UsergroupChat;
+import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
+import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
+import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
+import com.forgestorm.spigotcore.features.optional.player.PlayerBossBar;
+import com.forgestorm.spigotcore.features.optional.player.PlayerGreeting;
+import com.forgestorm.spigotcore.features.optional.player.PlayerListText;
+import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
+import com.forgestorm.spigotcore.features.optional.world.HiddenPaths;
+import com.forgestorm.spigotcore.features.optional.world.ServerSpawn;
+import com.forgestorm.spigotcore.features.optional.world.WorldHologram;
+import com.forgestorm.spigotcore.features.optional.world.WorldSettings;
+import com.forgestorm.spigotcore.features.optional.world.lantern.Lantern;
+import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
+import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
+import com.forgestorm.spigotcore.features.optional.world.loot.NewChestLoot;
+import com.forgestorm.spigotcore.features.required.CommandManager;
+import com.forgestorm.spigotcore.features.required.FeatureToggleManager;
+import com.forgestorm.spigotcore.features.required.database.DatabaseManager;
+import com.forgestorm.spigotcore.features.required.database.FeatureDataManager;
+import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
+import com.forgestorm.spigotcore.features.required.world.worldobject.WorldObjectManager;
 import com.forgestorm.spigotcore.util.text.Console;
-import com.forgestorm.spigotcore.world.ServerSpawn;
-import com.forgestorm.spigotcore.world.WorldHologram;
-import com.forgestorm.spigotcore.world.WorldSettings;
-import com.forgestorm.spigotcore.world.blockregen.BlockRegenerationManager;
-import com.forgestorm.spigotcore.world.blockregen.HiddenPaths;
-import com.forgestorm.spigotcore.world.lantern.Lantern;
-import com.forgestorm.spigotcore.world.loot.ChestLoot;
-import com.forgestorm.spigotcore.world.loot.DragonEggLoot;
-import com.forgestorm.spigotcore.world.loot.NewChestLoot;
-import com.forgestorm.spigotcore.world.worldobject.WorldObjectManager;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,45 +33,80 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SpigotCore is our main plugin class for Bukkit/Spigot. This is the plugin start class.
+ * <p>
+ * RULES:
+ * <ul>
+ * <li> All {@link com.forgestorm.spigotcore.features.required.FeatureRequired} are started here.</li>
+ * <li> All {@link FeatureOptional} features are added here.</li>
+ * <li> {@link org.bukkit.command.CommandExecutor} are never registered here.</li>
+ * <li> {@link java.util.EventListener} are never registered here.</li>
+ * </ul>
+ */
 @Getter
 public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final CommandManager commandManager = new CommandManager();
     private final DatabaseManager databaseManager = new DatabaseManager();
-    private final ProfileManager profileManager = new ProfileManager();
+    private final FeatureDataManager featureDataManager = new FeatureDataManager();
     private final BlockRegenerationManager blockRegenerationManager = new BlockRegenerationManager();
     private final WorldObjectManager worldObjectManager = new WorldObjectManager();
-    private final FeatureManager featureManager = new FeatureManager();
+    private final FeatureToggleManager featureToggleManager = new FeatureToggleManager();
 
+    /**
+     * Called on plugin start/reload.
+     */
     @Override
     public void onEnable() {
         Console.sendMessage(ChatColor.GOLD + "---------[ FS SpigotCore Initializing ]---------");
         PLUGIN = this;
 
-        // Enable required features first
+        // Required features first
+        commandManager.onServerStartup();
         databaseManager.onServerStartup();
-        profileManager.onServerStartup();
+        featureDataManager.onServerStartup();
         blockRegenerationManager.onServerStartup();
         worldObjectManager.onServerStartup();
-        featureManager.onServerStartup();
+        featureToggleManager.onServerStartup();
 
-        // Enable optional features last
+        // Optional features last
         initOptionalFeatures();
     }
 
+    /**
+     * Called on plugin stop/reload.
+     */
     @Override
     public void onDisable() {
-        // First disable all optional features
-        featureManager.onServerShutdown();
-
-        // Finally disable all required features
+        featureToggleManager.onServerShutdown(); // Always disable first
         blockRegenerationManager.onServerShutdown();
         worldObjectManager.onServerShutdown();
-        profileManager.onServerShutdown();
+        featureDataManager.onServerShutdown();
         databaseManager.onServerShutdown();
+        commandManager.onServerShutdown();
     }
 
+    /**
+     * In brief, FeatureOptional classes are decoupled plugin features
+     * that can be toggled on/off at runtime. FeatureRequired classes
+     * are required to start when server starts and stop when the server
+     * stops. No exceptions.
+     * <p>
+     * RULES:
+     * <ul>
+     * <li>FeatureOptional classes cannot rely on each other. Must be 100% decoupled.</li>
+     * <li>FeatureOptional classes can safely use RequiredFeature public methods.</li>
+     * <li>FeatureRequired classes cannot use FeatureOptional classes or methods.</li>
+     * </ul>
+     * <p>
+     * REFERENCE:
+     * {@link FeatureOptional}
+     * {@link FeatureToggleManager}
+     * {@link com.forgestorm.spigotcore.features.required.FeatureRequired}
+     */
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
@@ -89,6 +130,6 @@ public class SpigotCore extends JavaPlugin {
         features.add(new EzImgMessage());
 
         // Finally, add all features
-        featureManager.addFeatures(features);
+        featureToggleManager.addFeatures(features);
     }
 }

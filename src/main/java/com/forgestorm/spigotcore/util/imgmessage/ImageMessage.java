@@ -15,11 +15,11 @@ import java.awt.image.BufferedImage;
  * Time: 10:28 PM
  * https://github.com/bobacadodl/ImageMessage
  * <p>
- * <p>
  * ** Modified by Robert Andrew Brown ***
  * Date: 12/5/16
  * Time: 2:42 PM
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class ImageMessage {
     //private final static char TRANSPARENT_CHAR = " "; //Modified to use the bottom line.
     private final static String TRANSPARENT_CHAR = ChatColor.DARK_GRAY +

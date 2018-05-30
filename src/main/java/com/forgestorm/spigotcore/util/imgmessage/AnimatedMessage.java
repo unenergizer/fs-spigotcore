@@ -15,6 +15,7 @@ import java.util.List;
  * Time: 10:41 PM
  * https://github.com/bobacadodl/ImageMessage
  */
+@SuppressWarnings("SpellCheckingInspection")
 class AnimatedMessage {
     private final ImageMessage[] images;
     private int index = 0;
