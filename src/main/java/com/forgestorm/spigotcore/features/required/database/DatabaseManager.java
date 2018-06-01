@@ -6,6 +6,7 @@ import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
@@ -14,14 +15,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * DatabaseManager is responsible for providing access to a MySQL database.
- * <p>
- * RULES:
- * <ul>
- *      <li>No class should directly access the {@link HikariDataSource} used in this class.</li>
- * </ul>
  */
 public class DatabaseManager implements FeatureRequired {
 
+    @Getter
     private final HikariDataSource hikariDataSource = new HikariDataSource();
 
     @Override
@@ -43,64 +40,5 @@ public class DatabaseManager implements FeatureRequired {
     public void onServerShutdown() {
         hikariDataSource.close();
         Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Shut down");
-    }
-
-    /**
-     * Async loads data from MySQL.
-     *
-     * @param player  The player to get data for.
-     * @param feature The features to get data for.
-     */
-    public void asyncDatastoreLoad(Player player, AbstractDatabaseFeature feature) {
-        new AsyncLoad(player, feature).runTaskAsynchronously(SpigotCore.PLUGIN);
-    }
-
-    /**
-     * Async saves data from MySQL.
-     *
-     * @param player      The player to save data for.
-     * @param feature     The features to save data for.
-     * @param profileData The data we intend to save.
-     */
-    public void asyncDatastoreSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
-        new AsyncSave(player, feature, profileData).runTaskAsynchronously(SpigotCore.PLUGIN);
-    }
-
-    /**
-     * Runs an {@link AbstractDatabaseFeature} MySQL load query asynchronously.
-     */
-    @AllArgsConstructor
-    private class AsyncLoad extends BukkitRunnable {
-
-        private Player player;
-        private AbstractDatabaseFeature feature;
-
-        @Override
-        public void run() {
-            ProfileData profileData = feature.databaseLoad(player, hikariDataSource);
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new ProfileDataLoadEvent(player, feature, profileData));
-                }
-            }.runTask(SpigotCore.PLUGIN);
-        }
-    }
-
-    /**
-     * Runs an {@link AbstractDatabaseFeature} MySQL save query asynchronously.
-     */
-    @AllArgsConstructor
-    private class AsyncSave extends BukkitRunnable {
-
-        private Player player;
-        private AbstractDatabaseFeature feature;
-        private ProfileData profileData;
-
-        @Override
-        public void run() {
-            feature.databaseSave(player, profileData, hikariDataSource);
-        }
     }
 }

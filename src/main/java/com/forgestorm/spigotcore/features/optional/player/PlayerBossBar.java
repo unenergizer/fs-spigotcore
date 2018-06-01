@@ -1,11 +1,11 @@
 package com.forgestorm.spigotcore.features.optional.player;
 
-import co.aikar.commands.BaseCommand;
-import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.InitCommand;
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.features.ForgeStormCommand;
+import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.util.display.BossBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -18,19 +18,28 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple boss bar to show players additional information.
  * Shows a static message at the top of the players game.
  */
-public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommand, Listener {
+public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands, Listener {
 
-    private static String BAR_TEXT;
+    private String barText;
     private BossBarUtil bossBarUtil;
 
     @Override
+    public List<ForgeStormCommand> registerAllCommands() {
+        List<ForgeStormCommand> commands = new ArrayList<>();
+        commands.add(new TestCommand());
+        return commands;
+    }
+
+    @Override
     public void onEnable(boolean manualEnable) {
-        bossBarUtil = new BossBarUtil(BAR_TEXT);
+        bossBarUtil = new BossBarUtil(barText);
         bossBarUtil.setBossBarProgress(1);
 
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
@@ -39,11 +48,6 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommand,
         for (Player player : Bukkit.getOnlinePlayers()) {
             bossBarUtil.showBossBar(player);
         }
-    }
-
-    @Override
-    public BaseCommand defineCommands() {
-        return new TestCommand();
     }
 
     @Override
@@ -58,7 +62,7 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommand,
     @Override
     public void loadConfiguration() {
         Configuration config = YamlConfiguration.loadConfiguration(new File(FilePaths.PLAYER_BOSS_BAR.toString()));
-        BAR_TEXT = config.getString("BossBarText");
+        barText = config.getString("BossBarText");
     }
 
     @EventHandler

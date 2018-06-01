@@ -11,6 +11,7 @@ public enum FilePaths {
     LOBBY_PLAYER("player/LobbyPlayer.yml"),
     PLAYER_BOSS_BAR("player/BossBarText.yml"),
     PLAYER_GREETING("player/PlayerGreeting.yml"),
+    PLAYER_LIST_TEXT("player/PlayerListText.yml"),
 
     CHAT_ICONS("resources/chaticons/"),
 

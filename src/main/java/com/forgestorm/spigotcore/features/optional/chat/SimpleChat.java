@@ -1,8 +1,8 @@
 package com.forgestorm.spigotcore.features.optional.chat;
 
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.constants.UserGroup;
+import com.forgestorm.spigotcore.constants.PlayerRanks;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,16 +28,15 @@ public class SimpleChat implements FeatureOptional, Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
-        ChatColor messageColor = ChatColor.GRAY;
-        String tag = "";
 
-        if (event.getPlayer().isOp()) {
-            tag = tag + UserGroup.ADMINISTRATOR.getUserGroupPrefix();
-            messageColor = UserGroup.ADMINISTRATOR.getMessageColor();
+        if (SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(event.getPlayer()) == null) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You can not do that until your profile has loaded.");
+            return;
         }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(tag + ChatColor.GRAY + event.getPlayer().getName() + ChatColor.DARK_GRAY + ": " + messageColor + event.getMessage());
-        }
+        PlayerRanks playerRanks = SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(event.getPlayer()).getPlayerAccount().getRank();
+
+        for (Player player : Bukkit.getOnlinePlayers())
+            player.sendMessage(playerRanks.getUsernamePrefix() + ChatColor.GRAY + event.getPlayer().getName() + ChatColor.DARK_GRAY + ": " + playerRanks.getChatColor() + event.getMessage());
     }
 }

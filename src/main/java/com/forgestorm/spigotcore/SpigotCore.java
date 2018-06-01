@@ -3,13 +3,10 @@ package com.forgestorm.spigotcore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.chat.EzImgMessage;
 import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
-import com.forgestorm.spigotcore.features.optional.chat.UsergroupChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
-import com.forgestorm.spigotcore.features.optional.player.PlayerBossBar;
-import com.forgestorm.spigotcore.features.optional.player.PlayerGreeting;
-import com.forgestorm.spigotcore.features.optional.player.PlayerListText;
+import com.forgestorm.spigotcore.features.optional.player.*;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.features.optional.world.HiddenPaths;
 import com.forgestorm.spigotcore.features.optional.world.ServerSpawn;
@@ -19,14 +16,16 @@ import com.forgestorm.spigotcore.features.optional.world.lantern.Lantern;
 import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.NewChestLoot;
-import com.forgestorm.spigotcore.features.required.CommandManager;
-import com.forgestorm.spigotcore.features.required.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.database.DatabaseManager;
-import com.forgestorm.spigotcore.features.required.database.FeatureDataManager;
+import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
+import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
+import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
 import com.forgestorm.spigotcore.features.required.world.worldobject.WorldObjectManager;
 import com.forgestorm.spigotcore.util.text.Console;
+import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,12 +48,15 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
-    private final CommandManager commandManager = new CommandManager();
     private final DatabaseManager databaseManager = new DatabaseManager();
+    private final GlobalDataManager globalDataManager = new GlobalDataManager();
     private final FeatureDataManager featureDataManager = new FeatureDataManager();
     private final BlockRegenerationManager blockRegenerationManager = new BlockRegenerationManager();
     private final WorldObjectManager worldObjectManager = new WorldObjectManager();
     private final FeatureToggleManager featureToggleManager = new FeatureToggleManager();
+
+    //private PaperCommandManager paperCommandManager;
+    private TitleManagerAPI titleManager;
 
     /**
      * Called on plugin start/reload.
@@ -64,15 +66,19 @@ public class SpigotCore extends JavaPlugin {
         Console.sendMessage(ChatColor.GOLD + "---------[ FS SpigotCore Initializing ]---------");
         PLUGIN = this;
 
-        // Required features first
-        commandManager.onServerStartup();
+        // Init needed APIs
+        //paperCommandManager = new PaperCommandManager(this);
+        titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
+
+        // Init required features & maintain startup order
         databaseManager.onServerStartup();
+        globalDataManager.onServerStartup();
         featureDataManager.onServerStartup();
         blockRegenerationManager.onServerStartup();
         worldObjectManager.onServerStartup();
         featureToggleManager.onServerStartup();
 
-        // Optional features last
+        // Init optional features last
         initOptionalFeatures();
     }
 
@@ -81,12 +87,13 @@ public class SpigotCore extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        featureToggleManager.onServerShutdown(); // Always disable first
+        // Maintain shutdown order
+        featureToggleManager.onServerShutdown();
         blockRegenerationManager.onServerShutdown();
         worldObjectManager.onServerShutdown();
         featureDataManager.onServerShutdown();
+        globalDataManager.onServerShutdown();
         databaseManager.onServerShutdown();
-        commandManager.onServerShutdown();
     }
 
     /**
@@ -110,9 +117,11 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new PlayerNewChecker());
+        features.add(new PlayerOperator());
+        features.add(new PlayerBanKicker());
         features.add(new ServerSpawn());
         features.add(new SimpleChat());
-        features.add(new UsergroupChat());
         features.add(new LobbyPlayer());
         features.add(new PlayerGreeting());
         features.add(new PlayerListText());

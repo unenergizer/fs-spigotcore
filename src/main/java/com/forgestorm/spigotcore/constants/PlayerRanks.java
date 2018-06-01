@@ -1,11 +1,12 @@
 package com.forgestorm.spigotcore.constants;
 
+import lombok.Getter;
 import org.bukkit.ChatColor;
 
-public enum UserGroup {
+public enum PlayerRanks {
 
     NEW_PLAYER("newPlayer", "&7[&aNew&7]", ChatColor.GRAY),
-    FREE_PLAYER("free", "", ChatColor.GRAY),//Free user
+    FREE_PLAYER("free", "", ChatColor.GRAY),
     VIP("paid1", "&aVIP", ChatColor.WHITE),
     VIP_PLUS("paid2", "&aVIP+", ChatColor.WHITE),
     MVP("paid3", "&bMVP", ChatColor.WHITE),
@@ -17,26 +18,20 @@ public enum UserGroup {
     MINIGAME_KIT("mgKit", "&lKIT&7&l:&r", ChatColor.WHITE),
     MINIGAME_SPECTATOR("mgSpectator", "&7[Spectator]", ChatColor.DARK_GRAY);
 
-	private final String teamName;
-	private final String prefix;
-    private final ChatColor messageColor;
+    @Getter
+	private final String scoreboardTeamName;
+	private final String usernamePrefix;
+    @Getter
+	private final ChatColor chatColor;
 
-    //Constructor
-    UserGroup(String teamName, String prefix, ChatColor messageColor) {
-        this.teamName = teamName;
-        this.prefix = ChatColor.translateAlternateColorCodes('&', prefix);
-        this.messageColor = messageColor;
+    PlayerRanks(String scoreboardTeamName, String usernamePrefix, ChatColor messageColor) {
+        this.scoreboardTeamName = scoreboardTeamName;
+        this.usernamePrefix = ChatColor.translateAlternateColorCodes('&', usernamePrefix);
+        this.chatColor = messageColor;
     }
 
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public String getUserGroupPrefix() {
-        return prefix + ChatColor.RESET + " ";
-    }
-
-    public ChatColor getMessageColor() {
-        return messageColor;
+    public String getUsernamePrefix() {
+        if (this == FREE_PLAYER) return "";
+        return usernamePrefix + ChatColor.RESET + " ";
     }
 }

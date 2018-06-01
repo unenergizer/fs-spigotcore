@@ -1,6 +1,6 @@
 package com.forgestorm.spigotcore.util.scoreboard;
 
-import com.forgestorm.spigotcore.constants.UserGroup;
+import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -43,16 +43,16 @@ public class ScoreboardManager implements Listener {
     private void initDefaultTeams() {
         // Loop through the list of user groups and register
         // them as teams.
-        for (UserGroup userGroup : UserGroup.values()) {
+        for (PlayerRanks playerRanks : PlayerRanks.values()) {
             // Register the new Team.
-            Team team = scoreboard.registerNewTeam(userGroup.getTeamName());
+            Team team = scoreboard.registerNewTeam(playerRanks.getScoreboardTeamName());
             team.setCanSeeFriendlyInvisibles(true);
 
             // If the prefix does not exist, skip the part below.
-            if (userGroup.getUserGroupPrefix().isEmpty()) continue;
+            if (playerRanks.getUsernamePrefix().isEmpty()) continue;
 
             // Add the prefix.
-            team.setPrefix(userGroup.getUserGroupPrefix());
+            team.setPrefix(playerRanks.getUsernamePrefix());
         }
     }
 
@@ -154,13 +154,13 @@ public class ScoreboardManager implements Listener {
     }
 
     /**
-     * This will add a player to the scoreboard with UserGroup properties.
+     * This will add a player to the scoreboard with PlayerRanks properties.
      *
      * @param player    The player we want to add to the scoreboard.
-     * @param userGroup The usergroup we want to assign the player to.
+     * @param playerRanks The usergroup we want to assign the player to.
      */
-    public void addPlayer(Player player, UserGroup userGroup) {
-        addPlayer(player, userGroup.getTeamName(), userGroup.getUserGroupPrefix(), null);
+    public void addPlayer(Player player, PlayerRanks playerRanks) {
+        addPlayer(player, playerRanks.getScoreboardTeamName(), playerRanks.getUsernamePrefix(), null);
     }
 
     /**
@@ -211,8 +211,8 @@ public class ScoreboardManager implements Listener {
         if (currentTeam.getSize() >= 1) return;
 
         // Check if the team is a default preset.
-        for (UserGroup userGroup : UserGroup.values()) {
-            if (userGroup.getTeamName().equals(currentTeam.getName())) return;
+        for (PlayerRanks playerRanks : PlayerRanks.values()) {
+            if (playerRanks.getScoreboardTeamName().equals(currentTeam.getName())) return;
         }
 
         // If the team has no players and is not a default

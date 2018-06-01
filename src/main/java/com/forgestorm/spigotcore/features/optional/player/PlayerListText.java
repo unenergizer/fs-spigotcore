@@ -1,52 +1,57 @@
 package com.forgestorm.spigotcore.features.optional.player;
 
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.optional.FeatureShutdown;
+import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.util.text.Text;
-import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.io.File;
+
 /**
  * Simple class to change the PlayerList header and footer text.
  */
-public class PlayerListText implements FeatureOptional, FeatureShutdown, Listener {
+public class PlayerListText implements FeatureOptional, LoadsConfig, Listener {
 
-    private static final String PLAYER_LIST_HEADER = "\n&e&lForgeStorm: &r&lRPG MINIGAME SERVER\n";
-    private static final String PLAYER_LIST_FOOTER = "\n&7 www.ForgeStorm.com\n&c /help &e/mainmenu &a/settings &b/playtime &d/lobby ";
-
-    private TitleManagerAPI titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
+    private String header;
+    private String footer;
 
     @Override
     public void onEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+
         for (Player player : Bukkit.getOnlinePlayers()) setPlayerListText(player);
     }
 
     @Override
     public void onDisable(boolean manualDisable) {
-        for (Player player : Bukkit.getOnlinePlayers()) titleManager.setHeaderAndFooter(player, "", "");
         PlayerJoinEvent.getHandlerList().unregister(this);
+
+        for (Player player : Bukkit.getOnlinePlayers())
+            SpigotCore.PLUGIN.getTitleManager().setHeaderAndFooter(player, "", "");
     }
 
     @Override
-    public void onServerShutdown() {
-        titleManager = null;
+    public void loadConfiguration() {
+        Configuration config = YamlConfiguration.loadConfiguration(new File(FilePaths.PLAYER_LIST_TEXT.toString()));
+        header = config.getString("PlayerListText.header");
+        footer = config.getString("PlayerListText.footer");
     }
 
     private void setPlayerListText(Player player) {
-        titleManager.setHeaderAndFooter(
-                player,
-                Text.color(PLAYER_LIST_HEADER),
-                Text.color(PLAYER_LIST_FOOTER));
+        SpigotCore.PLUGIN.getTitleManager().setHeaderAndFooter(player, Text.color(header), Text.color(footer));
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         setPlayerListText(event.getPlayer());
     }
+
 }

@@ -5,9 +5,12 @@ Database:
    username: root
    password: ""
 Features:
+   PlayerNewChecker: true
+   PlayerOperator: true
+   PlayerBanKicker: true
    ServerSpawn: true
-   SimpleChat: false
-   UsergroupChat: true
+   SimpleChat: true
+   UsergroupChat: false
    LobbyPlayer: true
    PlayerGreeting: true
    PlayerListText: true

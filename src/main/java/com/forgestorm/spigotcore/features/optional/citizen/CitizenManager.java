@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.citizen;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.required.FeatureToggleManager;
+import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.FeatureShutdown;
 import com.forgestorm.spigotcore.features.LoadsConfig;

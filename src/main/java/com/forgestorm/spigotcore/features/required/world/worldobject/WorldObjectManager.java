@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.required.world.worldobject;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
-import com.forgestorm.spigotcore.features.required.FeatureToggleManager;
+import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

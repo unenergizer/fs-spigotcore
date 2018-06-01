@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * A type of {@link FeatureOptional} that needs database support. Note that to continue with our
  * goal of achieving completely decoupled optional features, data loaded should never be access
@@ -18,9 +21,9 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public abstract class AbstractDatabaseFeature implements FeatureOptional {
 
-    public abstract ProfileData databaseLoad(Player player, HikariDataSource hikariDataSource);
+    public abstract ProfileData databaseLoad(Player player, Connection connection) throws SQLException;
 
-    public abstract void databaseSave(Player player, ProfileData profileData, HikariDataSource hikariDataSource);
+    public abstract void databaseSave(Player player, ProfileData profileData, Connection connection) throws SQLException;
 
     /**
      * Gets ProfileData for the player from the FeatureDataManager for this specific features.
@@ -48,7 +51,7 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
      * @param player The player to load data for.
      */
     protected void asyncDatastoreLoad(Player player) {
-        SpigotCore.PLUGIN.getDatabaseManager().asyncDatastoreLoad(player, this);
+        SpigotCore.PLUGIN.getFeatureDataManager().asyncDatastoreLoad(player, this);
     }
 
     /**
@@ -57,6 +60,6 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
      * @param player The player to save data for.
      */
     protected void asyncDatastoreSave(Player player) {
-        SpigotCore.PLUGIN.getDatabaseManager().asyncDatastoreSave(player, this, getProfileData(player));
+        SpigotCore.PLUGIN.getFeatureDataManager().asyncDatastoreSave(player, this, getProfileData(player));
     }
 }
