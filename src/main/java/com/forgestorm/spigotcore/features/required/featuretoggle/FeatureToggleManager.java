@@ -5,6 +5,7 @@ import com.forgestorm.spigotcore.features.*;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.ShutdownTask;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
+import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -250,13 +251,13 @@ public class FeatureToggleManager implements FeatureRequired {
                 Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureOptional.getClass().getSimpleName()
                         + "] Enabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
                 forgeStormCommand.setupCommand(SpigotCore.PLUGIN.getPaperCommandManager());
-                forgeStormCommand.enableCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+                forgeStormCommand.enableCommand();
             }
         }
 
         void disableCommands() {
             for (ForgeStormCommand forgeStormCommand : commandMap) {
-                forgeStormCommand.disableCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+                forgeStormCommand.disableCommand();
                 Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureOptional.getClass().getSimpleName()
                         + "] Disabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
             }

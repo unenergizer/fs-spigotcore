@@ -2,6 +2,7 @@ package com.forgestorm.spigotcore.features;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.PaperCommandManager;
+import com.forgestorm.spigotcore.SpigotCore;
 import lombok.Getter;
 
 public abstract class ForgeStormCommand extends BaseCommand {
@@ -25,16 +26,16 @@ public abstract class ForgeStormCommand extends BaseCommand {
     /**
      * Enables this command.
      */
-    public void enableCommand(PaperCommandManager paperCommandManager) {
-        paperCommandManager.registerCommand(this);
+    public void enableCommand() {
+        SpigotCore.PLUGIN.getPaperCommandManager().registerCommand(this);
         isEnabled = true;
     }
 
     /**
      * Disables this command.
      */
-    public void disableCommand(PaperCommandManager paperCommandManager) {
+    public void disableCommand() {
         isEnabled = false;
-        paperCommandManager.unregisterCommand(this);
+        SpigotCore.PLUGIN.getPaperCommandManager().unregisterCommand(this);
     }
 }

@@ -1,6 +1,7 @@
 package com.forgestorm.spigotcore.features.required.menu;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.ForgeStormCommand;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.AllArgsConstructor;
@@ -93,7 +94,7 @@ public class MenuManager implements FeatureRequired, Listener {
      *
      * @param abstractMenu The menu to remove.
      */
-    public void removeMenu(Class abstractMenu) {
+    public void removeMenu(Class <? extends AbstractMenu> abstractMenu) {
         for (Map.Entry<Player, AbstractMenu> entry : activeMenus.entrySet()) {
             if (entry.getValue().getClass() != abstractMenu) continue;
             entry.getKey().closeInventory();
@@ -108,7 +109,7 @@ public class MenuManager implements FeatureRequired, Listener {
      * @param player     The player to show the menu to.
      * @param menuToOpen The menu we wish to open.
      */
-    public void openMenu(Player player, Class menuToOpen) {
+    public void openMenu(Player player, Class <? extends AbstractMenu> menuToOpen) {
         if (!canOpenMenus) return;
         AbstractMenu abstractMenu = menuMap.get(menuToOpen);
 
@@ -139,11 +140,17 @@ public class MenuManager implements FeatureRequired, Listener {
 
         if (player.getInventory().getItem(shiftClickFixer.inventorySlot) == null
                 || player.getInventory().getItem(shiftClickFixer.inventorySlot).getType() == Material.AIR) {
+            // Quick set item as air. This is to prevent the possibility of doubling the replace ItemStack.
+            // Mostly this is just as a precaution. Not sure if it actually works.
+            player.getInventory().setItem(shiftClickFixer.inventorySlot, new ItemStack(Material.AIR));
+
+            // Finally replace the lost item
             player.getInventory().setItem(shiftClickFixer.inventorySlot, shiftClickFixer.itemStack);
 
             // Never comment out the below console text. Keep records of item replacements.
             // Must watch for suspicious activity. Need to prevent dupes.
             Console.sendMessage("[MenuManager] Restored player item: " + shiftClickFixer.itemStack.getType().toString());
+            Console.sendMessage("[MenuManager] Stack Size: " + shiftClickFixer.itemStack.getAmount());
             Console.sendMessage("[MenuManager] For Player: " + player.getName());
             Console.sendMessage("[MenuManager] Slot: " + shiftClickFixer.inventorySlot);
         }

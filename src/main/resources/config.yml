@@ -5,6 +5,7 @@ Database:
    username: root
    password: ""
 Features:
+   GameTipAnnouncer: true
    PlayerCompassMenu: true
    PlayerScoreboardTeams: true
    PlayerNewChecker: true

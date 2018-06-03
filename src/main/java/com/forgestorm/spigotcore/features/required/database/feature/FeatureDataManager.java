@@ -1,7 +1,7 @@
 package com.forgestorm.spigotcore.features.required.database.feature;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.AbstractDatabaseFeature;
+import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import lombok.AllArgsConstructor;

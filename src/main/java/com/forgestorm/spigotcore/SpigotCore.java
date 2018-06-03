@@ -3,6 +3,7 @@ package com.forgestorm.spigotcore;
 import co.aikar.commands.PaperCommandManager;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.chat.EzImgMessage;
+import com.forgestorm.spigotcore.features.optional.chat.GameTipAnnouncer;
 import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
@@ -122,6 +123,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new GameTipAnnouncer());
         features.add(new PlayerCompassMenu());
         features.add(new PlayerScoreboardTeams());
         features.add(new PlayerNewChecker());

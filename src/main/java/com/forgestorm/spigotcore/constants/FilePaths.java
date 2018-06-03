@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum FilePaths {
 
+    GAME_TIPS("chat/GameTips.yml"),
+
     CITIZENS("citizen/Citizens.yml"),
     CITIZENS_MESSAGES("citizen/CitizenMessages.yml"),
 

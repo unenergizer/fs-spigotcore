@@ -32,6 +32,7 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands
 
     @Override
     public List<ForgeStormCommand> registerAllCommands() {
+        // TODO: REMOVE TEST COMMAND!! <---------------------------------------------------------------------------
         List<ForgeStormCommand> commands = new ArrayList<>();
         commands.add(new TestCommand());
         return commands;

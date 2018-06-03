@@ -1,7 +1,7 @@
 package com.forgestorm.spigotcore.features.required.database.global;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.AbstractDatabaseFeature;
+import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;

@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore.features;
+package com.forgestorm.spigotcore.features.required.database;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;

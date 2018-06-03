@@ -1,17 +1,12 @@
 package com.forgestorm.spigotcore.features.required.database;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * DatabaseConnectionManager is responsible for providing access to a MySQL database.
