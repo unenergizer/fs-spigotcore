@@ -47,6 +47,10 @@ public class GlobalDataManager implements FeatureRequired, Listener {
         return playerProfileDataMap.get(player);
     }
 
+    public boolean hasGlobalPlayerData(Player player) {
+        return playerProfileDataMap.containsKey(player);
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         new AsyncLoad(event.getPlayer()).runTaskAsynchronously(SpigotCore.PLUGIN);
@@ -75,7 +79,7 @@ public class GlobalDataManager implements FeatureRequired, Listener {
 
             GlobalPlayerData profileData = new GlobalPlayerData(); // TODO: Run database query
 
-            try (Connection connection = SpigotCore.PLUGIN.getDatabaseManager().getHikariDataSource().getConnection()) {
+            try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
 
                 for (BaseGlobalData baseGlobalData : globalDataLoaders) {
                     ResultSet resultSet = baseGlobalData.searchForData(player, connection);

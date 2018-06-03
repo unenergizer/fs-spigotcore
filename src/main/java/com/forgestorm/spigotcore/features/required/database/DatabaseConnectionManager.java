@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * DatabaseManager is responsible for providing access to a MySQL database.
+ * DatabaseConnectionManager is responsible for providing access to a MySQL database.
  */
-public class DatabaseManager implements FeatureRequired {
+public class DatabaseConnectionManager implements FeatureRequired {
 
     @Getter
     private final HikariDataSource hikariDataSource = new HikariDataSource();
@@ -33,12 +33,12 @@ public class DatabaseManager implements FeatureRequired {
         hikariDataSource.addDataSourceProperty("databaseName", config.getString(configPath + "dbname"));
         hikariDataSource.addDataSourceProperty("user", config.getString(configPath + "username"));
         hikariDataSource.addDataSourceProperty("password", config.getString(configPath + "password"));
-        Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Setup complete");
+        Console.sendMessage(ChatColor.BLUE + "[DatabaseConnectionManager] Setup complete");
     }
 
     @Override
     public void onServerShutdown() {
         hikariDataSource.close();
-        Console.sendMessage(ChatColor.BLUE + "[DatabaseManager] Shut down");
+        Console.sendMessage(ChatColor.BLUE + "[DatabaseConnectionManager] Shut down");
     }
 }

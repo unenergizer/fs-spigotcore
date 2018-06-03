@@ -46,7 +46,7 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
     }
 
     /**
-     * Async load data to MySQL using the DatabaseManager.
+     * Async load data to MySQL using the DatabaseConnectionManager.
      *
      * @param player The player to load data for.
      */
@@ -55,7 +55,7 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
     }
 
     /**
-     * Async save data to MySQL using the DatabaseManager.
+     * Async save data to MySQL using the DatabaseConnectionManager.
      *
      * @param player The player to save data for.
      */

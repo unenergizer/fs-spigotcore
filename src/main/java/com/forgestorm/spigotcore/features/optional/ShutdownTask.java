@@ -7,6 +7,6 @@ import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleMa
  * is automatically ran by our FeatureToggleManager when the server shuts down.
  * {@link FeatureToggleManager}
  */
-public interface FeatureShutdown {
+public interface ShutdownTask {
     void onServerShutdown();
 }

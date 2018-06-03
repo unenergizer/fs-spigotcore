@@ -1,16 +1,15 @@
 package com.forgestorm.spigotcore.features.required.featuretoggle;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.AbstractDatabaseFeature;
-import com.forgestorm.spigotcore.features.LoadsConfig;
-import com.forgestorm.spigotcore.features.SavesConfig;
+import com.forgestorm.spigotcore.features.*;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.optional.FeatureShutdown;
+import com.forgestorm.spigotcore.features.optional.ShutdownTask;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +62,6 @@ public class FeatureToggleManager implements FeatureRequired {
      * Provide easy access to PaperCommandManager
      */
 //    private final PaperCommandManager paperCommandManager = SpigotCore.PLUGIN.getPaperCommandManager();
-
     @Override
     public void onServerStartup() {
         SpigotCore.PLUGIN.getCommand("feature").setExecutor(new FeatureToggleCommand(this));
@@ -156,13 +154,9 @@ public class FeatureToggleManager implements FeatureRequired {
         featureOptional.onEnable(manualEnable);
 
         // Initialize commands
-//        if (featureOptional instanceof InitCommands) {
-//            for (ForgeStormCommand forgeStormCommand : ((InitCommands) featureOptional).registerAllCommands()) {
-//                forgeStormCommand.enableCommand(paperCommandManager);
-//                forgeStormCommand.setupCommand(paperCommandManager);
-//                Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] Enabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
-//            }
-//        }
+        if (featureOptional instanceof InitCommands) {
+            featureData.addCommands(((InitCommands) featureOptional).registerAllCommands());
+        }
     }
 
     /**
@@ -181,12 +175,9 @@ public class FeatureToggleManager implements FeatureRequired {
         Console.sendMessage(ChatColor.GREEN + "Disabling: " + featureName);
 
         // Unregister commands
-//        if (featureOptional instanceof InitCommands) {
-//            for (ForgeStormCommand forgeStormCommand : ((InitCommands) featureOptional).registerAllCommands()) {
-//                forgeStormCommand.disableCommand(paperCommandManager);
-//                Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] Disabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
-//            }
-//        }
+        if (featureOptional instanceof InitCommands) {
+            featureData.disableCommands();
+        }
 
         // Save configuration files
         if (featureOptional instanceof SavesConfig) {
@@ -210,7 +201,7 @@ public class FeatureToggleManager implements FeatureRequired {
     private void shutdownAllFeatures() {
         for (FeatureData featureData : featureDataMap.values()) {
             disableFeature(featureData.featureOptional, false);
-            if (featureData instanceof FeatureShutdown) ((FeatureShutdown) featureData).onServerShutdown();
+            if (featureData instanceof ShutdownTask) ((ShutdownTask) featureData).onServerShutdown();
         }
     }
 
@@ -241,6 +232,7 @@ public class FeatureToggleManager implements FeatureRequired {
     @Getter
     class FeatureData {
 
+        private final List<ForgeStormCommand> commandMap = new ArrayList<>();
         private final Class clazz;
         private final FeatureOptional featureOptional;
         private final boolean isEnabledInConfig;
@@ -250,6 +242,24 @@ public class FeatureToggleManager implements FeatureRequired {
             this.clazz = clazz;
             this.featureOptional = featureOptional;
             this.isEnabledInConfig = isEnabledInConfig;
+        }
+
+        void addCommands(List<ForgeStormCommand> commandList) {
+            for (ForgeStormCommand forgeStormCommand : commandList) {
+                commandMap.add(forgeStormCommand);
+                Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureOptional.getClass().getSimpleName()
+                        + "] Enabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
+                forgeStormCommand.setupCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+                forgeStormCommand.enableCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+            }
+        }
+
+        void disableCommands() {
+            for (ForgeStormCommand forgeStormCommand : commandMap) {
+                forgeStormCommand.disableCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+                Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureOptional.getClass().getSimpleName()
+                        + "] Disabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
+            }
         }
     }
 }

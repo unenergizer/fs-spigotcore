@@ -5,7 +5,6 @@ import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,8 +27,8 @@ public class MenuManager implements FeatureRequired, Listener {
     private final Map<Class, AbstractMenu> menuMap = new HashMap<>();
     private final Map<Player, AbstractMenu> activeMenus = new ConcurrentHashMap<>();
     private final Map<Player, ShiftClickFixer> shiftClickedItemStackMap = new HashMap<>();
-    private boolean canOpenMenus = false;
 
+    private boolean canOpenMenus = false;
     private BukkitTask menuTickTask;
 
     @Override
@@ -115,7 +114,7 @@ public class MenuManager implements FeatureRequired, Listener {
 
         if (menuToOpen == null) return;
 
-        Inventory inventory = Bukkit.createInventory(null, abstractMenu.getInventorySize().getSize(), ChatColor.BOLD + abstractMenu.getMenuName());
+        Inventory inventory = Bukkit.createInventory(null, abstractMenu.getInventorySize().getSize(), abstractMenu.getMenuName());
 
         for (Map.Entry<Integer, MenuItem> entrySet : abstractMenu.getMenuItemMap().entrySet()) {
             inventory.setItem(entrySet.getKey(), entrySet.getValue().getMenuItem());
@@ -156,12 +155,12 @@ public class MenuManager implements FeatureRequired, Listener {
         if (event.getClickedInventory() == null) return;
         //noinspection SuspiciousMethodCalls
         if (!activeMenus.containsKey(event.getWhoClicked())) return;
-        if (!(event.getWhoClicked() instanceof Player)) return;
         event.setCancelled(true);
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (event.getCurrentItem() == null) return;
+        if (event.getCurrentItem().getType() == Material.AIR) return;
 
         Player player = (Player) event.getWhoClicked();
-
-        event.getAction();
 
         // Attempt to fix the shift+clicking of items into the inventory.
         if (event.getClickedInventory().getType() != InventoryType.CHEST) {
@@ -169,9 +168,6 @@ public class MenuManager implements FeatureRequired, Listener {
                 shiftClickedItemStackMap.put(player, new ShiftClickFixer(event.getCursor(), event.getRawSlot()));
             }
         }
-
-        if (event.getCurrentItem() == null) return;
-        if (event.getCurrentItem().getType() == Material.AIR) return;
 
         AbstractMenu abstractMenu = activeMenus.get(player);
 

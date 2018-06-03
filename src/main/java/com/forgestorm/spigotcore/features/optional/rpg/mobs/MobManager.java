@@ -3,7 +3,7 @@ package com.forgestorm.spigotcore.features.optional.rpg.mobs;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.optional.FeatureShutdown;
+import com.forgestorm.spigotcore.features.optional.ShutdownTask;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class MobManager implements FeatureOptional, FeatureShutdown, LoadsConfig {
+public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig {
 
     private final Map<String, MobType> mobTypes = new HashMap<>();
     private final Map<Location, MobSpawner> mobSpawners = new HashMap<>();

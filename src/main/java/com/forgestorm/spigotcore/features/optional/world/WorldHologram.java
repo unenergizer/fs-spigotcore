@@ -4,7 +4,7 @@ import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.LoadsConfig;
-import com.forgestorm.spigotcore.features.optional.FeatureShutdown;
+import com.forgestorm.spigotcore.features.optional.ShutdownTask;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldHologram implements FeatureOptional, FeatureShutdown, LoadsConfig {
+public class WorldHologram implements FeatureOptional, ShutdownTask, LoadsConfig {
 
     private final List<HologramWorldObject> hologramWorldObjectList = new ArrayList<>();
 

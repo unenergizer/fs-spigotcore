@@ -115,7 +115,7 @@ public class FeatureDataManager implements FeatureRequired, Listener {
         public void run() {
 
             ProfileData profileData = null;
-            try (Connection connection = SpigotCore.PLUGIN.getDatabaseManager().getHikariDataSource().getConnection()) {
+            try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
 
                 feature.databaseLoad(player, connection);
 
@@ -145,7 +145,7 @@ public class FeatureDataManager implements FeatureRequired, Listener {
 
         @Override
         public void run() {
-            try (Connection connection = SpigotCore.PLUGIN.getDatabaseManager().getHikariDataSource().getConnection()) {
+            try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
 
                 feature.databaseSave(player, profileData, connection);
 

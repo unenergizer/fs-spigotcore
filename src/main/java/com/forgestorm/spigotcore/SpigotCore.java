@@ -17,7 +17,7 @@ import com.forgestorm.spigotcore.features.optional.world.lantern.Lantern;
 import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.NewChestLoot;
-import com.forgestorm.spigotcore.features.required.database.DatabaseManager;
+import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
@@ -51,7 +51,7 @@ public class SpigotCore extends JavaPlugin {
     public static SpigotCore PLUGIN;
 
     private final MenuManager menuManager = new MenuManager();
-    private final DatabaseManager databaseManager = new DatabaseManager();
+    private final DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager();
     private final GlobalDataManager globalDataManager = new GlobalDataManager();
     private final FeatureDataManager featureDataManager = new FeatureDataManager();
     private final BlockRegenerationManager blockRegenerationManager = new BlockRegenerationManager();
@@ -75,7 +75,7 @@ public class SpigotCore extends JavaPlugin {
 
         // Init required features & maintain startup order
         menuManager.onServerStartup();
-        databaseManager.onServerStartup();
+        databaseConnectionManager.onServerStartup();
         globalDataManager.onServerStartup();
         featureDataManager.onServerStartup();
         blockRegenerationManager.onServerStartup();
@@ -97,7 +97,7 @@ public class SpigotCore extends JavaPlugin {
         worldObjectManager.onServerShutdown();
         featureDataManager.onServerShutdown();
         globalDataManager.onServerShutdown();
-        databaseManager.onServerShutdown();
+        databaseConnectionManager.onServerShutdown();
         menuManager.onServerShutdown();
     }
 

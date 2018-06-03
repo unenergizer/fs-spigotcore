@@ -118,8 +118,9 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
             if (player.hasMetadata("NPC")) {
                 addPlayer(player, PlayerRanks.NPC);
             } else {
+                if (!SpigotCore.PLUGIN.getGlobalDataManager().hasGlobalPlayerData(player)) continue;
                 PlayerAccount playerAccount = SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(player).getPlayerAccount();
-                if (playerAccount != null) addPlayer(player, playerAccount.getRank());
+                addPlayer(player, playerAccount.getRank());
             }
 
             updatePlayerHP(player);
