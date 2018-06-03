@@ -3,10 +3,9 @@ package com.forgestorm.spigotcore.features.optional.player;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.events.PlayerRankChangeEvent;
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
-import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
@@ -31,20 +30,15 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
     public void onEnable(boolean manualEnable) {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                enableScoreboard();
-                setupTeams();
-            }
-        }.runTaskLater(SpigotCore.PLUGIN, 20);
+        enableScoreboard();
+        setupTeams();
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 setupAllPlayerEntities();
             }
-        }.runTaskLater(SpigotCore.PLUGIN, 20 * 5);
+        }.runTaskLater(SpigotCore.PLUGIN, 20);
     }
 
     @Override
@@ -57,6 +51,9 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
         disableScoreboard();
     }
 
+    /**
+     * Enables a new scoreboard and adds objectives.
+     */
     private void enableScoreboard() {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
@@ -70,6 +67,12 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
         objectivePlayerHP.setDisplayName(ChatColor.RED + "\u2764");
     }
 
+    /**
+     * Fully disables the scoreboard.
+     * Removes all players from teams.
+     * Removes all teams.
+     * Unregisters all scoreboard objectives.
+     */
     private void disableScoreboard() {
         // Remove players from teams and the team itself
         for (Team team : scoreboard.getTeams()) {
@@ -81,14 +84,16 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
 
         // Unregister objectives
         objectivePlayerList.unregister();
+        objectivePlayerList = null;
         objectivePlayerHP.unregister();
+        objectivePlayerHP = null;
 
         scoreboard = null;
     }
 
     /**
-     * This will setup all of the teams the player can join. This is used to show
-     * tags next to their names.
+     * This will setup all of the teams the player can join.
+     * This is used to show tags next to their names.
      */
     private void setupTeams() {
         for (PlayerRanks playerRanks : PlayerRanks.values()) {
@@ -96,14 +101,14 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
 
             team.setPrefix(playerRanks.getUsernamePrefix());
 
-//            Console.sendMessage("NewTeam: " + team.getName());
-//            Console.sendMessage("TeamPrefix: " + team.getPrefix());
-
             if (playerRanks == PlayerRanks.MODERATOR || playerRanks == PlayerRanks.ADMINISTRATOR)
                 team.setCanSeeFriendlyInvisibles(true);
         }
     }
 
+    /**
+     * Adds all entities to a scoreboard team.
+     */
     private void setupAllPlayerEntities() {
         for (LivingEntity livingEntity : Bukkit.getWorlds().get(0).getLivingEntities()) {
 
@@ -117,66 +122,49 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
                 if (playerAccount != null) addPlayer(player, playerAccount.getRank());
             }
 
-//            Console.sendMessage("Player: " + player.getDisplayName() + ", Rank: " + scoreboard.getEntryTeam(player.getName()).getPrefix());
-
             updatePlayerHP(player);
         }
     }
 
     /**
      * Updates the HP under a players username.
+     * <p>
+     * TODO: This should also be called by EventHandlers to set the health.
      *
      * @param player The player HP we want to update.
      */
     private void updatePlayerHP(Player player) {
-        updatePlayerHP(player, (int) player.getHealth());
+        objectivePlayerHP.getScore(player.getName()).setScore((int) player.getHealth());
     }
-
-    /**
-     * Updates the HP under a players username.
-     *
-     * @param player The player HP we want to update.
-     * @param health The health to set in the scoreboard.
-     */
-    public void updatePlayerHP(Player player, int health) {
-        objectivePlayerHP.getScore(player.getName()).setScore(health);
-    }
-
 
     /**
      * This will add a player to this scoreboard.
      *
      * @param player The player to add.
      * @param group  The User group they are in.
-     * @return True if they were added, false otherwise.
      */
-    private boolean addPlayer(Player player, PlayerRanks group) {
+    private void addPlayer(Player player, PlayerRanks group) {
         player.setScoreboard(scoreboard);
         Team tryTeam = scoreboard.getTeam(group.getScoreboardTeamName());
 
-        if (tryTeam == null) return false;
+        if (tryTeam == null) return;
 
         tryTeam.addEntry(player.getName());
-        return true;
     }
 
     /**
      * This will remove the player from this scoreboard.
      *
      * @param player The player to remove.
-     * @return True if removed, false otherwise.
      */
-    public boolean removePlayer(Player player) {
+    private void removePlayer(Player player) {
         PlayerAccount playerAccount = SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(player).getPlayerAccount();
 
-        if (playerAccount == null) return false;
+        if (playerAccount == null) return;
 
         Team tryTeam = scoreboard.getTeam(playerAccount.getRank().getScoreboardTeamName());
 
-        if (tryTeam == null) return false;
-
         tryTeam.removeEntry(player.getName());
-        return true;
     }
 
     @EventHandler

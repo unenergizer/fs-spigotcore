@@ -1,5 +1,8 @@
 package com.forgestorm.spigotcore.constants;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum FilePaths {
 
     CITIZENS("citizen/Citizens.yml"),
@@ -23,10 +26,6 @@ public enum FilePaths {
     WORLD_SETTINGS("world/WorldSettings.yml");
 
     private final String filePath;
-
-    FilePaths(String filePath) {
-        this.filePath = filePath;
-    }
 
     @Override
     public String toString() {

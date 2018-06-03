@@ -21,6 +21,7 @@ import com.forgestorm.spigotcore.features.required.database.DatabaseManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
+import com.forgestorm.spigotcore.features.required.menu.MenuManager;
 import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
 import com.forgestorm.spigotcore.features.required.world.worldobject.WorldObjectManager;
 import com.forgestorm.spigotcore.util.text.Console;
@@ -49,6 +50,7 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final MenuManager menuManager = new MenuManager();
     private final DatabaseManager databaseManager = new DatabaseManager();
     private final GlobalDataManager globalDataManager = new GlobalDataManager();
     private final FeatureDataManager featureDataManager = new FeatureDataManager();
@@ -72,6 +74,7 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
+        menuManager.onServerStartup();
         databaseManager.onServerStartup();
         globalDataManager.onServerStartup();
         featureDataManager.onServerStartup();
@@ -95,6 +98,7 @@ public class SpigotCore extends JavaPlugin {
         featureDataManager.onServerShutdown();
         globalDataManager.onServerShutdown();
         databaseManager.onServerShutdown();
+        menuManager.onServerShutdown();
     }
 
     /**
@@ -118,6 +122,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new PlayerCompassMenu());
         features.add(new PlayerScoreboardTeams());
         features.add(new PlayerNewChecker());
         features.add(new PlayerOperator());
