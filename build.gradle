@@ -125,6 +125,8 @@ dependencies {
 
     provided 'org.projectlombok:lombok:1.16.20'
 
+    provided files("src/main/Libs/Item-NBT-API.jar")
+
     //compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT' // Giving PaperSpigot a try. If it sucks, uncomment :)
 
     //provided group: 'net.md-5', name: 'bungeecord-api', version: '1.10-SNAPSHOT'

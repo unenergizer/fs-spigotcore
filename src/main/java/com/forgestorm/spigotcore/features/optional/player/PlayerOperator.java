@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.player;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.required.database.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;

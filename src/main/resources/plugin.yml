@@ -1,11 +1,11 @@
-name: FS-SpigotCore
+name: ForgeStorm-SpigotCore
 main: com.forgestorm.spigotcore.SpigotCore
 version: 0.1.0
 description: ForgeStorm SpigotCore
 author: Andrew Brown & Joseph Rugh
 website: http://www.forgestorm.com/
 load: POSTWORLD
-depend: [TitleManager, Citizens]
+depend: [TitleManager, Citizens, ItemNBTAPI]
 commands:
    feature:
    cmsg:

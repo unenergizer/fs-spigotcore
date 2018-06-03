@@ -1,5 +1,6 @@
 package com.forgestorm.spigotcore;
 
+import co.aikar.commands.PaperCommandManager;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.chat.EzImgMessage;
 import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
@@ -55,7 +56,7 @@ public class SpigotCore extends JavaPlugin {
     private final WorldObjectManager worldObjectManager = new WorldObjectManager();
     private final FeatureToggleManager featureToggleManager = new FeatureToggleManager();
 
-    //private PaperCommandManager paperCommandManager;
+    private PaperCommandManager paperCommandManager;
     private TitleManagerAPI titleManager;
 
     /**
@@ -67,7 +68,7 @@ public class SpigotCore extends JavaPlugin {
         PLUGIN = this;
 
         // Init needed APIs
-        //paperCommandManager = new PaperCommandManager(this);
+        paperCommandManager = new PaperCommandManager(this);
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
@@ -117,6 +118,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new PlayerScoreboardTeams());
         features.add(new PlayerNewChecker());
         features.add(new PlayerOperator());
         features.add(new PlayerBanKicker());

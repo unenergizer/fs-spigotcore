@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore.features.required.database;
+package com.forgestorm.spigotcore.features.events;
 
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import lombok.AllArgsConstructor;

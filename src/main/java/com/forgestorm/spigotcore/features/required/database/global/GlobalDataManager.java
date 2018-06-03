@@ -3,7 +3,7 @@ package com.forgestorm.spigotcore.features.required.database.global;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
-import com.forgestorm.spigotcore.features.required.database.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.features.required.database.global.player.sql.PlayerAccountSQL;
 import lombok.AllArgsConstructor;
