@@ -24,6 +24,7 @@ public class Hologram {
     @Getter
     private Location location;
     private boolean isSpawned = false;
+    private boolean isMultilineHologram = false;
 
     /**
      * Creates a new instance of a Hologram that contains a single line of text.
@@ -34,6 +35,7 @@ public class Hologram {
     public Hologram(String singleLineText, Location location) {
         this.singleLineText = singleLineText;
         this.location = location;
+        isMultilineHologram = false;
     }
 
     /**
@@ -45,6 +47,30 @@ public class Hologram {
     public Hologram(List<String> multilineText, Location location) {
         this.multilineText = multilineText;
         this.location = location;
+        isMultilineHologram = true;
+    }
+
+    /**
+     * Changes the Hologram display message.
+     *
+     * @param displayMessage The new message to show.
+     */
+    public void changeText(String displayMessage) {
+        if (isMultilineHologram)
+            throw new RuntimeException("Tried to change multiline hologram text but used single line method. User multiline version.");
+        singleLineText = displayMessage;
+    }
+
+    /**
+     * Changes the Hologram display message.
+     *
+     * @param displayMessage The new message to show.
+     * @param lineToChange   The line we want to change.
+     */
+    public void changeText(String displayMessage, int lineToChange) {
+        if (!isMultilineHologram)
+            throw new RuntimeException("Tried to change singe line hologram text but used multiline method. User single line version.");
+        armorStands.get(lineToChange).setCustomName(displayMessage);
     }
 
     /**

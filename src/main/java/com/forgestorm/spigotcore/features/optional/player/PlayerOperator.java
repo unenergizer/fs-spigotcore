@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.player;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -17,13 +17,13 @@ public class PlayerOperator implements FeatureOptional, Listener {
 
     @Override
     public void onDisable(boolean manualDisable) {
-        ProfileDataLoadEvent.getHandlerList().unregister(this);
+        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerKickEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
-    public void onGlobalProfileDataLoad(ProfileDataLoadEvent event) {
+    public void onGlobalProfileDataLoad(GlobalProfileDataLoadEvent event) {
         event.getPlayer().setOp(event.getGlobalPlayerData().getPlayerAccount().isAdmin());
     }
 

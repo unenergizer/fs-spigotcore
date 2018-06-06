@@ -3,7 +3,7 @@ package com.forgestorm.spigotcore.features.required.database.global;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
-import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.features.required.database.global.player.sql.PlayerAccountSQL;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -77,12 +78,16 @@ public class GlobalDataManager implements FeatureRequired, Listener {
         @Override
         public void run() {
 
-            GlobalPlayerData profileData = new GlobalPlayerData(); // TODO: Run database query
+            GlobalPlayerData profileData = new GlobalPlayerData();
 
             try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
 
                 for (BaseGlobalData baseGlobalData : globalDataLoaders) {
-                    ResultSet resultSet = baseGlobalData.searchForData(player, connection);
+                    SqlSearchData sqlSearchData = baseGlobalData.searchForData(player, connection);
+
+                    PreparedStatement searchStatement = connection.prepareStatement("SELECT * FROM " + sqlSearchData.getTableName() + " WHERE " + sqlSearchData.getColumnName() + "=?");
+                    searchStatement.setObject(1, sqlSearchData.getSetData());
+                    ResultSet resultSet = searchStatement.executeQuery();
 
                     // They are a new user and we must generate new tables for them
                     if (!resultSet.next()) {
@@ -99,7 +104,7 @@ public class GlobalDataManager implements FeatureRequired, Listener {
                 @Override
                 public void run() {
                     playerProfileDataMap.put(player, profileData);
-                    Bukkit.getPluginManager().callEvent(new ProfileDataLoadEvent(player, profileData));
+                    Bukkit.getPluginManager().callEvent(new GlobalProfileDataLoadEvent(player, profileData));
                 }
             }.runTask(SpigotCore.PLUGIN);
         }
@@ -115,7 +120,13 @@ public class GlobalDataManager implements FeatureRequired, Listener {
 
         @Override
         public void run() {
-            // TODO: Run database query
+            try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
+                for (BaseGlobalData baseGlobalData : globalDataLoaders) {
+                    baseGlobalData.databaseSave(player, connection);
+                }
+            } catch (SQLException exe) {
+                exe.printStackTrace();
+            }
         }
     }
 }

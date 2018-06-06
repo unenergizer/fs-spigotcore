@@ -4,8 +4,8 @@ import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,6 +21,9 @@ public class GameTipAnnouncer implements FeatureOptional, LoadsConfig {
     private List<String> gameTipList;
     private int timeBetween;
     private int lastTipIndex = 0;
+    private Sound sound;
+    private float soundVolume;
+    private float soundPitch;
     private BukkitTask tipAnnouncer;
 
     @Override
@@ -42,6 +45,9 @@ public class GameTipAnnouncer implements FeatureOptional, LoadsConfig {
     public void loadConfiguration() {
         Configuration config = YamlConfiguration.loadConfiguration(new File(FilePaths.GAME_TIPS.toString()));
         String path = "GameTips.";
+        sound = Sound.valueOf(config.getString(path + "sound.enum"));
+        soundVolume = (float) config.getDouble(path + "sound.volume");
+        soundPitch = (float) config.getDouble(path + "sound.pitch");
         timeBetween = config.getInt(path + "timeBetween");
         gameTipList = config.getStringList(path + "gameTipList");
     }
@@ -52,23 +58,10 @@ public class GameTipAnnouncer implements FeatureOptional, LoadsConfig {
      */
     private void displayGameTips() {
         if (gameTipList.isEmpty()) return;
-        String gameTip = gameTipList.get(lastTipIndex);
+        if (Bukkit.getOnlinePlayers().isEmpty()) return;
 
-        sendPlayerTips(new StringBuilder()
-                .append(ChatColor.YELLOW)
-                .append(ChatColor.BOLD)
-                .append("Tip")
-                .append(ChatColor.YELLOW)
-                .append(" #")
-                .append(Integer.toString(lastTipIndex + 1))
-                .append(ChatColor.DARK_GRAY)
-                .append(ChatColor.BOLD)
-                .append(": ")
-                .append(ChatColor.WHITE)
-                .append(gameTip)
-                .append(ChatColor.DARK_GRAY)
-                .append(".")
-                .toString());
+        String gameTip = gameTipList.get(lastTipIndex);
+        sendPlayerTips(Text.color("&e&lTip &e#" + Integer.toString(lastTipIndex + 1) + "&8&l: &f" + gameTip));
 
         lastTipIndex++;
         if (lastTipIndex >= gameTipList.size()) lastTipIndex = 0;
@@ -80,10 +73,11 @@ public class GameTipAnnouncer implements FeatureOptional, LoadsConfig {
      * @param message The message to send to the player.
      */
     private void sendPlayerTips(String message) {
-        for (Player players : Bukkit.getOnlinePlayers()) {
-            players.sendMessage(message);
-            players.playSound(players.getEyeLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, .5F, .2f);
-            players.playSound(players.getEyeLocation(), Sound.BLOCK_CLOTH_BREAK, .5F, 1f);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendMessage("");
+            player.sendMessage(message);
+            player.sendMessage("");
+            player.playSound(player.getEyeLocation(), sound, soundVolume, soundPitch);
         }
     }
 }

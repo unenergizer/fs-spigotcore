@@ -97,7 +97,7 @@ public class NewChestLoot implements FeatureOptional, Listener {
         }
 
         @Override
-        public void removeWorldObject() {
+        public void despawnWorldObject() {
             Console.sendMessage(ChatColor.DARK_PURPLE + "Removing loot chest.");
             location.getBlock().setType(Material.AIR);
             currentChestsSpawned = currentChestsSpawned - 1;

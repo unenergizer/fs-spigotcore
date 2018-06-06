@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.player;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.InventorySize;
-import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.menu.AbstractMenu;
 import com.forgestorm.spigotcore.features.required.menu.ClickAction;
@@ -26,18 +26,19 @@ public class PlayerCompassMenu implements FeatureOptional, Listener {
     @Override
     public void onDisable(boolean manualDisable) {
         SpigotCore.PLUGIN.getMenuManager().removeMenu(MainMenu.class);
-        ProfileDataLoadEvent.getHandlerList().unregister(this);
+        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
         PlayerInteractEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
-    public void onProfileDataLoad(ProfileDataLoadEvent event) {
+    public void onProfileDataLoad(GlobalProfileDataLoadEvent event) {
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (event.getPlayer().isSneaking()) return;
         if (event.getItem() == null) return;
         if (event.getItem().getType() != Material.COMPASS) return;
         SpigotCore.PLUGIN.getMenuManager().openMenu(player, MainMenu.class);
@@ -48,7 +49,7 @@ public class PlayerCompassMenu implements FeatureOptional, Listener {
         private int tickTest = 0;
 
         MainMenu() {
-            super("Main Menu", InventorySize.ROWS_1);
+            super("Test Menu", InventorySize.ROWS_1);
         }
 
         @Override

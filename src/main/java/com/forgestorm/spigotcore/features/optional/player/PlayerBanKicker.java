@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.player;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,11 +17,11 @@ public class PlayerBanKicker implements FeatureOptional, Listener {
 
     @Override
     public void onDisable(boolean manualDisable) {
-        ProfileDataLoadEvent.getHandlerList().unregister(this);
+        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
-    public void onGlobalProfileDataLoad(ProfileDataLoadEvent event) {
+    public void onGlobalProfileDataLoad(GlobalProfileDataLoadEvent event) {
         if (!event.getGlobalPlayerData().getPlayerAccount().isBanned()) return;
 
         new BukkitRunnable() {

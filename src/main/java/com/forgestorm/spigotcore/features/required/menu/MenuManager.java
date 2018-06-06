@@ -1,7 +1,6 @@
 package com.forgestorm.spigotcore.features.required.menu;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.ForgeStormCommand;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MenuManager implements FeatureRequired, Listener {
 
-    private final Map<Class, AbstractMenu> menuMap = new HashMap<>();
+    private final Map<Class<? extends AbstractMenu>, AbstractMenu> menuMap = new HashMap<>();
     private final Map<Player, AbstractMenu> activeMenus = new ConcurrentHashMap<>();
     private final Map<Player, ShiftClickFixer> shiftClickedItemStackMap = new HashMap<>();
 
@@ -94,7 +93,7 @@ public class MenuManager implements FeatureRequired, Listener {
      *
      * @param abstractMenu The menu to remove.
      */
-    public void removeMenu(Class <? extends AbstractMenu> abstractMenu) {
+    public void removeMenu(Class<? extends AbstractMenu> abstractMenu) {
         for (Map.Entry<Player, AbstractMenu> entry : activeMenus.entrySet()) {
             if (entry.getValue().getClass() != abstractMenu) continue;
             entry.getKey().closeInventory();
@@ -109,7 +108,7 @@ public class MenuManager implements FeatureRequired, Listener {
      * @param player     The player to show the menu to.
      * @param menuToOpen The menu we wish to open.
      */
-    public void openMenu(Player player, Class <? extends AbstractMenu> menuToOpen) {
+    public void openMenu(Player player, Class<? extends AbstractMenu> menuToOpen) {
         if (!canOpenMenus) return;
         AbstractMenu abstractMenu = menuMap.get(menuToOpen);
 
@@ -126,7 +125,7 @@ public class MenuManager implements FeatureRequired, Listener {
     }
 
     /**
-     * Removes the player from teh ActiveMenuList.
+     * Removes the player from the ActiveMenuList.
      *
      * @param player The player we want to remove.
      */

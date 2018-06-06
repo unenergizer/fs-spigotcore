@@ -5,6 +5,7 @@ Database:
    username: root
    password: ""
 Features:
+   RealmManager: true
    GameTipAnnouncer: true
    PlayerCompassMenu: true
    PlayerScoreboardTeams: true

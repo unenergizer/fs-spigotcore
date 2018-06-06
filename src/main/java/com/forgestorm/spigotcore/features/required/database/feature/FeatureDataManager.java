@@ -1,15 +1,21 @@
 package com.forgestorm.spigotcore.features.required.database.feature;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.events.FeatureProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
+import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +48,7 @@ public class FeatureDataManager implements FeatureRequired, Listener {
 
     @Override
     public void onServerShutdown() {
-//        ProfileDataLoadEvent.getHandlerList().unregister(this);
+//        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     /**
@@ -114,11 +120,19 @@ public class FeatureDataManager implements FeatureRequired, Listener {
         @Override
         public void run() {
 
-            ProfileData profileData = null;
+            ProfileData[] profileData = new ProfileData[1];
             try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
+                SqlSearchData sqlSearchData = feature.searchForData(player, connection);
 
-                feature.databaseLoad(player, connection);
+                PreparedStatement searchStatement = connection.prepareStatement("SELECT * FROM " + sqlSearchData.getTableName() + " WHERE " + sqlSearchData.getColumnName() + "=?");
+                searchStatement.setObject(1, sqlSearchData.getSetData());
+                ResultSet resultSet = searchStatement.executeQuery();
 
+                if (resultSet.next()) {
+                    profileData[0] = feature.databaseLoad(player, connection, resultSet);
+                } else {
+                    profileData[0] = feature.firstTimeSave(player, connection);
+                }
             } catch (SQLException exe) {
                 exe.printStackTrace();
             }
@@ -126,8 +140,8 @@ public class FeatureDataManager implements FeatureRequired, Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-//                    Bukkit.getPluginManager().callEvent(new ProfileDataLoadEvent(player, feature, profileData));
-                    addProfileData(player, feature, profileData);
+                    Bukkit.getPluginManager().callEvent(new FeatureProfileDataLoadEvent(player, feature, profileData[0]));
+                    addProfileData(player, feature, profileData[0]);
                 }
             }.runTask(SpigotCore.PLUGIN);
         }

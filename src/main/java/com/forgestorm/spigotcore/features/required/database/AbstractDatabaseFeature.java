@@ -3,12 +3,15 @@ package com.forgestorm.spigotcore.features.required.database;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
+import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -21,9 +24,13 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public abstract class AbstractDatabaseFeature implements FeatureOptional {
 
-    public abstract ProfileData databaseLoad(Player player, Connection connection) throws SQLException;
+    public abstract ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException;
 
     public abstract void databaseSave(Player player, ProfileData profileData, Connection connection) throws SQLException;
+
+    public abstract ProfileData firstTimeSave(Player player, Connection connection) throws SQLException;
+
+    public abstract SqlSearchData searchForData(Player player, Connection connection) throws SQLException;
 
     /**
      * Gets ProfileData for the player from the FeatureDataManager for this specific features.
@@ -31,7 +38,7 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
      * @param player The player we want to grab the template for.
      * @return A ProfileData that contains saved information.
      */
-    protected ProfileData getProfileData(Player player) {
+    public ProfileData getProfileData(Player player) {
         return SpigotCore.PLUGIN.getFeatureDataManager().getProfileData(player, this);
     }
 

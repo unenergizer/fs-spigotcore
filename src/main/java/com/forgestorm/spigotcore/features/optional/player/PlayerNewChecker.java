@@ -4,7 +4,7 @@ import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.events.PlayerRankChangeEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,17 +25,17 @@ public class PlayerNewChecker implements FeatureOptional, Listener {
 
     @Override
     public void onDisable(boolean manualDisable) {
-        ProfileDataLoadEvent.getHandlerList().unregister(this);
+        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
-    public void onGlobalProfileDataLoad(ProfileDataLoadEvent event) {
+    public void onGlobalProfileDataLoad(GlobalProfileDataLoadEvent event) {
         PlayerAccount playerAccount = event.getGlobalPlayerData().getPlayerAccount();
 
         if (playerAccount.getRank() != PlayerRanks.NEW_PLAYER) return;
 
         long firstJoinDate = playerAccount.getFirstJoinDate().getTime();
-        long waitTime = (TimeUnit.HOURS.toMillis(3));
+        long waitTime = (TimeUnit.SECONDS.toMillis(30));
         long timeNow = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))).getTime();
 
         if (firstJoinDate + waitTime < timeNow) {

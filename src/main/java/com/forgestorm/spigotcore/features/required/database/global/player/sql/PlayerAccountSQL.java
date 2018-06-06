@@ -3,6 +3,7 @@ package com.forgestorm.spigotcore.features.required.database.global.player.sql;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.required.database.global.BaseGlobalData;
+import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class PlayerAccountSQL implements BaseGlobalData {
         if (playerAccount == null) return;
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_player_account" +
-                " SET username=? rank=? isBanned=? warning_points=?" +
+                " SET username=?, rank=?, is_banned=?, warning_points=?" +
                 " WHERE player_uuid=?");
         preparedStatement.setString(1, player.getName());
         preparedStatement.setString(2, playerAccount.getRank().toString());
@@ -85,9 +86,7 @@ public class PlayerAccountSQL implements BaseGlobalData {
     }
 
     @Override
-    public ResultSet searchForData(Player player, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM fs_player_account WHERE player_uuid=?");
-        preparedStatement.setString(1, player.getUniqueId().toString());
-        return preparedStatement.executeQuery();
+    public SqlSearchData searchForData(Player player, Connection connection) throws SQLException {
+        return new SqlSearchData("fs_player_account", "player_uuid", player.getUniqueId().toString());
     }
 }

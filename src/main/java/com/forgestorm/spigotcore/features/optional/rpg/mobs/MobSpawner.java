@@ -29,7 +29,7 @@ public class MobSpawner extends BaseWorldObject {
     }
 
     @Override
-    public void removeWorldObject() {
+    public void despawnWorldObject() {
         for (SpawnerMobDetails spawnerMobDetails : spawnerMobDetails) {
             if (spawnerMobDetails.spawnedEntity != null) {
                 spawnerMobDetails.removeEntity();

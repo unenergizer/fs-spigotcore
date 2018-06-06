@@ -15,6 +15,6 @@ public interface BaseGlobalData {
 
     void firstTimeSave(Player player, Connection connection, GlobalPlayerData playerData) throws SQLException;
 
-    ResultSet searchForData(Player player, Connection connection) throws SQLException;
+    SqlSearchData searchForData(Player player, Connection connection) throws SQLException;
 
 }

@@ -300,7 +300,7 @@ public class ChestLoot extends BukkitRunnable implements FeatureOptional, Listen
         }
 
         @Override
-        public void removeWorldObject() {
+        public void despawnWorldObject() {
             Console.sendMessage(ChatColor.DARK_PURPLE + "Removing loot chest.");
             location.getBlock().setType(Material.AIR);
             showParticles = false;

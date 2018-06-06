@@ -266,7 +266,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
         }
 
         @Override
-        public void removeWorldObject() {
+        public void despawnWorldObject() {
             //Despawn the block
             location.getBlock().setType(Material.AIR);
 

@@ -2,8 +2,8 @@ package com.forgestorm.spigotcore.features.optional.player;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.events.PlayerRankChangeEvent;
-import com.forgestorm.spigotcore.features.events.ProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import org.bukkit.Bukkit;
@@ -43,7 +43,7 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
 
     @Override
     public void onDisable(boolean manualDisable) {
-        ProfileDataLoadEvent.getHandlerList().unregister(this);
+        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
         PlayerRankChangeEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerKickEvent.getHandlerList().unregister(this);
@@ -169,7 +169,7 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
     }
 
     @EventHandler
-    public void onProfileLoad(ProfileDataLoadEvent event) {
+    public void onProfileLoad(GlobalProfileDataLoadEvent event) {
         addPlayer(event.getPlayer(), event.getGlobalPlayerData().getPlayerAccount().getRank());
         updatePlayerHP(event.getPlayer());
     }

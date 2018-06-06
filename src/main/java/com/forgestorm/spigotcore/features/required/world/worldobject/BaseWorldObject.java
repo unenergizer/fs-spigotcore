@@ -19,7 +19,7 @@ public abstract class BaseWorldObject {
     public abstract void spawnWorldObject();
 
     /**
-     * Actions to perform when a object is to spawn in a world.
+     * Actions to perform when a object is to despawn in a world.
      */
-    public abstract void removeWorldObject();
+    public abstract void despawnWorldObject();
 }

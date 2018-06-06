@@ -3,6 +3,8 @@ package com.forgestorm.spigotcore.features.required.world.worldobject;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
+import com.forgestorm.spigotcore.util.text.Console;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,7 +71,7 @@ public class WorldObjectManager implements FeatureRequired {
         // Cleanup!
         for (BaseWorldObject baseWorldObject : worldObjectMap.values()) {
             baseWorldObject.setSpawned(false);
-            baseWorldObject.removeWorldObject();
+            baseWorldObject.despawnWorldObject();
         }
         worldObjectMap.clear();
     }
@@ -146,7 +148,7 @@ public class WorldObjectManager implements FeatureRequired {
             } else {
 
                 // No players near this BaseWorldObject, lets remove it.
-                baseWorldObject.removeWorldObject();
+                baseWorldObject.despawnWorldObject();
             }
         }
     }
@@ -172,7 +174,7 @@ public class WorldObjectManager implements FeatureRequired {
         // If the BaseWorldObject currently exists in the world, lets remove it.
         if (baseWorldObject.isSpawned()) {
             baseWorldObject.setSpawned(false);
-            baseWorldObject.removeWorldObject();
+            baseWorldObject.despawnWorldObject();
         }
 
         worldObjectMap.remove(location);

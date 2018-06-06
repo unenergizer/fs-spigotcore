@@ -1,5 +1,6 @@
 package com.forgestorm.spigotcore.constants;
 
+import com.forgestorm.spigotcore.SpigotCore;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -32,6 +33,6 @@ public enum FilePaths {
     @Override
     public String toString() {
         // Include the base file path
-        return "plugins/FS-SpigotCore/" + filePath;
+        return SpigotCore.PLUGIN.getDataFolder() + "/" + filePath;
     }
 }

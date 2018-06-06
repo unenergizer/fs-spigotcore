@@ -9,6 +9,7 @@ import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
 import com.forgestorm.spigotcore.features.optional.player.*;
+import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.features.optional.world.HiddenPaths;
 import com.forgestorm.spigotcore.features.optional.world.ServerSpawn;
@@ -23,6 +24,7 @@ import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataM
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.menu.MenuManager;
+import com.forgestorm.spigotcore.features.required.world.loader.WorldManager;
 import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
 import com.forgestorm.spigotcore.features.required.world.worldobject.WorldObjectManager;
 import com.forgestorm.spigotcore.util.text.Console;
@@ -51,6 +53,7 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final WorldManager worldManager = new WorldManager();
     private final MenuManager menuManager = new MenuManager();
     private final DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager();
     private final GlobalDataManager globalDataManager = new GlobalDataManager();
@@ -75,6 +78,7 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
+        worldManager.onServerStartup();
         menuManager.onServerStartup();
         databaseConnectionManager.onServerStartup();
         globalDataManager.onServerStartup();
@@ -100,6 +104,7 @@ public class SpigotCore extends JavaPlugin {
         globalDataManager.onServerShutdown();
         databaseConnectionManager.onServerShutdown();
         menuManager.onServerShutdown();
+        worldManager.onServerShutdown();
     }
 
     /**
@@ -123,6 +128,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new RealmManager());
         features.add(new GameTipAnnouncer());
         features.add(new PlayerCompassMenu());
         features.add(new PlayerScoreboardTeams());
