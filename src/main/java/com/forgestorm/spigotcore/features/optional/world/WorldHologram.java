@@ -2,11 +2,10 @@ package com.forgestorm.spigotcore.features.optional.world;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.LoadsConfig;
-import com.forgestorm.spigotcore.features.optional.ShutdownTask;
-import com.forgestorm.spigotcore.util.display.Hologram;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
+import com.forgestorm.spigotcore.util.display.Hologram;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldHologram implements FeatureOptional, ShutdownTask, LoadsConfig {
+public class WorldHologram implements FeatureOptional, LoadsConfig {
 
     private final List<HologramWorldObject> hologramWorldObjectList = new ArrayList<>();
 
@@ -28,11 +27,7 @@ public class WorldHologram implements FeatureOptional, ShutdownTask, LoadsConfig
 
     @Override
     public void onDisable(boolean manualDisable) {
-        hologramWorldObjectList.forEach(HologramWorldObject::removeWorldObject);
-    }
-
-    @Override
-    public void onServerShutdown() {
+        hologramWorldObjectList.forEach(worldObject -> SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(worldObject));
         hologramWorldObjectList.forEach(HologramWorldObject::remove);
         hologramWorldObjectList.clear();
     }
@@ -73,7 +68,6 @@ public class WorldHologram implements FeatureOptional, ShutdownTask, LoadsConfig
         }
 
         public void remove() {
-            removeWorldObject();
             hologram.remove();
         }
 
@@ -83,7 +77,7 @@ public class WorldHologram implements FeatureOptional, ShutdownTask, LoadsConfig
         }
 
         @Override
-        public void removeWorldObject() {
+        public void despawnWorldObject() {
             hologram.despawnHologram();
         }
     }
