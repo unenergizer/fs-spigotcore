@@ -1,9 +1,9 @@
 package com.forgestorm.spigotcore.features.required.database.global;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
-import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
+import com.forgestorm.spigotcore.features.required.FeatureRequired;
+import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.features.required.database.global.player.sql.PlayerAccountSQL;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,7 +40,6 @@ public class GlobalDataManager implements FeatureRequired, Listener {
     public void onServerShutdown() {
         PlayerLoginEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
     }
 
     public GlobalPlayerData getGlobalPlayerData(Player player) {
@@ -59,11 +57,6 @@ public class GlobalDataManager implements FeatureRequired, Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        new AsyncSave(event.getPlayer()).runTaskAsynchronously(SpigotCore.PLUGIN);
-    }
-
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
         new AsyncSave(event.getPlayer()).runTaskAsynchronously(SpigotCore.PLUGIN);
     }
 

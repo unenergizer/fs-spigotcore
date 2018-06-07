@@ -21,12 +21,12 @@ public class WorldHologram implements FeatureOptional, LoadsConfig {
     private final List<HologramWorldObject> hologramWorldObjectList = new ArrayList<>();
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         hologramWorldObjectList.forEach(worldObject -> SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(worldObject.getLocation(), worldObject));
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         hologramWorldObjectList.forEach(worldObject -> SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(worldObject));
         hologramWorldObjectList.forEach(HologramWorldObject::remove);
         hologramWorldObjectList.clear();

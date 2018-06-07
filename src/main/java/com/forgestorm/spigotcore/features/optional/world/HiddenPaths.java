@@ -45,12 +45,12 @@ public class HiddenPaths implements FeatureOptional, Listener {
     }
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         EntityExplodeEvent.getHandlerList().unregister(this);
         BlockPlaceEvent.getHandlerList().unregister(this);
     }

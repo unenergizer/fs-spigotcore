@@ -11,12 +11,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PlayerBanKicker implements FeatureOptional, Listener {
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 

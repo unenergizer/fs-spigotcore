@@ -16,12 +16,12 @@ public interface FeatureOptional {
      *
      * @param manualEnable True, if startup was called manually (e.g. via command).
      */
-    void onEnable(boolean manualEnable);
+    void onFeatureEnable(boolean manualEnable);
 
     /**
      * Called when we want to disable a features.
      *
      * @param manualDisable True, if startup was called manually (e.g. via command).
      */
-    void onDisable(boolean manualDisable);
+    void onFeatureDisable(boolean manualDisable);
 }

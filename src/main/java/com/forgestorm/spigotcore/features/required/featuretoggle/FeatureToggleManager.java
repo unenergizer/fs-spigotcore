@@ -152,7 +152,7 @@ public class FeatureToggleManager implements FeatureRequired {
         }
 
         // Next enable the features.
-        featureOptional.onEnable(manualEnable);
+        featureOptional.onFeatureEnable(manualEnable);
 
         // Initialize commands
         if (featureOptional instanceof InitCommands) {
@@ -191,7 +191,7 @@ public class FeatureToggleManager implements FeatureRequired {
             Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureName + "] Database data saved.");
         }
 
-        featureOptional.onDisable(manualDisable);
+        featureOptional.onFeatureDisable(manualDisable);
     }
 
     /**

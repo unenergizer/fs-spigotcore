@@ -86,7 +86,7 @@ public class PlayerAccountSQL implements BaseGlobalData {
     }
 
     @Override
-    public SqlSearchData searchForData(Player player, Connection connection) throws SQLException {
+    public SqlSearchData searchForData(Player player, Connection connection) {
         return new SqlSearchData("fs_player_account", "player_uuid", player.getUniqueId().toString());
     }
 }

@@ -12,12 +12,12 @@ public class ItemLoader implements FeatureOptional, LoadsConfig {
     }
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
 
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
 
     }
 }

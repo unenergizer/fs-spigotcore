@@ -45,7 +45,7 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
     private boolean featureEnabled = false;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         Bukkit.getWorlds().get(0).setSpawnLocation(
                 (int) spawnLocation.getX(),
@@ -69,7 +69,7 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         featureEnabled = false;
         if (commandOptions.commandEnabled && commandOptions.countdownEnabled) {
             spawnTimer.cancel();

@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -63,7 +62,6 @@ public class MenuManager implements FeatureRequired, Listener {
         InventoryCloseEvent.getHandlerList().unregister(this);
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
     }
 
     /**
@@ -213,11 +211,6 @@ public class MenuManager implements FeatureRequired, Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        removePlayer(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
         removePlayer(event.getPlayer());
     }
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum RealmAlignment {
+
     FRIENDLY("&aFriendly"),
     HOSTILE("&cHostile");
 

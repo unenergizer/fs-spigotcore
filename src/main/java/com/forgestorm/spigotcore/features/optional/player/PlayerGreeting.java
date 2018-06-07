@@ -1,9 +1,9 @@
 package com.forgestorm.spigotcore.features.optional.player;
 
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
@@ -26,15 +25,14 @@ public class PlayerGreeting implements FeatureOptional, LoadsConfig, Listener {
     private boolean showPersonalLoginMessage = false;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
     }
 
     @Override
@@ -70,11 +68,6 @@ public class PlayerGreeting implements FeatureOptional, LoadsConfig, Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(Greetings.BROADCAST_PLAYER_QUIT.toString().replace("%e", event.getPlayer().getDisplayName()));
-    }
-
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
-        event.setLeaveMessage(Greetings.BROADCAST_PLAYER_QUIT.toString().replace("%e", event.getPlayer().getDisplayName()));
     }
 
     private enum Greetings {

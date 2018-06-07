@@ -12,7 +12,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -27,7 +26,7 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
     private Objective objectivePlayerHP;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         enableScoreboard();
@@ -42,11 +41,10 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
         PlayerRankChangeEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
 
         disableScoreboard();
     }
@@ -183,11 +181,6 @@ public class PlayerScoreboardTeams implements FeatureOptional, Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        removePlayer(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
         removePlayer(event.getPlayer());
     }
 }

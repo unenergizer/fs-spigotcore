@@ -25,13 +25,13 @@ public class EzImgMessage implements FeatureOptional, CommandExecutor {
     private boolean isEnabled = false;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         isEnabled = true;
         SpigotCore.PLUGIN.getCommand("chaticon").setExecutor(this);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         isEnabled = false;
     }
 

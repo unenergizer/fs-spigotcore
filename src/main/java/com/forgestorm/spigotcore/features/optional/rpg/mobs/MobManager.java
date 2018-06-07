@@ -23,7 +23,7 @@ public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig {
     private final Map<Location, MobSpawner> mobSpawners = new HashMap<>();
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         addSpawnersToWorldObjectManager();
 
         Console.sendMessage("[MobManager] MobTypes Loaded: " + Integer.toString(mobTypes.size()));
@@ -31,7 +31,7 @@ public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig {
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         removeSpawnersFromWorldObjectManager();
     }
 

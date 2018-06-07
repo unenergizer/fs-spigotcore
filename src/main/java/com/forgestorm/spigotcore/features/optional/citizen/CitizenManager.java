@@ -34,7 +34,7 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
     private ResetTimer resetTimer;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         resetTimer = new ResetTimer();
@@ -46,7 +46,7 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerInteractEntityEvent.getHandlerList().unregister(this);
 
         resetTimer.cancel();

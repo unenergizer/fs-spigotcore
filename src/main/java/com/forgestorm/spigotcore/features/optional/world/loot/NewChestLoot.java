@@ -26,13 +26,13 @@ public class NewChestLoot implements FeatureOptional, Listener {
     private int currentChestsSpawned = 0;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         loadLocations();
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
 
     }
 

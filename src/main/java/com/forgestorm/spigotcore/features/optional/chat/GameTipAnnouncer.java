@@ -27,7 +27,7 @@ public class GameTipAnnouncer implements FeatureOptional, LoadsConfig {
     private BukkitTask tipAnnouncer;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         tipAnnouncer = new BukkitRunnable() {
             @Override
             public void run() {
@@ -37,7 +37,7 @@ public class GameTipAnnouncer implements FeatureOptional, LoadsConfig {
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         tipAnnouncer.cancel();
     }
 

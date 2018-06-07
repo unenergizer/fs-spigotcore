@@ -34,14 +34,14 @@ public class Lantern implements FeatureOptional, LoadsConfig, Listener {
     private final WorldTimer worldTimer = new WorldTimer();
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         worldTimer.onEnable();
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         worldTimer.onDisable();
 
         if (timeOfDay == TimeOfDay.DUSK) putOutLanterns();

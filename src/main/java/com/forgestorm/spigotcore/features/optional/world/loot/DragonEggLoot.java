@@ -41,7 +41,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     private boolean isSpawned = false;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         loadLocations();
 
         hologramText.add("&5&lTP EGG GAME");
@@ -55,7 +55,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         // Remove the dragon egg from chunk manager
         SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(dragonEgg.location);
 

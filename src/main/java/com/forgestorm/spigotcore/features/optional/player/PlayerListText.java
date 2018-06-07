@@ -24,14 +24,14 @@ public class PlayerListText implements FeatureOptional, LoadsConfig, Listener {
     private String footer;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         for (Player player : Bukkit.getOnlinePlayers()) setPlayerListText(player);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
 
         for (Player player : Bukkit.getOnlinePlayers())

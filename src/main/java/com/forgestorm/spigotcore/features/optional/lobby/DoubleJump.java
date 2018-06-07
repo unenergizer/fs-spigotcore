@@ -1,7 +1,7 @@
 package com.forgestorm.spigotcore.features.optional.lobby;
 
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -16,17 +16,16 @@ import org.bukkit.event.player.*;
 public class DoubleJump implements FeatureOptional, Listener {
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         Bukkit.getOnlinePlayers().forEach(this::setupPlayer);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
         PlayerMoveEvent.getHandlerList().unregister(this);
         PlayerToggleFlightEvent.getHandlerList().unregister(this);
         EntityDamageEvent.getHandlerList().unregister(this);
@@ -68,11 +67,6 @@ public class DoubleJump implements FeatureOptional, Listener {
     }
 
     @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
-        removePlayer(event.getPlayer());
-    }
-
-    @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
@@ -107,5 +101,19 @@ public class DoubleJump implements FeatureOptional, Listener {
     public void onEntityDamage(final EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL) event.setCancelled(true);
+    }
+
+    /**
+     * Added listener to make sure people who joined our main world, has the correct setup to
+     * be able to double jump. This is useful if players have left a
+     * {@link com.forgestorm.spigotcore.features.optional.realm.Realm} and flying and other vars
+     * have been turned off. Using a listener here allows both features to play nicely wither or not
+     * one or another is enabled/disabled.
+     */
+    @EventHandler
+    public void onPlayerPortalEvent(PlayerPortalEvent event) {
+        if (event.getCause() != PlayerPortalEvent.TeleportCause.NETHER_PORTAL) return;
+        if (!Bukkit.getWorlds().get(0).getName().equals(event.getPlayer().getWorld().getName())) return;
+        setupPlayer(event.getPlayer());
     }
 }

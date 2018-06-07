@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
@@ -39,7 +38,7 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands
     }
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         bossBarUtil = new BossBarUtil(barText);
         bossBarUtil.setBossBarProgress(1);
 
@@ -52,10 +51,9 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
 
         bossBarUtil.removeAllBossBar();
     }
@@ -75,10 +73,4 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands
     public void onPlayerQuit(PlayerQuitEvent event) {
         bossBarUtil.removeBossBar(event.getPlayer());
     }
-
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
-        bossBarUtil.removeBossBar(event.getPlayer());
-    }
-
 }

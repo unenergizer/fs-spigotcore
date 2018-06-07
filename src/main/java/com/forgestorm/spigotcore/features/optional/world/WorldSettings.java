@@ -46,13 +46,13 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
     private boolean doWeatherCycle;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         initWorld(manualEnable);
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         BlockIgniteEvent.getHandlerList().unregister(this);
         ChunkLoadEvent.getHandlerList().unregister(this);
         EntityChangeBlockEvent.getHandlerList().unregister(this);

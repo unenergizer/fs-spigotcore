@@ -27,7 +27,7 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
     private boolean clearInventory;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         // Encase of reloads
@@ -38,7 +38,7 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerJoinEvent.getHandlerList().unregister(this);
         FoodLevelChangeEvent.getHandlerList().unregister(this);
     }
@@ -61,6 +61,8 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
     private void setupPlayer(Player player) {
         player.setGameMode(GameMode.getByValue(gameMode));
         if (clearInventory) player.getInventory().clear();
+
+        player.getInventory().setHeldItemSlot(0);
 
         if (!fixHealth) return;
         player.setHealth(20);

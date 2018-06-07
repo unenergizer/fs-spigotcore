@@ -6,7 +6,6 @@ import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
-import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -23,22 +22,23 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RealmManager extends AbstractDatabaseFeature implements FeatureOptional, Listener {
 
 
-    private final Map<Player, Realm> openRealmsMap = new HashMap<>();
+    private final Map<Player, Realm> openRealmsMap = new ConcurrentHashMap<>();
     private RealmCooldownTimer realmCooldownTimer;
 
     @Override
-    public void onEnable(boolean manualEnable) {
+    public void onFeatureEnable(boolean manualEnable) {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         realmCooldownTimer = new RealmCooldownTimer();
@@ -46,11 +46,12 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
     }
 
     @Override
-    public void onDisable(boolean manualDisable) {
+    public void onFeatureDisable(boolean manualDisable) {
         PlayerInteractEvent.getHandlerList().unregister(this);
         BlockDamageEvent.getHandlerList().unregister(this);
         EntityDamageByEntityEvent.getHandlerList().unregister(this);
         BlockPhysicsEvent.getHandlerList().unregister(this);
+        PlayerQuitEvent.getHandlerList().unregister(this);
 
         for (Map.Entry<Player, Realm> entry : openRealmsMap.entrySet()) {
             closeRealm(entry.getKey());
@@ -69,7 +70,7 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
     private void openRealm(Player player, Location realmOpenLocation) {
         // Make sure the user doesn't already have a realm open.
         if (openRealmsMap.containsKey(player)) {
-            player.sendMessage(RealmMessages.REALM_PORTAL_DUPLICATE.toString());
+            player.sendMessage(RealmMessages.REALM_PORTAL_DUPLICATE.getMessage());
             CommonSounds.ACTION_FAILED.play(player);
             return;
         }
@@ -90,16 +91,17 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
 
         // Make sure the player isn't setting the realm close to another realm.
         if (getNearbyPortals(realmOpenLocation, 2)) {
-            player.sendMessage(RealmMessages.REALM_PORTAL_PLACE_TOO_CLOSE.toString());
+            player.sendMessage(RealmMessages.REALM_PORTAL_PLACE_TOO_CLOSE.getMessage());
             CommonSounds.ACTION_FAILED.play(player);
             return;
         }
 
-        player.sendMessage(ChatColor.GREEN + "Loading your realm.");
         asyncDatastoreLoad(player);
         Realm realm = new Realm(this, player, realmOpenLocation);
         realm.onRealmEnable();
         openRealmsMap.put(player, realm);
+
+        player.sendMessage(ChatColor.GREEN + "Loading your realm.");
     }
 
     /**
@@ -111,26 +113,26 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
         if (!openRealmsMap.containsKey(player)) return;
         realmCooldownTimer.addRealmCooldown(player);
 
-        player.sendMessage(ChatColor.GREEN + "Closing and saving your realm.");
-
         Realm realm = openRealmsMap.get(player);
         realm.onRealmDisable();
         asyncDatastoreSave(player);
         openRealmsMap.remove(player);
+
+        player.sendMessage(ChatColor.GREEN + "Closing and saving your realm.");
     }
 
     @Override
     public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
 
-        RealmData realmData = new RealmData();
+        RealmProfileData realmProfileData = new RealmProfileData();
 
-        realmData.setHasRealm(resultSet.getBoolean("has_realm"));
-        realmData.setRealmTitle(resultSet.getString("title"));
-        realmData.setRealmTier(resultSet.getInt("tier"));
-        realmData.setRealmInsideDoorLocation(resultSet.getString("inside_door_location"));
-        realmData.setDataLoaded(true);
+        realmProfileData.setHasRealm(resultSet.getBoolean("has_realm"));
+        realmProfileData.setRealmTitle(resultSet.getString("title"));
+        realmProfileData.setRealmTier(resultSet.getInt("tier"));
+        realmProfileData.setRealmInsideDoorLocation(resultSet.getString("inside_door_location"));
+        realmProfileData.setDataLoaded(true);
 
-        return realmData;
+        return realmProfileData;
     }
 
     @Override
@@ -138,21 +140,12 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_feature_realm SET has_realm=?, title=?, tier=?, inside_door_location=? WHERE owner_uuid=?");
 
-        RealmData realmData = (RealmData) profileData;
+        RealmProfileData realmProfileData = (RealmProfileData) profileData;
 
-
-        Console.sendMessage("---------------- SAVE START --------------");
-        Console.sendMessage(Boolean.toString(realmData.isHasRealm()));
-        Console.sendMessage(realmData.getRealmTitle());
-        Console.sendMessage(Integer.toString(realmData.getRealmTier()));
-        Console.sendMessage(realmData.getRealmInsideDoorLocation());
-        Console.sendMessage(player.getUniqueId().toString());
-        Console.sendMessage("---------------- SAVE END --------------");
-
-        preparedStatement.setBoolean(1, realmData.isHasRealm());
-        preparedStatement.setString(2, realmData.getRealmTitle());
-        preparedStatement.setInt(3, realmData.getRealmTier());
-        preparedStatement.setString(4, realmData.getRealmInsideDoorLocation());
+        preparedStatement.setBoolean(1, realmProfileData.isHasRealm());
+        preparedStatement.setString(2, realmProfileData.getRealmTitle());
+        preparedStatement.setInt(3, realmProfileData.getRealmTier());
+        preparedStatement.setString(4, realmProfileData.getRealmInsideDoorLocation());
         preparedStatement.setString(5, player.getUniqueId().toString());
 
         preparedStatement.execute();
@@ -178,18 +171,18 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
 
         newPlayerStatement.execute();
 
-        RealmData realmData = new RealmData();
-        realmData.setHasRealm(newHasRealm);
-        realmData.setRealmTitle(newRealmTitle);
-        realmData.setRealmTier(newRealmTier);
-        realmData.setRealmInsideDoorLocation(newRealmInsideDoorLocation);
-        realmData.setDataLoaded(true);
+        RealmProfileData realmProfileData = new RealmProfileData();
+        realmProfileData.setHasRealm(newHasRealm);
+        realmProfileData.setRealmTitle(newRealmTitle);
+        realmProfileData.setRealmTier(newRealmTier);
+        realmProfileData.setRealmInsideDoorLocation(newRealmInsideDoorLocation);
+        realmProfileData.setDataLoaded(true);
 
-        return realmData;
+        return realmProfileData;
     }
 
     @Override
-    public SqlSearchData searchForData(Player player, Connection connection) throws SQLException {
+    public SqlSearchData searchForData(Player player, Connection connection) {
         return new SqlSearchData("fs_feature_realm", "owner_uuid", player.getUniqueId().toString());
     }
 
@@ -287,6 +280,11 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
         if (event.getChangedType().equals(Material.PORTAL)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (openRealmsMap.containsKey(event.getPlayer())) closeRealm(event.getPlayer());
     }
 
     @AllArgsConstructor
