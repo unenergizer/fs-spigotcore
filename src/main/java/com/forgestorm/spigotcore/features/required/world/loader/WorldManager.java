@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class WorldManager implements FeatureRequired, Listener {
+public class WorldManager extends FeatureRequired implements Listener {
 
     private final Map<String, WorldData> worldUnloadDataList = new HashMap<>();
 
@@ -26,7 +26,7 @@ public class WorldManager implements FeatureRequired, Listener {
     private AsyncWorldCopy asyncWorldCopier;
 
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         syncWorldLoader = new SyncWorldLoader();
         syncWorldLoader.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
@@ -35,7 +35,7 @@ public class WorldManager implements FeatureRequired, Listener {
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
         WorldUnloadEvent.getHandlerList().unregister(this);
         syncWorldLoader.cancel();
         asyncWorldCopier.cancel();

@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * </ul>
  */
 @SuppressWarnings("WeakerAccess")
-public class BlockRegenerationManager implements FeatureRequired {
+public class BlockRegenerationManager extends FeatureRequired {
 
     /**
      * Default time for a block to respawn, if a time is not supplied.
@@ -36,7 +36,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     private BukkitRunnable syncRunnable;
 
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
         syncRunnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -47,7 +47,7 @@ public class BlockRegenerationManager implements FeatureRequired {
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
         syncRunnable.cancel();
         resetAllBlocks();
         regenerationInfoList.clear();

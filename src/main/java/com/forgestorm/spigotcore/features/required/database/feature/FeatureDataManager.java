@@ -37,17 +37,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * <li>Fix the isProfileData loaded method.</li>
  * </ul>
  */
-public class FeatureDataManager implements FeatureRequired, Listener {
+public class FeatureDataManager extends FeatureRequired implements Listener {
 
     private final Map<Player, Map<AbstractDatabaseFeature, ProfileData>> playerProfileDataMap = new ConcurrentHashMap<>();
 
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
 //        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
 //        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 

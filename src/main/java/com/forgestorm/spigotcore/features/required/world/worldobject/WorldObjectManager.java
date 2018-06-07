@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *     <li>Implement a respawn timing system for {@link BaseWorldObject}</li>
  * </ul>
  */
-public class WorldObjectManager implements FeatureRequired {
+public class WorldObjectManager extends FeatureRequired {
 
     // Quick command to kill entites besides players. Will remove later.
     //TODO: /kill @e[type=!Player]
@@ -44,7 +44,7 @@ public class WorldObjectManager implements FeatureRequired {
     private BukkitRunnable syncRunnable;
 
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
         asyncRunnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -63,7 +63,7 @@ public class WorldObjectManager implements FeatureRequired {
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
         asyncRunnable.cancel();
         syncRunnable.cancel();
         baseWorldObjectQueue.clear();

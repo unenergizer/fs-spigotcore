@@ -30,7 +30,7 @@ public final class JsonMessageConverter {
     private static final Pattern ARG_SPLIT_PATTERN = Pattern.compile("\\|jmc\\|", Pattern.CASE_INSENSITIVE);
 
     public BaseComponent[] convert(@NonNull final String input) {
-        return convert(input, null, null);
+        return convert(input, null, null, null);
     }
 
     /**
@@ -44,7 +44,7 @@ public final class JsonMessageConverter {
      * @return the converted message as {@link BaseComponent}
      */
     @NonNull
-    public BaseComponent[] convert(final String input, final String uniqueKey, final String npcName) {
+    public BaseComponent[] convert(final String input, final String command, final String uniqueKey, final String npcName) {
         // Any text wrapped in Text.color(value) was not included in the original class.
         List<BaseComponent> components = new ArrayList<>();
         final Matcher matcher = CAM_PATTERN.matcher(input);
@@ -73,7 +73,7 @@ public final class JsonMessageConverter {
                         break;
                     case "cmsg": // Not found in original class.
                         txt.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Text.color("&eClick me!"))));
-                        txt.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cmsg " + uniqueKey + " " + npcName + " " + val));
+                        txt.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"+ command + " " + uniqueKey + " " + npcName + " " + val));
                         break;
                     case "link":
                         txt.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, val));

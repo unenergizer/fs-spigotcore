@@ -24,7 +24,7 @@ public class TarkanScoreboard {
 //        api.removeScoreboard(player);
 //    }
 //
-//    public void onServerShutdown() {
+//    public void initFeatureClose() {
 //        for (Player players : Bukkit.getOnlinePlayers()) {
 //            if (hasScoreboard(players)) {
 //                removeScoreboard(players);

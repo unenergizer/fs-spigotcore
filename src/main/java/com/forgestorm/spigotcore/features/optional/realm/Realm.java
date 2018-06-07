@@ -89,11 +89,11 @@ class Realm implements Listener {
         player.teleport(LocationUtil.addToLocation(insideDoorLocation, 0.0, 1.5, 0.0));
         player.sendMessage("");
         player.sendMessage(CenterChatText.centerChatMessage(Text.color("&7&m-&r &7&m--&r &7&m---&r &7&m----&r &3&lRealm Joined &7&m----&r &7&m---&r &7&m--&r &7&m-&r")));
-        player.sendMessage(Text.color("&eOwner&8: &r" + realmOwner.getName()));
-        player.sendMessage(Text.color("&eAlignment&8: &r" + realmAlignment.getAlignment()));
-        player.sendMessage(Text.color("&eTier&8: &r" + realmTier.getTier()));
-        player.sendMessage(Text.color("&eBuild Width&8: &r" + realmTier.getSize() + "&7x&r" + realmTier.getSize()));
-        player.sendMessage(Text.color("&eJoinMessage&8: &r" + title));
+        player.sendMessage(Text.color("&e&lOwner&8: &r" + realmOwner.getName()));
+        player.sendMessage(Text.color("&e&lAlignment&8: &r" + realmAlignment.getAlignment()));
+        player.sendMessage(Text.color("&e&lTier&8: &r" + realmTier.getTier()));
+        player.sendMessage(Text.color("&e&lBuild Width&8: &r" + realmTier.getSize() + "&7x&r" + realmTier.getSize()));
+        player.sendMessage(Text.color("&e&lJoinMessage&8: &r" + title));
 
         // Removes double jump, if feature is active
         // Enabled again automatically by DoubleJump feature when player rejoins the main world

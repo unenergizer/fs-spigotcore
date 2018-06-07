@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MenuManager implements FeatureRequired, Listener {
+public class MenuManager extends FeatureRequired implements Listener {
 
     private final Map<Class<? extends AbstractMenu>, AbstractMenu> menuMap = new HashMap<>();
     private final Map<Player, AbstractMenu> activeMenus = new ConcurrentHashMap<>();
@@ -31,7 +31,7 @@ public class MenuManager implements FeatureRequired, Listener {
     private BukkitTask menuTickTask;
 
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         canOpenMenus = true;
 
@@ -44,7 +44,7 @@ public class MenuManager implements FeatureRequired, Listener {
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
         canOpenMenus = false;
         menuTickTask.cancel();
 

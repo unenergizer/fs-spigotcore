@@ -78,14 +78,14 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
-        worldManager.onServerStartup();
-        menuManager.onServerStartup();
-        databaseConnectionManager.onServerStartup();
-        globalDataManager.onServerStartup();
-        featureDataManager.onServerStartup();
-        blockRegenerationManager.onServerStartup();
-        worldObjectManager.onServerStartup();
-        featureToggleManager.onServerStartup();
+        worldManager.startup();
+        menuManager.startup();
+        databaseConnectionManager.startup();
+        globalDataManager.startup();
+        featureDataManager.startup();
+        blockRegenerationManager.startup();
+        worldObjectManager.startup();
+        featureToggleManager.startup();
 
         // Init optional features last
         initOptionalFeatures();
@@ -97,14 +97,14 @@ public class SpigotCore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Maintain shutdown order
-        featureToggleManager.onServerShutdown();
-        blockRegenerationManager.onServerShutdown();
-        worldObjectManager.onServerShutdown();
-        featureDataManager.onServerShutdown();
-        globalDataManager.onServerShutdown();
-        databaseConnectionManager.onServerShutdown();
-        menuManager.onServerShutdown();
-        worldManager.onServerShutdown();
+        featureToggleManager.shutdown();
+        blockRegenerationManager.shutdown();
+        worldObjectManager.shutdown();
+        featureDataManager.shutdown();
+        globalDataManager.shutdown();
+        databaseConnectionManager.shutdown();
+        menuManager.shutdown();
+        worldManager.shutdown();
     }
 
     /**

@@ -32,7 +32,7 @@ import java.util.Map;
  * <li>Features are not allowed to interact with each other. No exceptions!</li>
  * </ul>
  */
-public class FeatureToggleManager implements FeatureRequired {
+public class FeatureToggleManager extends FeatureRequired {
 
     /**
      * Contains a list of all SpigotCore features that were added in
@@ -64,12 +64,12 @@ public class FeatureToggleManager implements FeatureRequired {
      */
 //    private final PaperCommandManager paperCommandManager = SpigotCore.PLUGIN.getPaperCommandManager();
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
         SpigotCore.PLUGIN.getCommand("feature").setExecutor(new FeatureToggleCommand(this));
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
         shutdownAllFeatures();
         featureDataMap.clear();
     }

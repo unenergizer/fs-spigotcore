@@ -25,19 +25,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GlobalDataManager implements FeatureRequired, Listener {
+public class GlobalDataManager extends FeatureRequired implements Listener {
 
     private final Map<Player, GlobalPlayerData> playerProfileDataMap = new ConcurrentHashMap<>();
     private final List<BaseGlobalData> globalDataLoaders = new ArrayList<>();
 
     @Override
-    public void onServerStartup() {
+    public void initFeatureStart() {
         SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         globalDataLoaders.add(new PlayerAccountSQL());
     }
 
     @Override
-    public void onServerShutdown() {
+    public void initFeatureClose() {
         PlayerLoginEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
     }
