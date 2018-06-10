@@ -6,6 +6,7 @@ import com.forgestorm.spigotcore.features.optional.chat.EzImgMessage;
 import com.forgestorm.spigotcore.features.optional.chat.GameTipAnnouncer;
 import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
+import com.forgestorm.spigotcore.features.optional.commands.Roll;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
@@ -128,6 +129,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new Roll());
         features.add(new AnvilTest());
         features.add(new RealmManager());
         features.add(new GameTipAnnouncer());

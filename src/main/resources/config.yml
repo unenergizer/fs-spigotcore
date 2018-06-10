@@ -5,6 +5,7 @@ Database:
    username: root
    password: ""
 Features:
+   Roll: true
    AnvilTest: false
    RealmManager: true
    GameTipAnnouncer: true

@@ -81,6 +81,7 @@ public class RealmCommands extends FeatureOptionalCommand {
     }
 
     @Subcommand("invite|inv|add")
+    @CommandCompletion("@players")
     @Syntax("<player> &e- Adds a player to realm build list.")
     public void getRealmBuildInvite(Player player, String playerName) {
         Player builder = PlayerUtil.findPlayer(player, playerName);
@@ -89,6 +90,7 @@ public class RealmCommands extends FeatureOptionalCommand {
     }
 
     @Subcommand("uninvite|uninv|remove")
+    @CommandCompletion("@players")
     @Syntax("<player> &e- Removes a player to realm build list.")
     public void getRealmBuildRemove(Player player, String playerName) {
         Player builder = PlayerUtil.findPlayer(player, playerName);
