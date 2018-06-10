@@ -5,7 +5,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.forgestorm.spigotcore.SpigotCore;
 import lombok.Getter;
 
-public abstract class ForgeStormCommand extends BaseCommand {
+public abstract class FeatureOptionalCommand extends BaseCommand {
 
     @Getter
     private boolean isEnabled = false;

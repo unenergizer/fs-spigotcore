@@ -8,13 +8,12 @@ import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
+import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
+import com.forgestorm.spigotcore.features.optional.moderation.PlayerOperator;
 import com.forgestorm.spigotcore.features.optional.player.*;
 import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
-import com.forgestorm.spigotcore.features.optional.world.HiddenPaths;
-import com.forgestorm.spigotcore.features.optional.world.ServerSpawn;
-import com.forgestorm.spigotcore.features.optional.world.WorldHologram;
-import com.forgestorm.spigotcore.features.optional.world.WorldSettings;
+import com.forgestorm.spigotcore.features.optional.world.*;
 import com.forgestorm.spigotcore.features.optional.world.lantern.Lantern;
 import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
@@ -75,6 +74,7 @@ public class SpigotCore extends JavaPlugin {
 
         // Init needed APIs
         paperCommandManager = new PaperCommandManager(this);
+        paperCommandManager.enableUnstableAPI("help");
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
@@ -128,10 +128,11 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new AnvilTest());
         features.add(new RealmManager());
         features.add(new GameTipAnnouncer());
         features.add(new PlayerCompassMenu());
-        features.add(new PlayerScoreboardTeams());
+        features.add(new ScoreboardTeams());
         features.add(new PlayerNewChecker());
         features.add(new PlayerOperator());
         features.add(new PlayerBanKicker());

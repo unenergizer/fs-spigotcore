@@ -2,16 +2,20 @@ package com.forgestorm.spigotcore.features.optional.citizen;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
+import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.ShutdownTask;
-import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
+import com.forgestorm.spigotcore.util.scheduler.ResetTimer;
 import lombok.Getter;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
@@ -20,11 +24,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfig, Listener {
 
@@ -38,7 +40,7 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         resetTimer = new ResetTimer();
-        resetTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 1);
+        resetTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 20);
 
         // Do additional citizen setup after server start
         Console.sendMessage("[CitizenManager] Init delayed task for citizen setup.");
@@ -79,6 +81,8 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
         for (String citizenName : keys) {
             String section = "Citizens." + citizenName + ".";
 
+            Console.sendMessage("Setting up: " + citizenName);
+
             BasicCitizen basicCitizen = new BasicCitizen(
                     CitizenType.valueOf(config.getString(section + "type")),
                     config.getStringList(section + "chat"));
@@ -99,6 +103,18 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
             if (!(livingEntity instanceof Player)) continue;
 
             Player npc = (Player) livingEntity;
+
+            // Basic vars
+            npc.setMaxHealth(1000);
+            npc.setHealth(1000);
+
+            // Center on block
+            int x = npc.getLocation().getBlockX();
+            int z = npc.getLocation().getBlockZ();
+            npc.teleport(new Location(npc.getWorld(), x + .5, npc.getLocation().getY(), z + .5));
+
+            // Create Basic Citizen
+            if (!basicCitizenMap.containsKey(npc.getDisplayName())) continue;
             BasicCitizen basicCitizen = basicCitizenMap.get(npc.getDisplayName());
             basicCitizen.addHologram(npc);
         }
@@ -113,12 +129,16 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
         if (!(event.getRightClicked() instanceof Player)) return;
         if (!event.getRightClicked().hasMetadata("NPC")) return;
 
-        resetTimer.addPlayer(player);
+        resetTimer.addPlayer(player, 2);
 
         Player npc = (Player) event.getRightClicked();
+
+        if (!basicCitizenMap.containsKey(npc)) return;
+
         String npcName = npc.getDisplayName();
         Location npcLocation = npc.getLocation();
         BasicCitizen basicCitizen = basicCitizenMap.get(npcName);
+
 
         // Toggle citizen interact event
         CitizenToggleEvent citizenToggleEvent = new CitizenToggleEvent(player, npc, basicCitizen.citizenType);
@@ -174,7 +194,7 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
 
             List<String> hologramText = new ArrayList<>();
             hologramText.add(citizenType.getTitle());
-            hologramText.add(ChatColor.BOLD + "RIGHT-CLICK");
+            hologramText.add("&7&lRIGHT&r&7-&lCLICK");
 
             Location hologramLocation = npc.getLocation().add(0, 1.65, 0);
 
@@ -189,38 +209,6 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
         void remove() {
             chatMessages.clear();
             if (hologram != null) hologram.remove();
-        }
-    }
-
-    /**
-     * This reset timer prevents duplicate Right-Clicks on
-     * citizens.
-     */
-    private class ResetTimer extends BukkitRunnable {
-
-        private final Map<Player, Integer> countDowns = new ConcurrentHashMap<>();
-
-        @Override
-        public void run() {
-
-            for (Player player : countDowns.keySet()) {
-
-                int count = countDowns.get(player);
-
-                if (count <= 0) {
-                    countDowns.remove(player);
-                } else {
-                    countDowns.replace(player, --count);
-                }
-            }
-        }
-
-        void addPlayer(Player player) {
-            countDowns.put(player, 2);
-        }
-
-        boolean containsPlayer(Player player) {
-            return countDowns.containsKey(player);
         }
     }
 }

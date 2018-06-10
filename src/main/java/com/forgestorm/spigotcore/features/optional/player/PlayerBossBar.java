@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.player;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.ForgeStormCommand;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
 import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
@@ -30,9 +30,9 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands
     private BossBarUtil bossBarUtil;
 
     @Override
-    public List<ForgeStormCommand> registerAllCommands() {
+    public List<FeatureOptionalCommand> registerAllCommands() {
         // TODO: REMOVE TEST COMMAND!! <---------------------------------------------------------------------------
-        List<ForgeStormCommand> commands = new ArrayList<>();
+        List<FeatureOptionalCommand> commands = new ArrayList<>();
         commands.add(new TestCommand());
         return commands;
     }

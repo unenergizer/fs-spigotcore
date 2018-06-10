@@ -19,7 +19,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-public class PlayerScoreboardTeams implements FeatureOptional, Listener {
+public class ScoreboardTeams implements FeatureOptional, Listener {
 
     private Scoreboard scoreboard;
     private Objective objectivePlayerList;

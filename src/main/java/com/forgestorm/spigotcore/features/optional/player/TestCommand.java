@@ -3,11 +3,11 @@ package com.forgestorm.spigotcore.features.optional.player;
 import co.aikar.commands.BukkitCommandExecutionContext;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.commands.annotation.CommandAlias;
-import com.forgestorm.spigotcore.features.ForgeStormCommand;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("test")
-public class TestCommand extends ForgeStormCommand {
+public class TestCommand extends FeatureOptionalCommand {
 
     @CommandAlias("test|testing")
     public void execute(CommandSender sender) {

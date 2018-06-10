@@ -41,10 +41,10 @@ class RealmCooldownTimer extends BukkitRunnable {
     }
 
     /**
-     * Gets the time left until the player is no longer on a cooldown.
+     * Gets the scheduler left until the player is no longer on a cooldown.
      *
-     * @param player The player to get the time left for.
-     * @return The time left.
+     * @param player The player to get the scheduler left for.
+     * @return The scheduler left.
      */
     int getTimeLeft(Player player) {
         return realmCooldownMap.get(player.getUniqueId());

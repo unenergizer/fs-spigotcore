@@ -7,6 +7,7 @@ public enum CitizenType {
     AUCTIONEER("Auctioneer"),
     BANKER("Banker"),
     BARTENDER("Bartender"),
+    BUILDER("Epic Builds By"),
     DIRTY_HOBO("Dirty Old Hobo"),
     LOBBY("Back To Lobby"),
     MERCHANT("Item Merchant"),

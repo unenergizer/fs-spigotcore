@@ -22,11 +22,11 @@ import java.sql.SQLException;
  */
 @Getter
 @AllArgsConstructor
-public abstract class AbstractDatabaseFeature implements FeatureOptional {
+public abstract class AbstractDatabaseFeature <T> implements FeatureOptional {
 
     public abstract ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException;
 
-    public abstract void databaseSave(Player player, ProfileData profileData, Connection connection) throws SQLException;
+    public abstract void databaseSave(Player player, T profileData, Connection connection) throws SQLException;
 
     public abstract ProfileData firstTimeSave(Player player, Connection connection) throws SQLException;
 
@@ -38,8 +38,8 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
      * @param player The player we want to grab the template for.
      * @return A ProfileData that contains saved information.
      */
-    public ProfileData getProfileData(Player player) {
-        return SpigotCore.PLUGIN.getFeatureDataManager().getProfileData(player, this);
+    public T getProfileData(Player player) {
+        return (T) SpigotCore.PLUGIN.getFeatureDataManager().getProfileData(player, this);
     }
 
     /**
@@ -67,6 +67,6 @@ public abstract class AbstractDatabaseFeature implements FeatureOptional {
      * @param player The player to save data for.
      */
     protected void asyncDatastoreSave(Player player) {
-        SpigotCore.PLUGIN.getFeatureDataManager().asyncDatastoreSave(player, this, getProfileData(player));
+        SpigotCore.PLUGIN.getFeatureDataManager().asyncDatastoreSave(player, this, (ProfileData) getProfileData(player));
     }
 }

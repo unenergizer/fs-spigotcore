@@ -2,6 +2,8 @@ package com.forgestorm.spigotcore.features.optional.realm;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.CommonSounds;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
+import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
@@ -28,10 +30,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RealmManager extends AbstractDatabaseFeature implements FeatureOptional, Listener {
+public class RealmManager extends AbstractDatabaseFeature<RealmProfileData> implements FeatureOptional, InitCommands, Listener {
 
 
     private final Map<Player, Realm> openRealmsMap = new ConcurrentHashMap<>();
@@ -59,6 +63,23 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
 
         realmCooldownTimer.cancel();
         realmCooldownTimer = null;
+    }
+
+    @Override
+    public List<FeatureOptionalCommand> registerAllCommands() {
+        List<FeatureOptionalCommand> commands = new ArrayList<>();
+        commands.add(new RealmCommands(this));
+        return commands;
+    }
+
+    /**
+     * Gets if the player has an open realm.
+     *
+     * @param player The player to get a realm for.
+     * @return True if a realm is loaded, false otherwise.
+     */
+    public boolean hasRealm(Player player) {
+        return openRealmsMap.containsKey(player);
     }
 
     /**
@@ -136,11 +157,9 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
     }
 
     @Override
-    public void databaseSave(Player player, ProfileData profileData, Connection connection) throws SQLException {
+    public void databaseSave(Player player, RealmProfileData realmProfileData, Connection connection) throws SQLException {
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_feature_realm SET has_realm=?, title=?, tier=?, inside_door_location=? WHERE owner_uuid=?");
-
-        RealmProfileData realmProfileData = (RealmProfileData) profileData;
 
         preparedStatement.setBoolean(1, realmProfileData.isHasRealm());
         preparedStatement.setString(2, realmProfileData.getRealmTitle());
@@ -184,6 +203,10 @@ public class RealmManager extends AbstractDatabaseFeature implements FeatureOpti
     @Override
     public SqlSearchData searchForData(Player player, Connection connection) {
         return new SqlSearchData("fs_feature_realm", "owner_uuid", player.getUniqueId().toString());
+    }
+
+    public Realm getRealm(Player player) {
+        return openRealmsMap.get(player);
     }
 
     /**

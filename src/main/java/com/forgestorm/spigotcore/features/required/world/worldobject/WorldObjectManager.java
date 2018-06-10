@@ -91,9 +91,9 @@ public class WorldObjectManager extends FeatureRequired {
 
     /**
      * Test to see if this BaseWorldObject has timing components. If it does,
-     * lets adjust the time for these objects now.
+     * lets adjust the scheduler for these objects now.
      *
-     * @param baseWorldObject The WorldObject to test and adjust time for.
+     * @param baseWorldObject The WorldObject to test and adjust scheduler for.
      */
     private void adjustRespawnTime(BaseWorldObject baseWorldObject) {
         if (baseWorldObject instanceof CooldownWorldObject)

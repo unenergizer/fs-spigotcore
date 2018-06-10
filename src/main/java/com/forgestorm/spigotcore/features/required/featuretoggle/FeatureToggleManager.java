@@ -49,9 +49,9 @@ public class FeatureToggleManager extends FeatureRequired {
     private final Map<Class, FeatureData> featureDataMap = new HashMap<>();
 
     /**
-     * A delay created to make sure all tasks start X amount of time
+     * A delay created to make sure all tasks start X amount of scheduler
      * after the server is fully loaded up. This is done mainly to give
-     * the WorldSettings features (if enabled) enough time to clear all
+     * the WorldSettings features (if enabled) enough scheduler to clear all
      * world entities without effecting ones we may spawn in.
      * <p>
      * Note: 20 ticks is 1 second.
@@ -65,7 +65,9 @@ public class FeatureToggleManager extends FeatureRequired {
 //    private final PaperCommandManager paperCommandManager = SpigotCore.PLUGIN.getPaperCommandManager();
     @Override
     public void initFeatureStart() {
-        SpigotCore.PLUGIN.getCommand("feature").setExecutor(new FeatureToggleCommand(this));
+        FeatureToggleCommand featureToggleCommand = new FeatureToggleCommand(this);
+        featureToggleCommand.setupCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+        featureToggleCommand.enableCommand();
     }
 
     @Override
@@ -233,7 +235,7 @@ public class FeatureToggleManager extends FeatureRequired {
     @Getter
     class FeatureData {
 
-        private final List<ForgeStormCommand> commandMap = new ArrayList<>();
+        private final List<FeatureOptionalCommand> commandMap = new ArrayList<>();
         private final Class clazz;
         private final FeatureOptional featureOptional;
         private final boolean isEnabledInConfig;
@@ -245,21 +247,21 @@ public class FeatureToggleManager extends FeatureRequired {
             this.isEnabledInConfig = isEnabledInConfig;
         }
 
-        void addCommands(List<ForgeStormCommand> commandList) {
-            for (ForgeStormCommand forgeStormCommand : commandList) {
-                commandMap.add(forgeStormCommand);
+        void addCommands(List<FeatureOptionalCommand> commandList) {
+            for (FeatureOptionalCommand featureOptionalCommand : commandList) {
+                commandMap.add(featureOptionalCommand);
                 Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureOptional.getClass().getSimpleName()
-                        + "] Enabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
-                forgeStormCommand.setupCommand(SpigotCore.PLUGIN.getPaperCommandManager());
-                forgeStormCommand.enableCommand();
+                        + "] Enabled " + featureOptionalCommand.getClass().getSimpleName() + " commands");
+                featureOptionalCommand.setupCommand(SpigotCore.PLUGIN.getPaperCommandManager());
+                featureOptionalCommand.enableCommand();
             }
         }
 
         void disableCommands() {
-            for (ForgeStormCommand forgeStormCommand : commandMap) {
-                forgeStormCommand.disableCommand();
+            for (FeatureOptionalCommand featureOptionalCommand : commandMap) {
+                featureOptionalCommand.disableCommand();
                 Console.sendMessage(ChatColor.DARK_GREEN + " - [" + featureOptional.getClass().getSimpleName()
-                        + "] Disabled " + forgeStormCommand.getClass().getSimpleName() + " commands");
+                        + "] Disabled " + featureOptionalCommand.getClass().getSimpleName() + " commands");
             }
         }
     }

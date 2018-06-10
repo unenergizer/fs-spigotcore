@@ -8,13 +8,20 @@ import com.forgestorm.spigotcore.features.required.menu.AbstractMenu;
 import com.forgestorm.spigotcore.features.required.menu.ClickAction;
 import com.forgestorm.spigotcore.features.required.menu.MenuClickType;
 import com.forgestorm.spigotcore.features.required.menu.MenuTick;
+import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerCompassMenu implements FeatureOptional, Listener {
     @Override
@@ -32,7 +39,30 @@ public class PlayerCompassMenu implements FeatureOptional, Listener {
 
     @EventHandler
     public void onProfileDataLoad(GlobalProfileDataLoadEvent event) {
-        event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
+        ItemStack compass = new ItemStack(Material.COMPASS);
+        compass.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+        ItemMeta compassMeta = compass.getItemMeta();
+
+        compassMeta.setDisplayName(Text.color("&c&lMain Game Menu"));
+        List<String> lore = new ArrayList<>();
+        lore.add(Text.color("&7A menu that allows you to join games, view your"));
+        lore.add(Text.color("&7user profile, change your game settings, join"));
+        lore.add(Text.color("&7your personal realm, get help, and much "));
+        lore.add(Text.color("&7much more!"));
+        lore.add(Text.color(" "));
+        lore.add(Text.color("&aRight-Click&7: Opens the game menu."));
+        lore.add(Text.color("&aShift + Left-Click Ground&7: Opens player realm."));
+        lore.add(Text.color("&aShift + Right-Click Player&7: Add Builder to realm."));
+        compassMeta.setLore(lore);
+
+        compassMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        compassMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        compassMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        compassMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+
+        compass.setItemMeta(compassMeta);
+
+        event.getPlayer().getInventory().setItem(0, compass);
     }
 
     @EventHandler

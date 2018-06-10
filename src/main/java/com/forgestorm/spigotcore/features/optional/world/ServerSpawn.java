@@ -3,8 +3,8 @@ package com.forgestorm.spigotcore.features.optional.world;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,8 +42,6 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
     private Map<Player, Integer> timeLeft;
     private BukkitRunnable spawnTimer;
 
-    private boolean featureEnabled = false;
-
     @Override
     public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
@@ -65,12 +63,10 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
             }
         };
         spawnTimer.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
-        featureEnabled = true;
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        featureEnabled = false;
         if (commandOptions.commandEnabled && commandOptions.countdownEnabled) {
             spawnTimer.cancel();
             timeLeft.clear();
@@ -127,7 +123,7 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
      * Consistent teleport with added effects.
      *
      * @param player The player to teleport.
-     * @param sound The sound to play when a player is teleported.
+     * @param sound  The sound to play when a player is teleported.
      */
     private void teleport(Player player, CommonSounds sound) {
         player.teleport(spawnLocation);
@@ -138,14 +134,15 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!featureEnabled) return false;
         if (!(sender instanceof Player)) return false;
         Player player = ((Player) sender).getPlayer();
 
-        if (commandOptions.countdownEnabled) timeLeft.put(player, commandOptions.countdownTime);
-        else teleport(player, CommonSounds.ACTION_SUCCESS);
-        if (commandOptions.countdownEnabled && commandOptions.cancelOnMove)
-            player.sendMessage(ChatColor.GRAY + "Starting countdown. Do not move!");
+        if (commandOptions.countdownEnabled) {
+            timeLeft.put(player, commandOptions.countdownTime);
+            if (commandOptions.cancelOnMove) player.sendMessage(ChatColor.GRAY + "Starting countdown. Do not move!");
+        } else {
+            teleport(player, CommonSounds.ACTION_SUCCESS);
+        }
         return false;
     }
 
@@ -153,6 +150,7 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
+        if (!commandOptions.countdownEnabled) return;
         if (!commandOptions.cancelOnMove) return;
         if (!timeLeft.containsKey(player)) return;
 

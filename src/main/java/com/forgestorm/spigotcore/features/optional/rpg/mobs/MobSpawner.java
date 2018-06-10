@@ -21,7 +21,7 @@ public class MobSpawner extends BaseWorldObject {
     public void spawnWorldObject() {
         for (SpawnerMobDetails spawnerMobDetails : spawnerMobDetails) {
 
-            // Spawn mobs who have no respawn time
+            // Spawn mobs who have no respawn scheduler
             if (spawnerMobDetails.respawnTimeLeft == spawnerMobDetails.mobType.getDefaultRespawnTime()) {
                 spawnerMobDetails.spawnEntity();
             }

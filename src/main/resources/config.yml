@@ -5,10 +5,11 @@ Database:
    username: root
    password: ""
 Features:
+   AnvilTest: false
    RealmManager: true
    GameTipAnnouncer: true
    PlayerCompassMenu: true
-   PlayerScoreboardTeams: true
+   ScoreboardTeams: true
    PlayerNewChecker: true
    PlayerOperator: true
    PlayerBanKicker: true
@@ -25,7 +26,7 @@ Features:
    ChestLoot: false
    DragonEggLoot: false
    HiddenPaths: true
-   MobManager: false
+   MobManager: true
    DoubleJump: true
    Lantern: false
    WorldHologram: true

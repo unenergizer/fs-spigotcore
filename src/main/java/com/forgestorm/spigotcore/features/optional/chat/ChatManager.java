@@ -7,6 +7,7 @@ import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import com.forgestorm.spigotcore.util.math.RandomChance;
+import com.forgestorm.spigotcore.util.player.PlayerUtil;
 import com.forgestorm.spigotcore.util.text.JsonMessageConverter;
 import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
@@ -18,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
 
@@ -99,5 +102,6 @@ public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
         commandSender.sendMessage("&7Mod&8: " + profileToViewAccount.isModerator());
         commandSender.sendMessage("&7Banned&8: " + profileToViewAccount.isBanned());
         commandSender.sendMessage("&7WarningPoints&8: " + profileToViewAccount.getWarningPoints());
+        commandSender.sendMessage("&7Ping&8: " + PlayerUtil.getPing(profileToView));
     }
 }

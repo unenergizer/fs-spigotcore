@@ -47,14 +47,14 @@ class WorldTimer extends BukkitRunnable {
         if (time == 18000) triggerEvent(TimeOfDay.MIDNIGHT);
 
 //            Animate blockRegen
-//            plugin.getWorldAnimator().shouldAnimate(time);
+//            plugin.getWorldAnimator().shouldAnimate(scheduler);
         lastTime = time;
     }
 
     /**
      * This will trigger a new TimeOfTHeDayEvent.
      *
-     * @param timesOfTheDay The current time of day
+     * @param timesOfTheDay The current scheduler of day
      */
     private void triggerEvent(TimeOfDay timesOfTheDay) {
         TimeOfDayEvent exampleEvent = new TimeOfDayEvent(timesOfTheDay);

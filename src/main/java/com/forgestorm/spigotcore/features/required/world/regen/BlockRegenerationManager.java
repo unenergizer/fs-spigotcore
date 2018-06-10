@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class BlockRegenerationManager extends FeatureRequired {
 
     /**
-     * Default time for a block to respawn, if a time is not supplied.
+     * Default scheduler for a block to respawn, if a scheduler is not supplied.
      */
     private static final int DEFAULT_REGEN_TIME = 60 * 3;
 
@@ -112,7 +112,7 @@ public class BlockRegenerationManager extends FeatureRequired {
      * @param data        The original block data.
      * @param tempBlock   The temporary block to replace the broken block.
      * @param location    The XYZ location in the world the block was broken.
-     * @param respawnTime The amount of time it will take for this block to regenerate.
+     * @param respawnTime The amount of scheduler it will take for this block to regenerate.
      */
     public void setBlock(Material type, byte data, Material tempBlock, Location location, int respawnTime) {
         setBlock(type, data, tempBlock, (byte) 0, location, respawnTime);
@@ -139,7 +139,7 @@ public class BlockRegenerationManager extends FeatureRequired {
      * @param tempBlock   The temporary block to replace the broken block.
      * @param tempData    The temporary block data.
      * @param location    The XYZ location in the world the block was broken.
-     * @param respawnTime The amount of time it will take for this block to regenerate.
+     * @param respawnTime The amount of scheduler it will take for this block to regenerate.
      */
     public void setBlock(Material type, byte data, Material tempBlock, byte tempData, Location location, int respawnTime) {
         Block block = location.getBlock();
@@ -174,7 +174,7 @@ public class BlockRegenerationManager extends FeatureRequired {
         private final Location blockLocation;
 
         /**
-         * The time left until the block is reset.
+         * The scheduler left until the block is reset.
          */
         private int timeLeft;
     }

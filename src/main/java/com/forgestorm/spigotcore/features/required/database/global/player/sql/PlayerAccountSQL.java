@@ -20,6 +20,7 @@ public class PlayerAccountSQL implements BaseGlobalData {
 
         playerAccount.setFirstJoinDate(resultSet.getTimestamp("first_join_date"));
         playerAccount.setRank(PlayerRanks.valueOf(resultSet.getString("rank")));
+        playerAccount.setDuties(resultSet.getString("duties"));
         playerAccount.setBanned(resultSet.getBoolean("is_banned"));
         playerAccount.setAdmin(resultSet.getBoolean("is_admin"));
         playerAccount.setModerator(resultSet.getBoolean("is_moderator"));
@@ -41,13 +42,14 @@ public class PlayerAccountSQL implements BaseGlobalData {
         if (playerAccount == null) return;
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_player_account" +
-                " SET username=?, rank=?, is_banned=?, warning_points=?" +
+                " SET username=?, rank=?, duties=?, is_banned=?, warning_points=?" +
                 " WHERE player_uuid=?");
         preparedStatement.setString(1, player.getName());
         preparedStatement.setString(2, playerAccount.getRank().toString());
-        preparedStatement.setBoolean(3, playerAccount.isBanned());
-        preparedStatement.setInt(4, playerAccount.getWarningPoints());
-        preparedStatement.setString(5, player.getUniqueId().toString());
+        preparedStatement.setString(3, playerAccount.getDuties() != null ? playerAccount.getDuties() : "");
+        preparedStatement.setBoolean(4, playerAccount.isBanned());
+        preparedStatement.setInt(5, playerAccount.getWarningPoints());
+        preparedStatement.setString(6, player.getUniqueId().toString());
 
         preparedStatement.execute();
     }

@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore.features.optional.player;
+package com.forgestorm.spigotcore.features.optional.moderation;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;

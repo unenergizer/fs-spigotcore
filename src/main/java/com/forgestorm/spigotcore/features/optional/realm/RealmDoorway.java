@@ -16,11 +16,16 @@ import java.util.List;
  */
 public class RealmDoorway extends BaseWorldObject {
 
+    private String doorOwnerName;
     private Hologram realmDoorTitle;
     private Location topPortalBlock;
     private Location bottomPortalBlock;
 
-    void enable(Player player, Location doorLocation) {
+    public RealmDoorway(Player doorOwner) {
+        this.doorOwnerName = doorOwner.getName();
+    }
+
+    void enable(Location doorLocation) {
 
         int x = (int) doorLocation.getX();
         int y = (int) doorLocation.getY();
@@ -30,7 +35,7 @@ public class RealmDoorway extends BaseWorldObject {
         bottomPortalBlock = new Location(doorLocation.getWorld(), x, y + 1, z);
 
         List<String> hologramText = new ArrayList<>();
-        hologramText.add(Text.color("&l" + player.getName()));
+        hologramText.add(Text.color("&l" + doorOwnerName));
         hologramText.add(RealmAlignment.HOSTILE.getAlignment());
 
         realmDoorTitle = new Hologram(hologramText, new Location(doorLocation.getWorld(), x + .5, y + 2.2, z + .5));

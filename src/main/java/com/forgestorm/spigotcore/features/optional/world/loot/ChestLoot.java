@@ -216,7 +216,7 @@ public class ChestLoot extends BukkitRunnable implements FeatureOptional, Listen
 
             if (chest.isSpawned()) spawnedChests++;
 
-            // Adjust time left for locked out chest locations
+            // Adjust scheduler left for locked out chest locations
             if (chest.isTimedOut) {
                 chest.timeLeft = chest.timeLeft - 1;
                 if (chest.timeLeft <= 0) {

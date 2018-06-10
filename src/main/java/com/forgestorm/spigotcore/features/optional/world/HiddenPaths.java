@@ -23,7 +23,7 @@ import java.util.List;
  * Hidden paths are a Zelda like features. Players can use TNT to
  * blow up a particular wall revealing a hidden path. When using
  * the block regeneration manager, the blockRegen will respawn after
- * some time.
+ * some scheduler.
  */
 public class HiddenPaths implements FeatureOptional, Listener {
 
