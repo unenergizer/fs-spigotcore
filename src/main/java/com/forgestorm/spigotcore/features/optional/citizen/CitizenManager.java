@@ -2,15 +2,17 @@ package com.forgestorm.spigotcore.features.optional.citizen;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
+import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.ShutdownTask;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.math.RandomChance;
+import com.forgestorm.spigotcore.util.scheduler.ResetTimer;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
-import com.forgestorm.spigotcore.util.scheduler.ResetTimer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -28,7 +30,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import java.io.File;
 import java.util.*;
 
-public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfig, Listener {
+public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTask, LoadsConfig, Listener {
 
     private final Map<String, BasicCitizen> basicCitizenMap = new HashMap<>();
     private final CitizenMessages citizenMessages = new CitizenMessages();
@@ -57,6 +59,13 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
         for (BasicCitizen basicCitizen : basicCitizenMap.values()) {
             basicCitizen.disableHologram();
         }
+    }
+
+    @Override
+    public List<FeatureOptionalCommand> registerAllCommands() {
+        List<FeatureOptionalCommand> commands = new ArrayList<>();
+        commands.add(new CitizenMessageCommands(citizenMessages));
+        return commands;
     }
 
     @Override
@@ -133,7 +142,7 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
 
         Player npc = (Player) event.getRightClicked();
 
-        if (!basicCitizenMap.containsKey(npc)) return;
+        if (!basicCitizenMap.containsKey(npc.getName())) return;
 
         String npcName = npc.getDisplayName();
         Location npcLocation = npc.getLocation();
@@ -149,7 +158,9 @@ public class CitizenManager implements FeatureOptional, ShutdownTask, LoadsConfi
 
             // Tries to send a clickable message first. Otherwise, send a random saying to the player
             String npcMessage = basicCitizen.getRandomChatMessage();
-            if (npcMessage != null) player.sendMessage(Text.color("&7[&9NPC&7] " + npcName + "&8: &r" + npcMessage));
+            if (npcMessage != null) {
+                player.sendMessage(Text.color("&7[&9NPC&7] " + npcName + "&8: &r" + npcMessage));
+            }
         }
 
         // Play citizen sound

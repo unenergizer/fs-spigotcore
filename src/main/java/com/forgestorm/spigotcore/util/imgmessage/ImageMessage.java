@@ -1,6 +1,7 @@
 package com.forgestorm.spigotcore.util.imgmessage;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
@@ -184,6 +185,12 @@ public class ImageMessage {
     public void sendToPlayer(Player player) {
         for (String line : lines) {
             player.sendMessage(line);
+        }
+    }
+
+    public void sendToPlayer(CommandSender commandSender) {
+        for (String line : lines) {
+            commandSender.sendMessage(line);
         }
     }
 }

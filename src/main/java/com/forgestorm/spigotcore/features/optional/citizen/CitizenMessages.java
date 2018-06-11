@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.citizen;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.util.math.RandomChance;
@@ -8,9 +7,7 @@ import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.JsonMessageConverter;
 import lombok.AllArgsConstructor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import lombok.Getter;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -21,7 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CitizenMessages implements LoadsConfig, CommandExecutor {
+@Getter
+public class CitizenMessages implements LoadsConfig {
 
     /**
      * Converts messages from Config to clickable messages by a NPC.
@@ -42,7 +40,6 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
     private final int uniqueCommandKey = RandomChance.randomInt(11111, 99999);
 
     CitizenMessages() {
-        SpigotCore.PLUGIN.getCommand("cmsg").setExecutor(this);
         loadConfiguration();
     }
 
@@ -87,12 +84,12 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
     /**
      * Sends the player a BaseComponent message with clickable actions.
      *
-     * @param player   The player to send the message to.
-     * @param npcName  The name of the npc.
-     * @param topicKey The topic to get messages for.
+     * @param player        The player to send the message to.
+     * @param npcName       The name of the npc.
+     * @param topicKey      The topic to get messages for.
      * @param messageHeader The message we will show above the NPCs chat messages.
      */
-    private void sendTopicMessage(Player player, String npcName, String topicKey, String messageHeader) {
+    public void sendTopicMessage(Player player, String npcName, String topicKey, String messageHeader) {
         NpcTopics npcTopics = npcTopicsMap.get(npcName);
         List<String> topicsMessages = npcTopics.getMessages(topicKey);
 
@@ -102,27 +99,6 @@ public class CitizenMessages implements LoadsConfig, CommandExecutor {
         for (String message : topicsMessages) {
             player.spigot().sendMessage(messageConverter.convert("&7[&9NPC&7] " + npcName + "&8: &r" + message, "cmsg", Integer.toString(uniqueCommandKey), npcName));
         }
-    }
-
-    /**
-     * Listens for the /cmsg command to be ran. This command is ran when a player clicks on a citizen message.
-     * We skip instanceof checks to make sure the sender is a player for speed reasons. The console should
-     * never send these commands as the console can't do anything with clickable messages.
-     * <p>
-     * Command breakdown:
-     * label == /cmsg
-     * Arg[0] == uniqueCommandKey plugin key
-     * Arg[1] == npcName
-     * Arg[2] == topicKey
-     */
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length != 3) return false;
-        if (!label.equalsIgnoreCase("cmsg")) return false;
-        if (Integer.parseInt(args[0]) != uniqueCommandKey) return false;
-
-        sendTopicMessage((Player) sender, args[1], args[2], CenterChatText.centerChatMessage("&7- - - - &m---------&r&7 - - - -"));
-        return true;
     }
 
     /**
