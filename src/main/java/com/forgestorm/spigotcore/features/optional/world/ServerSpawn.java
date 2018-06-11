@@ -1,17 +1,19 @@
 package com.forgestorm.spigotcore.features.optional.world;
 
+import co.aikar.commands.PaperCommandManager;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
+import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -26,6 +28,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Simple features to control where a player spawns in the world.
  * If the player fall's into the void, we can teleport them back to the main spawn.
  */
-public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, CommandExecutor {
+public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig, Listener {
 
     private boolean spawnOnVoidDamage;
     private CommandOptions commandOptions;
@@ -50,9 +54,6 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
                 (int) spawnLocation.getY(),
                 spawnLocation.getBlockZ()
         );
-
-        if (!commandOptions.commandEnabled) return;
-        SpigotCore.PLUGIN.getCommand("spawn").setExecutor(this);
 
         if (!commandOptions.countdownEnabled) return;
         timeLeft = new ConcurrentHashMap<>();
@@ -75,6 +76,13 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
         PlayerMoveEvent.getHandlerList().unregister(this);
         PlayerSpawnLocationEvent.getHandlerList().unregister(this);
         EntityDamageEvent.getHandlerList().unregister(this);
+    }
+
+    @Override
+    public List<FeatureOptionalCommand> registerAllCommands() {
+        List<FeatureOptionalCommand> commands = new ArrayList<>();
+        commands.add(new SpawnCommand());
+        return commands;
     }
 
     @Override
@@ -130,20 +138,6 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
         player.setFallDistance(0F);
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 100));
         sound.play(player);
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) return false;
-        Player player = ((Player) sender).getPlayer();
-
-        if (commandOptions.countdownEnabled) {
-            timeLeft.put(player, commandOptions.countdownTime);
-            if (commandOptions.cancelOnMove) player.sendMessage(ChatColor.GRAY + "Starting countdown. Do not move!");
-        } else {
-            teleport(player, CommonSounds.ACTION_SUCCESS);
-        }
-        return false;
     }
 
     @EventHandler
@@ -205,5 +199,26 @@ public class ServerSpawn implements FeatureOptional, LoadsConfig, Listener, Comm
         private final boolean countdownEnabled;
         private final int countdownTime;
         private final boolean cancelOnMove;
+    }
+
+    @CommandAlias("spawn|s")
+    private class SpawnCommand extends FeatureOptionalCommand {
+
+        @Override
+        public void setupCommand(PaperCommandManager paperCommandManager) {
+
+        }
+
+        @Default
+        public void onSpawn(Player player) {
+            if (commandOptions.countdownEnabled) {
+                timeLeft.put(player, commandOptions.countdownTime);
+                if (commandOptions.cancelOnMove)
+                    player.sendMessage(ChatColor.GRAY + "Starting countdown. Do not move!");
+            } else {
+                teleport(player, CommonSounds.ACTION_SUCCESS);
+            }
+        }
+
     }
 }

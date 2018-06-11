@@ -7,7 +7,5 @@ website: http://www.forgestorm.com/
 load: POSTWORLD
 depend: [TitleManager, Citizens, ItemNBTAPI]
 commands:
-   feature:
    cmsg:
-   spawn:
    chaticon:
