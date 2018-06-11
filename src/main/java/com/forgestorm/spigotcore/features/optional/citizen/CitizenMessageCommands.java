@@ -28,6 +28,12 @@ public class CitizenMessageCommands extends FeatureOptionalCommand {
         paperCommandManager.getCommandContexts().registerIssuerAwareContext(CommandSender.class, BukkitCommandExecutionContext::getSender);
     }
 
+    @Default
+    public void onCMSGCommand(Player player) {
+        player.sendMessage(Text.color("&cNothing happened..."));
+        CommonSounds.ACTION_FAILED.play(player);
+    }
+
     /**
      * Listens for the /cmsg command to be ran. This command is ran when a player clicks on a citizen message.
      * We skip instanceof checks to make sure the sender is a player for speed reasons. The console should
@@ -39,12 +45,6 @@ public class CitizenMessageCommands extends FeatureOptionalCommand {
      * Arg[1] == npcName
      * Arg[2] == topicKey
      */
-    @Default
-    public void onCMSGCommand(Player player) {
-        player.sendMessage(Text.color("&cNothing happened..."));
-        CommonSounds.ACTION_FAILED.play(player);
-    }
-
     @Subcommand("msg")
     @Private
     public void onSubCMD(Player player, String[] args) {

@@ -129,7 +129,9 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new BasicBuildProtection());
         features.add(new Roll());
+        features.add(new HelpBookTest());
         features.add(new AnvilTest());
         features.add(new RealmManager());
         features.add(new GameTipAnnouncer());

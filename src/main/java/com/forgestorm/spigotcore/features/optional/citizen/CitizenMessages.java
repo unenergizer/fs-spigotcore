@@ -77,7 +77,7 @@ public class CitizenMessages implements LoadsConfig {
     boolean initCitizenMessage(Player player, String npcName) {
         if (!npcTopicsMap.containsKey(npcName)) return false;
 
-        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&7&o[&c&o!&7&o] Click Colored Messages Below to Interact [&c&o!&7&o]"));
+        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&7&o[&c&k&o!&7&o] &9&oClick Colored Messages Below to Interact &7&o[&c&k&o!&7&o]"));
         return true;
     }
 
@@ -89,7 +89,7 @@ public class CitizenMessages implements LoadsConfig {
      * @param topicKey      The topic to get messages for.
      * @param messageHeader The message we will show above the NPCs chat messages.
      */
-    public void sendTopicMessage(Player player, String npcName, String topicKey, String messageHeader) {
+    void sendTopicMessage(Player player, String npcName, String topicKey, String messageHeader) {
         NpcTopics npcTopics = npcTopicsMap.get(npcName);
         List<String> topicsMessages = npcTopics.getMessages(topicKey);
 
