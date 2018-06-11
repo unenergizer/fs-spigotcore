@@ -233,7 +233,7 @@ public class FeatureToggleManager extends FeatureRequired {
      * Data class that holds information about a {@link FeatureOptional} object.
      */
     @Getter
-    class FeatureData {
+    public class FeatureData {
 
         private final List<FeatureOptionalCommand> commandMap = new ArrayList<>();
         private final Class clazz;

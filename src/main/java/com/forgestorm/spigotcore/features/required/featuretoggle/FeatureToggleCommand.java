@@ -2,10 +2,8 @@ package com.forgestorm.spigotcore.features.required.featuretoggle;
 
 import co.aikar.commands.BukkitCommandExecutionContext;
 import co.aikar.commands.PaperCommandManager;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.PreCommand;
-import co.aikar.commands.annotation.Subcommand;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.annotation.*;
+import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
 import com.forgestorm.spigotcore.util.text.Text;
@@ -30,6 +28,29 @@ public class FeatureToggleCommand extends FeatureOptionalCommand {
     @Override
     public void setupCommand(PaperCommandManager paperCommandManager) {
         paperCommandManager.getCommandContexts().registerIssuerAwareContext(CommandSender.class, BukkitCommandExecutionContext::getSender);
+        paperCommandManager.getCommandCompletions().registerCompletion("featuresDisabled", c -> {
+            List<String> features = new ArrayList<>();
+            for (FeatureToggleManager.FeatureData featureData : SpigotCore.PLUGIN.getFeatureToggleManager().getFeatureDataMap().values()) {
+                if (featureData.isEnabled()) continue;
+                features.add(featureData.getClazz().getSimpleName());
+            }
+            return features;
+        });
+        paperCommandManager.getCommandCompletions().registerCompletion("featuresEnabled", c -> {
+            List<String> features = new ArrayList<>();
+            for (FeatureToggleManager.FeatureData featureData : SpigotCore.PLUGIN.getFeatureToggleManager().getFeatureDataMap().values()) {
+                if (!featureData.isEnabled()) continue;
+                features.add(featureData.getClazz().getSimpleName());
+            }
+            return features;
+        });
+        paperCommandManager.getCommandCompletions().registerCompletion("allFeatures", c -> {
+            List<String> features = new ArrayList<>();
+            for (FeatureToggleManager.FeatureData featureData : SpigotCore.PLUGIN.getFeatureToggleManager().getFeatureDataMap().values()) {
+                features.add(featureData.getClazz().getSimpleName());
+            }
+            return features;
+        });
     }
 
     @PreCommand
@@ -83,6 +104,7 @@ public class FeatureToggleCommand extends FeatureOptionalCommand {
     }
 
     @Subcommand("enable|e")
+    @CommandCompletion("@featuresDisabled")
     @Syntax("<FeatureName> - A optional feature we want to enable.")
     public void enableFeature(CommandSender commandSender, String featureName) {
         boolean found = false;
@@ -108,6 +130,7 @@ public class FeatureToggleCommand extends FeatureOptionalCommand {
     }
 
     @Subcommand("disable|d")
+    @CommandCompletion("@featuresEnabled")
     @Syntax("<FeatureName> - A optional feature we want to disable.")
     public void disableCommand(CommandSender commandSender, String featureName) {
         boolean found = false;
@@ -133,6 +156,7 @@ public class FeatureToggleCommand extends FeatureOptionalCommand {
     }
 
     @Subcommand("reload|r")
+    @CommandCompletion("@featuresEnabled")
     @Syntax("<FeatureName> - Reloads this feature.")
     public void reloadFeature(CommandSender commandSender, String featureName) {
         boolean found = false;
@@ -156,6 +180,7 @@ public class FeatureToggleCommand extends FeatureOptionalCommand {
     }
 
     @Subcommand("reloadConfig|rc")
+    @CommandCompletion("@featuresEnabled")
     @Syntax("<FeatureName> - Reloads the config file for this feature.")
     public void reloadConfig(CommandSender commandSender, String featureName) {
         boolean found = false;
@@ -177,6 +202,7 @@ public class FeatureToggleCommand extends FeatureOptionalCommand {
     }
 
     @Subcommand("status|s")
+    @CommandCompletion("@allFeatures")
     @Syntax("<FeatureName> - Gets the status of this feature.")
     public void featureStatus(CommandSender commandSender, String featureName) {
         boolean found = false;
