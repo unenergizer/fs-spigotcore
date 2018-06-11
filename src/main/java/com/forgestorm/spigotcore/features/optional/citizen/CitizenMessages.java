@@ -97,7 +97,7 @@ public class CitizenMessages implements LoadsConfig {
         player.sendMessage(messageHeader);
         player.sendMessage(""); // Blank line to make messages easier to read
         for (String message : topicsMessages) {
-            player.spigot().sendMessage(messageConverter.convert("&7[&9NPC&7] " + npcName + "&8: &r" + message, "cmsg", Integer.toString(uniqueCommandKey), npcName));
+            player.spigot().sendMessage(messageConverter.convert("&7[&9NPC&7] " + npcName + "&8: &r" + message, "cmsg", "msg " + Integer.toString(uniqueCommandKey), npcName));
         }
     }
 

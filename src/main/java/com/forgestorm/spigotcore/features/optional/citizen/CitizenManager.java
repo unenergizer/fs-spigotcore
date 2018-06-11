@@ -33,6 +33,8 @@ import java.util.*;
 public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTask, LoadsConfig, Listener {
 
     private final Map<String, BasicCitizen> basicCitizenMap = new HashMap<>();
+
+    @Getter
     private final CitizenMessages citizenMessages = new CitizenMessages();
 
     private ResetTimer resetTimer;
@@ -64,7 +66,7 @@ public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTa
     @Override
     public List<FeatureOptionalCommand> registerAllCommands() {
         List<FeatureOptionalCommand> commands = new ArrayList<>();
-        commands.add(new CitizenMessageCommands(citizenMessages));
+        commands.add(new CitizenMessageCommands(this));
         return commands;
     }
 
@@ -147,7 +149,6 @@ public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTa
         String npcName = npc.getDisplayName();
         Location npcLocation = npc.getLocation();
         BasicCitizen basicCitizen = basicCitizenMap.get(npcName);
-
 
         // Toggle citizen interact event
         CitizenToggleEvent citizenToggleEvent = new CitizenToggleEvent(player, npc, basicCitizen.citizenType);

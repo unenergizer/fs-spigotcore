@@ -1,33 +1,31 @@
 package com.forgestorm.spigotcore.features.optional.citizen;
 
+import co.aikar.commands.BukkitCommandExecutionContext;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.PreCommand;
+import co.aikar.commands.annotation.Private;
+import co.aikar.commands.annotation.Subcommand;
+import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
+import com.forgestorm.spigotcore.util.text.Console;
+import com.forgestorm.spigotcore.util.text.Text;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 @CommandAlias("cmsg")
-class CitizenMessageCommands extends FeatureOptionalCommand {
+public class CitizenMessageCommands extends FeatureOptionalCommand {
 
-    private final CitizenMessages citizenMessages;
+    private final CitizenManager citizenManager;
 
-    CitizenMessageCommands(CitizenMessages citizenMessages) {
-        this.citizenMessages = citizenMessages;
+    CitizenMessageCommands(CitizenManager citizenManager) {
+        this.citizenManager = citizenManager;
     }
 
     @Override
     public void setupCommand(PaperCommandManager paperCommandManager) {
-
-    }
-
-    @PreCommand
-    public boolean onPreCommand(Player player, String commandKey, String npcName, String topicKey) {
-        if (Integer.parseInt(commandKey) != citizenMessages.getUniqueCommandKey()) return true;
-        if (npcName.equals("")) return true;
-        return topicKey.equals("");
+        paperCommandManager.getCommandContexts().registerIssuerAwareContext(CommandSender.class, BukkitCommandExecutionContext::getSender);
     }
 
     /**
@@ -42,8 +40,17 @@ class CitizenMessageCommands extends FeatureOptionalCommand {
      * Arg[2] == topicKey
      */
     @Default
-    public void onCommand(Player player, String commandKey, String npcName, String topicKey) {
-        citizenMessages.sendTopicMessage(player, npcName, topicKey, CenterChatText.centerChatMessage("&7- - - - &m---------&r&7 - - - -"));
+    public void onCMSGCommand(Player player) {
+        player.sendMessage(Text.color("&cNothing happened..."));
+        CommonSounds.ACTION_FAILED.play(player);
+    }
+
+    @Subcommand("msg")
+    @Private
+    public void onSubCMD(Player player, String[] args) {
+        Console.sendMessage(args[0]);
+        citizenManager.getCitizenMessages().sendTopicMessage(player, args[1], args[2], CenterChatText.centerChatMessage("&7- - - - &m---------&r&7 - - - -"));
     }
 }
+
 
