@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -252,7 +253,7 @@ class Realm implements Listener {
     /**
      * Make sure only the realm owner and friends can break blocks.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
@@ -264,6 +265,8 @@ class Realm implements Listener {
             event.setCancelled(true);
             player.sendMessage(Text.color("&cYou may not build here. Get permission from &e" + realmOwner.getName() + "&c to build."));
             CommonSounds.ACTION_FAILED.play(player);
+        } else {
+            event.setCancelled(false);
         }
     }
 
@@ -271,7 +274,7 @@ class Realm implements Listener {
      * Check to make sure only realm owners and friends can place blocks.
      * Also check to make sure players are building in the right bounds.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
 
