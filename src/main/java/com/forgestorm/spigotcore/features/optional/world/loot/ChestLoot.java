@@ -89,7 +89,7 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
     @EventHandler
     public void onWorldObjectSpawn(WorldObjectSpawnEvent event) {
         // Cancel spawning chests if we have reached max spawns.
-        event.setCancelled(currentChestsSpawned >= MAX_CHEST_PER_PLAYER_ONLINE);
+        if (event.getBaseWorldObject() instanceof Chest) event.setCancelled(currentChestsSpawned >= MAX_CHEST_PER_PLAYER_ONLINE);
     }
 
     /**
@@ -139,14 +139,14 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
         List<ItemStack> items = generateChestLoot();
 
         if (blockBreak) {
-            // Chest was broken, lets spawn items in the open world
+            // DragonEgg was broken, lets spawn items in the open world
             for (ItemStack itemStack : items) {
                 location.getWorld().dropItem(location, itemStack);
             }
         } else {
-            // Chest was opened, lets show the player an inventory of items
+            // DragonEgg was opened, lets show the player an inventory of items
             int slot = 0;
-            Inventory inventory = Bukkit.createInventory(null, 9 * 3, "Loot Chest");
+            Inventory inventory = Bukkit.createInventory(null, 9 * 3, "Loot DragonEgg");
             for (ItemStack itemStack : items) {
                 inventory.setItem(slot++, itemStack);
             }

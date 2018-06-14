@@ -5,6 +5,7 @@ Database:
    username: root
    password: ""
 Features:
+   NewDragonEggLoot: true
    BasicBuildProtection: true
    Roll: true
    HelpBookTest: true
