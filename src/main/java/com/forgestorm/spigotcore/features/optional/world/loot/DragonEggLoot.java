@@ -3,10 +3,10 @@ package com.forgestorm.spigotcore.features.optional.world.loot;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
-import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
@@ -57,7 +57,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         // Remove the dragon egg from chunk manager
-        SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(dragonEgg.location);
+        SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(dragonEgg.getLocation());
 
         // Unregister Listeners
         PlayerInteractEvent.getHandlerList().unregister(this);
@@ -79,7 +79,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
 
         //Make sure the player clicks the official dragon egg.
         //This will stop them from clicking an egg on a "build."
-        if (clickLocation.equals(dragonEgg.location)) {
+        if (clickLocation.equals(dragonEgg.getLocation())) {
             //TODO: Play Animation
             for (double i = 0; i < 2; i++) {
                 Firework fw = player.getWorld().spawn(clickLocation.subtract(0, -2, 0), Firework.class);
@@ -95,10 +95,10 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
             }
 
             //Play sound
-            Bukkit.getWorlds().get(0).playSound(dragonEgg.location, Sound.ENTITY_SHULKER_BULLET_HURT, 1, .7f);
+            Bukkit.getWorlds().get(0).playSound(dragonEgg.getLocation(), Sound.ENTITY_SHULKER_BULLET_HURT, 1, .7f);
 
             // Remove the dragon egg from chunk manager
-            SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(dragonEgg.location);
+            SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(dragonEgg.getLocation());
 
             //Reward Text
             long exp = 100;
@@ -136,7 +136,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     }
 
     public void teleportToEgg(Player player) {
-        player.teleport(dragonEgg.location);
+        player.teleport(dragonEgg.getLocation());
         player.sendMessage(ChatColor.YELLOW + "Teleported you to egg location: " + dragonEgg.id);
     }
 
@@ -209,12 +209,6 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
     class DragonEgg extends BaseWorldObject {
 
         /**
-         * This is both the spawn location of the egg and counts as the entry from the "locations"
-         * list.
-         */
-        private final Location location;
-
-        /**
          * Mainly used to teleport an admin to this location. This ID is the exact one found in
          * the file configuration.
          */
@@ -233,7 +227,7 @@ public class DragonEggLoot extends BukkitRunnable implements FeatureOptional, Li
         private boolean barrierSpawned = false;
 
         DragonEgg(Location location, int id) {
-            this.location = location;
+            super(location);
             this.id = id;
         }
 

@@ -10,11 +10,10 @@ import java.util.List;
 
 public class MobSpawner extends BaseWorldObject {
 
-    private final Location spawnerLocation;
     private final List<SpawnerMobDetails> spawnerMobDetails = new ArrayList<>();
 
-    MobSpawner(Location spawnerLocation) {
-        this.spawnerLocation = spawnerLocation;
+    public MobSpawner(Location location) {
+        super(location);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class MobSpawner extends BaseWorldObject {
         }
 
         void spawnEntity() {
-            spawnedEntity = spawnerLocation.getWorld().spawnEntity(spawnerLocation, mobType.getEntityType());
+            spawnedEntity = location.getWorld().spawnEntity(location, mobType.getEntityType());
             spawnedEntity.setCustomNameVisible(true);
             spawnedEntity.setCustomName(ChatColor.GREEN + mobType.getMobName());
         }

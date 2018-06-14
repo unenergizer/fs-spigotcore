@@ -2,14 +2,19 @@ package com.forgestorm.spigotcore.features.required.world.worldobject;
 
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.bukkit.Location;
 
+@Getter
+@RequiredArgsConstructor
 public abstract class BaseWorldObject {
+
+    protected final Location location;
 
     /**
      * Denotes if this world object has been spawned inside a playable world or not.
      */
-    @Getter
     @Setter
     private boolean isSpawned = false;
 

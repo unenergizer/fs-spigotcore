@@ -77,7 +77,7 @@ public class CitizenMessages implements LoadsConfig {
     boolean initCitizenMessage(Player player, String npcName) {
         if (!npcTopicsMap.containsKey(npcName)) return false;
 
-        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&7&o[&c&k&o!&7&o] &9&oClick Colored Messages Below to Interact &7&o[&c&k&o!&7&o]"));
+        sendTopicMessage(player, npcName, "init", CenterChatText.centerChatMessage("&c&k&oX&r &e&oClick Colored Messages Below to Interact &c&k&oX"));
         return true;
     }
 

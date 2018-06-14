@@ -57,8 +57,7 @@ class Realm implements Listener {
         this.realmOwner = realmOwner;
         this.outsideDoorLocation = outsideDoorLocation;
 
-        realmDoorwayOutside = new RealmDoorway(realmOwner);
-        realmDoorwayInside = new RealmDoorway(realmOwner);
+        realmDoorwayOutside = new RealmDoorway(outsideDoorLocation, realmOwner);
     }
 
     /**
@@ -220,9 +219,11 @@ class Realm implements Listener {
         if (!event.getWorld().getName().equals(realmOwner.getUniqueId().toString())) return;
 
         realmWorld = event.getWorld();
-        realmDoorwayOutside.enable(outsideDoorLocation);
+        realmDoorwayOutside.enable();
         insideDoorLocation = realmManager.getProfileData(realmOwner).getRealmInsideDoorLocation(realmWorld);
-        realmDoorwayInside.enable(insideDoorLocation);
+
+        realmDoorwayInside = new RealmDoorway(insideDoorLocation, realmOwner);
+        realmDoorwayInside.enable();
     }
 
     /**
@@ -361,7 +362,8 @@ class Realm implements Listener {
 
         //Set New Realm inside Portal
         insideDoorLocation = block.getLocation();
-        realmDoorwayInside.enable(insideDoorLocation);
+        realmDoorwayInside = new RealmDoorway(insideDoorLocation, realmOwner);
+        realmDoorwayInside.enable();
 
         //Save location to player profile.
         RealmProfileData realmProfileData = realmManager.getProfileData(player);

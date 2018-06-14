@@ -6,7 +6,6 @@ import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import com.forgestorm.spigotcore.util.display.Hologram;
-import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
@@ -54,14 +53,18 @@ public class WorldHologram implements FeatureOptional, LoadsConfig {
                 location = location.add(0, .65, 0);
             }
 
-            hologramWorldObjectList.add(new HologramWorldObject(new Hologram(text, location)));
+            hologramWorldObjectList.add(new HologramWorldObject(location, new Hologram(text, location)));
         }
     }
 
-    @AllArgsConstructor
     class HologramWorldObject extends BaseWorldObject {
 
         private final Hologram hologram;
+
+        public HologramWorldObject(Location location, Hologram hologram) {
+            super(location);
+            this.hologram = hologram;
+        }
 
         public Location getLocation() {
             return hologram.getLocation();

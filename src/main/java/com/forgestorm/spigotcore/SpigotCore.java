@@ -16,9 +16,8 @@ import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.features.optional.world.*;
 import com.forgestorm.spigotcore.features.optional.world.lantern.Lantern;
-import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
-import com.forgestorm.spigotcore.features.optional.world.loot.NewChestLoot;
+import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
@@ -148,7 +147,6 @@ public class SpigotCore extends JavaPlugin {
         features.add(new PlayerBossBar());
         features.add(new CitizenManager());
         features.add(new WorldSettings());
-        features.add(new NewChestLoot());
         features.add(new ChestLoot());
         features.add(new DragonEggLoot());
         features.add(new HiddenPaths());

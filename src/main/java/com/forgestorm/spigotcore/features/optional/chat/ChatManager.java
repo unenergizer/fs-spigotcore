@@ -58,10 +58,7 @@ public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length != 3) return false;
         if (!label.equalsIgnoreCase("ChatManager")) return false;
-        if (Integer.parseInt(args[0]) != uniqueCommandKey) return false;
-
-        //sendTopicMessage((Player) sender, args[1], args[2], CenterChatText.centerChatMessage("&7- - - - &m---------&r&7 - - - -"));
-        return true;
+        return Integer.parseInt(args[0]) == uniqueCommandKey;
     }
 
     private void getPlayerProfileInfo(CommandSender commandSender, Player profileToView) {

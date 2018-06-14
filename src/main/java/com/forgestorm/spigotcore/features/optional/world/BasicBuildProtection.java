@@ -46,24 +46,24 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
         HangingBreakByEntityEvent.getHandlerList().unregister(this);
     }
 
-    private boolean canBuild(Player player) {
-        return player.isOp() && player.getGameMode() == GameMode.CREATIVE;
+    private boolean preventBuild(Player player) {
+        return !player.isOp() || player.getGameMode() != GameMode.CREATIVE;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        event.setCancelled(!canBuild(event.getPlayer()));
+        event.setCancelled(preventBuild(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        event.setCancelled(!canBuild(event.getPlayer()));
+        event.setCancelled(preventBuild(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() == null) return;
-        event.setCancelled(event.getRightClicked().getType() == EntityType.ITEM_FRAME && !canBuild(event.getPlayer()));
+        event.setCancelled(event.getRightClicked().getType() == EntityType.ITEM_FRAME && preventBuild(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -79,7 +79,7 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
             case GOLD_PLATE:
             case IRON_PLATE:
             case FLOWER_POT:
-                event.setCancelled(!canBuild(event.getPlayer()));
+                event.setCancelled(preventBuild(event.getPlayer()));
                 break;
             case DARK_OAK_DOOR:
             case ACACIA_DOOR:
@@ -90,7 +90,7 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
             case WOOD_DOOR:
             case WOODEN_DOOR:
                 if (doorResetTimer.contains(event.getClickedBlock())) doorResetTimer.removeDoor(event.getClickedBlock());
-                doorResetTimer.addDoor(event.getClickedBlock(), 5);
+                doorResetTimer.addDoor(event.getClickedBlock());
                 break;
             default:
                 event.setCancelled(false);
@@ -99,7 +99,7 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPaintingBreak(HangingBreakByEntityEvent event) {
-        event.setCancelled(event.getEntity().getType() == EntityType.PAINTING && !canBuild((Player) event.getRemover()));
+        event.setCancelled(event.getEntity().getType() == EntityType.PAINTING && preventBuild((Player) event.getRemover()));
     }
 
     public class DoorResetTimer extends BukkitRunnable {
@@ -133,8 +133,8 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
             }
         }
 
-        private void addDoor(Block block, int time) {
-            countDowns.put(block, time);
+        private void addDoor(Block block) {
+            countDowns.put(block, 5);
         }
 
         private void removeDoor(Block block) {

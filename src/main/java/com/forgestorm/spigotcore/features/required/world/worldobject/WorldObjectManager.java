@@ -1,10 +1,13 @@
 package com.forgestorm.spigotcore.features.required.world.worldobject;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.events.WorldObjectAddEvent;
+import com.forgestorm.spigotcore.features.events.WorldObjectDespawnEvent;
+import com.forgestorm.spigotcore.features.events.WorldObjectSpawnEvent;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.util.text.Console;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,14 +24,14 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * <p>
  * RULES:
  * <ul>
- *     <li>Only spawns {@link BaseWorldObject} in the world when they are needed (and chunks loaded).</li>
- *     <li>BaseWorldObjects should never be added with the intent to have it be saved in the world.</li>
- *     <li>Remove BaseWorldObjects from the map when the server is shutdown.</li>
+ * <li>Only spawns {@link BaseWorldObject} in the world when they are needed (and chunks loaded).</li>
+ * <li>BaseWorldObjects should never be added with the intent to have it be saved in the world.</li>
+ * <li>Remove BaseWorldObjects from the map when the server is shutdown.</li>
  * </ul>
  * <p>
  * TODO:
  * <ul>
- *     <li>Implement a respawn timing system for {@link BaseWorldObject}</li>
+ * <li>Implement a respawn timing system for {@link BaseWorldObject}</li>
  * </ul>
  */
 public class WorldObjectManager extends FeatureRequired {
@@ -86,6 +89,8 @@ public class WorldObjectManager extends FeatureRequired {
 
             adjustRespawnTime(baseWorldObject);
             shouldSpawn(location, baseWorldObject);
+            if (baseWorldObject instanceof AsyncWorldObjectTick && baseWorldObject.isSpawned())
+                ((AsyncWorldObjectTick) baseWorldObject).onAsyncTick();
         }
     }
 
@@ -96,8 +101,9 @@ public class WorldObjectManager extends FeatureRequired {
      * @param baseWorldObject The WorldObject to test and adjust scheduler for.
      */
     private void adjustRespawnTime(BaseWorldObject baseWorldObject) {
-        if (baseWorldObject instanceof CooldownWorldObject)
+        if (baseWorldObject instanceof CooldownWorldObject) {
             ((CooldownWorldObject) baseWorldObject).adjustCooldownTime();
+        }
     }
 
     /**
@@ -112,6 +118,10 @@ public class WorldObjectManager extends FeatureRequired {
     private void shouldSpawn(Location location, BaseWorldObject baseWorldObject) {
         boolean isPlayerNear = false;
 
+        if (baseWorldObject instanceof CooldownWorldObject) {
+            if (((CooldownWorldObject) baseWorldObject).isOnCooldown()) return;
+        }
+
         // Check to see if a player is near a BaseWorldObject location
         for (Player player : location.getWorld().getPlayers()) {
 
@@ -120,18 +130,12 @@ public class WorldObjectManager extends FeatureRequired {
                 isPlayerNear = true;
 
                 // Player is near, but the BaseWorldObject is not spawned. Spawn it now!
-                if (!baseWorldObject.isSpawned()) {
-                    baseWorldObject.setSpawned(true);
-                    baseWorldObjectQueue.add(baseWorldObject);
-                }
+                if (!baseWorldObject.isSpawned()) baseWorldObjectQueue.add(baseWorldObject);
             }
         }
 
         // No player near, despawn the BaseWorldObject
-        if (!isPlayerNear && baseWorldObject.isSpawned()) {
-            baseWorldObject.setSpawned(false);
-            baseWorldObjectQueue.add(baseWorldObject);
-        }
+        if (!isPlayerNear && baseWorldObject.isSpawned()) baseWorldObjectQueue.add(baseWorldObject);
     }
 
     /**
@@ -142,14 +146,32 @@ public class WorldObjectManager extends FeatureRequired {
         while (!baseWorldObjectQueue.isEmpty()) {
             BaseWorldObject baseWorldObject = baseWorldObjectQueue.remove();
 
-            // Player is near this BaseWorldObject, lets spawn it.
-            if (baseWorldObject.isSpawned()) {
-                baseWorldObject.spawnWorldObject();
+            // Spawn or despawn world objects and call events.
+            if (!baseWorldObject.isSpawned()) {
+                WorldObjectSpawnEvent event = new WorldObjectSpawnEvent(baseWorldObject);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+
+                // Player is near this BaseWorldObject, lets spawn it.
+                if (!event.isCancelled()) {
+                    baseWorldObject.spawnWorldObject();
+                    baseWorldObject.setSpawned(true);
+                }
             } else {
+                WorldObjectDespawnEvent event = new WorldObjectDespawnEvent(baseWorldObject);
+                Bukkit.getServer().getPluginManager().callEvent(event);
 
                 // No players near this BaseWorldObject, lets remove it.
-                baseWorldObject.despawnWorldObject();
+                if (!event.isCancelled()) {
+                    baseWorldObject.setSpawned(false);
+                    baseWorldObject.despawnWorldObject();
+                }
             }
+        }
+
+        // Do sync tick
+        for (BaseWorldObject baseWorldObject : worldObjectMap.values()) {
+            if (baseWorldObject instanceof SyncWorldObjectTick && baseWorldObject.isSpawned())
+                ((SyncWorldObjectTick) baseWorldObject).onSyncTick();
         }
     }
 
@@ -160,7 +182,14 @@ public class WorldObjectManager extends FeatureRequired {
      * @param baseWorldObject The BaseWorldObject we will possible be spawning.
      */
     public void addWorldObject(Location location, BaseWorldObject baseWorldObject) {
-        worldObjectMap.put(location, baseWorldObject);
+        WorldObjectAddEvent event = new WorldObjectAddEvent(location, baseWorldObject);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        if (!event.isCancelled()) {
+            worldObjectMap.put(location, baseWorldObject);
+            Console.sendMessage("[WorldObjectManager] Added world object: " + baseWorldObject.getClass().getSimpleName() + " at Location: " + location.getBlockX() + "/" + location.getBlockY() + "/" + location.getBlockZ());
+
+        }
     }
 
     /**
@@ -172,12 +201,11 @@ public class WorldObjectManager extends FeatureRequired {
         BaseWorldObject baseWorldObject = worldObjectMap.get(location);
 
         // If the BaseWorldObject currently exists in the world, lets remove it.
-        if (baseWorldObject.isSpawned()) {
-            baseWorldObject.setSpawned(false);
-            baseWorldObject.despawnWorldObject();
-        }
+        baseWorldObject.despawnWorldObject();
 
         worldObjectMap.remove(location);
+
+        Console.sendMessage("[WorldObjectManager] Removed world object: " + baseWorldObject.getClass().getSimpleName() + " at Location: " + location.getBlockX() + "/" + location.getBlockY() + "/" + location.getBlockZ());
     }
 
     /**
@@ -186,11 +214,42 @@ public class WorldObjectManager extends FeatureRequired {
      * @param baseWorldObject The BaseWorldObject we wish to remove.
      */
     public void removeWorldObject(BaseWorldObject baseWorldObject) {
+        removeWorldObject(getBaseWorldObjectLocation(baseWorldObject));
+    }
+
+    private Location getBaseWorldObjectLocation(BaseWorldObject baseWorldObject) {
         for (Map.Entry<Location, BaseWorldObject> entry : worldObjectMap.entrySet()) {
             if (entry.getValue().equals(baseWorldObject)) {
-                removeWorldObject(entry.getKey());
-                break;
+                return entry.getKey();
             }
         }
+        return null;
+    }
+
+    /**
+     * Initializes the cooldown timer for this given object.
+     *
+     * @param location The key used to get the BaseWorldObject from the worldObjectMap.
+     */
+    public void toggleCooldown(Location location) {
+        BaseWorldObject baseWorldObject = worldObjectMap.get(location);
+
+        if (!(baseWorldObject instanceof CooldownWorldObject))
+            throw new RuntimeException("The supplied WorldObject is not an instance of CooldownWorldObject");
+
+        ((CooldownWorldObject) baseWorldObject).setTimeLeft(((CooldownWorldObject) baseWorldObject).getDEFAULT_COOLDOWN_TIME());
+
+        // Add this WorldObject back to the que to be despawned.
+        baseWorldObjectQueue.add(baseWorldObject);
+    }
+
+    /**
+     * Gets the specified world object.
+     *
+     * @param location The key used to get the BaseWorldObject from the worldObjectMap.
+     * @return The stored BaseWorldObject from the worldObjectMap.
+     */
+    public BaseWorldObject getWorldObject(Location location) {
+        return worldObjectMap.get(location);
     }
 }

@@ -2,6 +2,7 @@ package com.forgestorm.spigotcore.features.required.world.worldobject;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Location;
 
 public abstract class CooldownWorldObject extends BaseWorldObject {
 
@@ -10,18 +11,21 @@ public abstract class CooldownWorldObject extends BaseWorldObject {
 
     @Setter
     @Getter
-    private int timeLeft;
+    private int timeLeft = 0;
 
-    public CooldownWorldObject(int defaultCooldownTime) {
+    public CooldownWorldObject(Location location, int defaultCooldownTime) {
+        super(location);
         this.DEFAULT_COOLDOWN_TIME = defaultCooldownTime;
     }
 
     void adjustCooldownTime() {
-        timeLeft = timeLeft - 1;
+        if (timeLeft != 0) timeLeft = timeLeft - 1;
     }
 
-    void resetCooldownTime() {
-        timeLeft = DEFAULT_COOLDOWN_TIME;
+    /**
+     * @return True if this object is on cooldown, false otherwise.
+     */
+    boolean isOnCooldown() {
+        return timeLeft != 0;
     }
-
 }

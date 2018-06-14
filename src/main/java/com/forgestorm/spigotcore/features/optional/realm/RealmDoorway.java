@@ -21,26 +21,27 @@ public class RealmDoorway extends BaseWorldObject {
     private Location topPortalBlock;
     private Location bottomPortalBlock;
 
-    public RealmDoorway(Player doorOwner) {
+    RealmDoorway(Location location, Player doorOwner) {
+        super(location);
         this.doorOwnerName = doorOwner.getName();
     }
 
-    void enable(Location doorLocation) {
+    void enable() {
 
-        int x = (int) doorLocation.getX();
-        int y = (int) doorLocation.getY();
-        int z = (int) doorLocation.getZ();
+        int x = (int) location.getX();
+        int y = (int) location.getY();
+        int z = (int) location.getZ();
 
-        topPortalBlock = new Location(doorLocation.getWorld(), x, y + 2, z);
-        bottomPortalBlock = new Location(doorLocation.getWorld(), x, y + 1, z);
+        topPortalBlock = new Location(location.getWorld(), x, y + 2, z);
+        bottomPortalBlock = new Location(location.getWorld(), x, y + 1, z);
 
         List<String> hologramText = new ArrayList<>();
         hologramText.add(Text.color("&l" + doorOwnerName));
         hologramText.add(RealmAlignment.HOSTILE.getAlignment());
 
-        realmDoorTitle = new Hologram(hologramText, new Location(doorLocation.getWorld(), x + .5, y + 2.2, z + .5));
+        realmDoorTitle = new Hologram(hologramText, new Location(location.getWorld(), x + .5, y + 2.2, z + .5));
 
-        SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(doorLocation, this);
+        SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(location, this);
     }
 
     void disable() {
