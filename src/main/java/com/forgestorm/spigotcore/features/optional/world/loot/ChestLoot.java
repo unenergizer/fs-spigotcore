@@ -10,8 +10,6 @@ import com.forgestorm.spigotcore.features.required.world.worldobject.AsyncWorldO
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import com.forgestorm.spigotcore.features.required.world.worldobject.CooldownWorldObject;
 import com.forgestorm.spigotcore.util.text.Console;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -130,14 +128,11 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
      */
     private void toggleChestLootActive(Player player, Location location, boolean blockBreak) {
 
-        // Set the chest as claimed, to stop particle effect.
-        ((Chest) SpigotCore.PLUGIN.getWorldObjectManager().getWorldObject(location)).setChestClaimed(true);
-
         // Set the chest to air.
         location.getBlock().setType(Material.AIR);
         player.playSound(location, Sound.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, 0.5F, 1.2F);
 
-        // TODO: Prepare chest for timeout countdown
+        // Prepare chest for timeout countdown
         SpigotCore.PLUGIN.getWorldObjectManager().toggleCooldown(location);
 
         // Give the player chest loot
@@ -165,10 +160,6 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
      */
     private class Chest extends CooldownWorldObject implements AsyncWorldObjectTick {
 
-        @Setter
-        @Getter
-        private boolean chestClaimed = false; //TODO: MAY REMOVE. Check WorldObject cooldown map instead?
-
         Chest(Location location, int defaultCooldownTime) {
             super(location, defaultCooldownTime);
         }
@@ -179,8 +170,6 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
 
             location.getBlock().setType(CHEST_TYPE);
             currentChestsSpawned = currentChestsSpawned + 1;
-
-            chestClaimed = false;
         }
 
         @Override
@@ -192,7 +181,7 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
 
         @Override
         public void onAsyncTick() {
-            if (!chestClaimed) location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 1);
+            if (!isOnCooldown()) location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 1);
         }
     }
 }

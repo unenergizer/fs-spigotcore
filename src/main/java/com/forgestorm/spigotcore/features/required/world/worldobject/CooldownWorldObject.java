@@ -25,7 +25,7 @@ public abstract class CooldownWorldObject extends BaseWorldObject {
     /**
      * @return True if this object is on cooldown, false otherwise.
      */
-    boolean isOnCooldown() {
+    public boolean isOnCooldown() {
         return timeLeft != 0;
     }
 }

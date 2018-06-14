@@ -25,7 +25,7 @@ Features:
    PlayerBossBar: true
    CitizenManager: true
    WorldSettings: true
-   NewChestLoot: true
+   ChestLoot: true
    DragonEggLoot: false
    HiddenPaths: true
    MobManager: true

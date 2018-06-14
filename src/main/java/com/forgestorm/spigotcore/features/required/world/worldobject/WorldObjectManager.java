@@ -242,14 +242,4 @@ public class WorldObjectManager extends FeatureRequired {
         // Add this WorldObject back to the que to be despawned.
         baseWorldObjectQueue.add(baseWorldObject);
     }
-
-    /**
-     * Gets the specified world object.
-     *
-     * @param location The key used to get the BaseWorldObject from the worldObjectMap.
-     * @return The stored BaseWorldObject from the worldObjectMap.
-     */
-    public BaseWorldObject getWorldObject(Location location) {
-        return worldObjectMap.get(location);
-    }
 }
