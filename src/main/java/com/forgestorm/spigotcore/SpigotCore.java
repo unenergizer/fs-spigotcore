@@ -13,12 +13,12 @@ import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerOperator;
 import com.forgestorm.spigotcore.features.optional.player.*;
 import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
+import com.forgestorm.spigotcore.features.optional.rpg.armor.ArmorManager;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.features.optional.world.*;
-import com.forgestorm.spigotcore.features.optional.world.lantern.Lantern;
-import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
+import com.forgestorm.spigotcore.features.optional.world.lantern.NewLantern;
 import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
-import com.forgestorm.spigotcore.features.optional.world.loot.NewDragonEggLoot;
+import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
@@ -129,7 +129,8 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
-        features.add(new NewDragonEggLoot());
+        features.add(new ArmorManager());
+        features.add(new DragonEggLoot());
         features.add(new BasicBuildProtection());
         features.add(new Roll());
         features.add(new HelpBookTest());
@@ -150,11 +151,10 @@ public class SpigotCore extends JavaPlugin {
         features.add(new CitizenManager());
         features.add(new WorldSettings());
         features.add(new ChestLoot());
-        features.add(new DragonEggLoot());
         features.add(new HiddenPaths());
         features.add(new MobManager());
         features.add(new DoubleJump());
-        features.add(new Lantern());
+        features.add(new NewLantern());
         features.add(new WorldHologram());
         features.add(new EzImgMessage());
 

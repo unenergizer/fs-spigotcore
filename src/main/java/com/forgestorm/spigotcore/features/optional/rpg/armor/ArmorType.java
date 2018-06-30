@@ -3,9 +3,9 @@ package com.forgestorm.spigotcore.features.optional.rpg.armor;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * @Author Borlea
- * @Github https://github.com/borlea/
- * @Website http://codingforcookies.com/
+ * Author Borlea
+ * Github https://github.com/borlea/
+ * Website http://codingforcookies.com/
  * @Since Jul 30, 2015 6:46:16 PM
  */
 public enum ArmorType {

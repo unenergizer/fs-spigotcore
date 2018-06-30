@@ -5,7 +5,7 @@ Database:
    username: root
    password: ""
 Features:
-   NewDragonEggLoot: true
+   ArmorManager: true
    BasicBuildProtection: true
    Roll: true
    HelpBookTest: true
@@ -27,10 +27,10 @@ Features:
    CitizenManager: true
    WorldSettings: true
    ChestLoot: true
-   DragonEggLoot: false
+   DragonEggLoot: true
    HiddenPaths: true
    MobManager: true
    DoubleJump: true
-   Lantern: false
+   NewLantern: true
    WorldHologram: true
    EzImgMessage: true

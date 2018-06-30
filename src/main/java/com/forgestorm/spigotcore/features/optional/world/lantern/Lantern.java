@@ -31,26 +31,26 @@ public class Lantern implements FeatureOptional, LoadsConfig, Listener {
     private final FileConfiguration config = YamlConfiguration.loadConfiguration(file);
     private TimeOfDay timeOfDay;
     private final static String prefix = "Lanterns";
-    private final WorldTimer worldTimer = new WorldTimer();
+    private final WorldTime worldTime = new WorldTime();
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
-        worldTimer.onEnable();
+        worldTime.onEnable();
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        worldTimer.onDisable();
+        worldTime.onDisable();
 
         if (timeOfDay == TimeOfDay.DUSK) putOutLanterns();
 
-        TimeOfDayEvent.getHandlerList().unregister(this);
+        TimeOfDayChangeEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
-    public void onTimeChange(TimeOfDayEvent event) {
+    public void onTimeChange(TimeOfDayChangeEvent event) {
         TimeOfDay times = event.getTimeOfDay();
 
         // Light all lantern

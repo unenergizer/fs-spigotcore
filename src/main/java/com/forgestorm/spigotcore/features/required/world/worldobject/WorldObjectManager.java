@@ -242,4 +242,18 @@ public class WorldObjectManager extends FeatureRequired {
         // Add this WorldObject back to the que to be despawned.
         baseWorldObjectQueue.add(baseWorldObject);
     }
+
+    public void despawnWorldObject(Location location) {
+        BaseWorldObject worldObject = worldObjectMap.get(location);
+
+        if (!worldObject.isSpawned()) return;
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                worldObject.setSpawned(false);
+                worldObject.despawnWorldObject();
+            }
+        }.runTaskLater(SpigotCore.PLUGIN, 0);
+    }
 }

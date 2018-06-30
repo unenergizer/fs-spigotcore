@@ -2,8 +2,8 @@ package com.forgestorm.spigotcore.features.optional.world;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -44,11 +44,18 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
     private boolean allowPortal;
     private boolean doDaylightCycle;
     private boolean doWeatherCycle;
+    private boolean doFireTick;
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-        initWorld(manualEnable);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                initWorld(manualEnable);
+            }
+        }.runTaskLater(SpigotCore.PLUGIN, 1);
     }
 
     @Override
@@ -81,6 +88,7 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
         path = path + "GameRules."; // update path!
         doDaylightCycle = config.getBoolean(path + "doDaylightCycle");
         doWeatherCycle = config.getBoolean(path + "doWeatherCycle");
+        doFireTick = config.getBoolean(path + "doFireTick");
     }
 
     /**
@@ -102,6 +110,7 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
         world.setAutoSave(autoSaveWorld);
         world.setGameRuleValue("doDaylightCycle", Boolean.toString(doDaylightCycle));
         world.setGameRuleValue("doWeatherCycle", Boolean.toString(doWeatherCycle));
+        world.setGameRuleValue("doFireTick", Boolean.toString(doFireTick));
 
         // If we have manually enabled this features, do not clear entities!
         // This would remove any entities spawned by other features.

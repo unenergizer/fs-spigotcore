@@ -99,7 +99,7 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
      */
     private List<ItemStack> generateChestLoot() {
         List<ItemStack> items = new ArrayList<>();
-        items.add(new ItemStack(Material.DIRT));
+        items.add(new ItemStack(Material.TNT));
         items.add(new ItemStack(Material.COBBLESTONE));
         return items;
     }

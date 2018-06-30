@@ -1,5 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.rpg.armor;
 
+import com.forgestorm.spigotcore.SpigotCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,20 +16,32 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author Borlea
- * @Github https://github.com/borlea/
- * @Website http://codingforcookies.com/
+ * Author Borlea
+ * Github https://github.com/borlea/
+ * Website http://codingforcookies.com/
+ *
  * @since Jul 30, 2015 6:43:34 PM
  */
 public class ArmorListener implements Listener {
 
-    private final List<String> blockedMaterials;
+    private final List<String> blockedMaterials = new ArrayList<>();
 
-    public ArmorListener(List<String> blockedMaterials) {
-        this.blockedMaterials = blockedMaterials;
+
+    void onEnable() {
+        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+    }
+
+
+    void onDisable() {
+        InventoryClickEvent.getHandlerList().unregister(this);
+        PlayerInteractEvent.getHandlerList().unregister(this);
+        InventoryDragEvent.getHandlerList().unregister(this);
+        PlayerItemBreakEvent.getHandlerList().unregister(this);
+        PlayerDeathEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
@@ -112,8 +125,10 @@ public class ArmorListener implements Listener {
             if (e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK) {// Having both of these checks is useless, might as well do it though.
                 // Some blocks have actions when you right click them which stops the client from equipping the armor in hand.
                 Material mat = e.getClickedBlock().getType();
-                for (String s : blockedMaterials) {
-                    if (mat.name().equalsIgnoreCase(s)) return;
+                if (blockedMaterials != null && !blockedMaterials.isEmpty()) {
+                    for (String s : blockedMaterials) {
+                        if (mat.name().equalsIgnoreCase(s)) return;
+                    }
                 }
             }
             ArmorType newArmorType = ArmorType.matchType(e.getItem());

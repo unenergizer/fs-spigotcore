@@ -4,13 +4,13 @@ import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-class TimeOfDayEvent extends Event {
+public class TimeOfDayChangeEvent extends Event {
 
     @Getter
     private final TimeOfDay timeOfDay;
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public TimeOfDayEvent(TimeOfDay timeOfDay) {
+    TimeOfDayChangeEvent(TimeOfDay timeOfDay) {
         this.timeOfDay = timeOfDay;
     }
 

@@ -85,7 +85,7 @@ public class HiddenPaths implements FeatureOptional, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
@@ -96,6 +96,7 @@ public class HiddenPaths implements FeatureOptional, Listener {
         // If the block underneath is powered, it is okay to set TNT.
         if (block.isBlockIndirectlyPowered()) {
             player.sendMessage(Text.color("&a&lTNT was set, RUN!"));
+            event.setCancelled(false);
         } else {
 
             // If the block is not powered, do not let player set TNT
