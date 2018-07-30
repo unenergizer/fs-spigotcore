@@ -16,6 +16,7 @@ import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
 import com.forgestorm.spigotcore.features.optional.rpg.armor.ArmorManager;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.features.optional.world.*;
+import com.forgestorm.spigotcore.features.optional.world.gameworld.GameWorldManager;
 import com.forgestorm.spigotcore.features.optional.world.lantern.NewLantern;
 import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
@@ -129,6 +130,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new GameWorldManager());
         features.add(new ArmorManager());
         features.add(new DragonEggLoot());
         features.add(new BasicBuildProtection());

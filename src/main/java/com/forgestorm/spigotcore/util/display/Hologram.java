@@ -24,7 +24,7 @@ public class Hologram {
     @Getter
     private Location location;
     private boolean isSpawned = false;
-    private boolean isMultilineHologram = false;
+    private boolean isMultilineHologram;
 
     /**
      * Creates a new instance of a Hologram that contains a single line of text.

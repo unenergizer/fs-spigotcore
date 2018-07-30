@@ -5,12 +5,13 @@ Database:
    username: root
    password: ""
 Features:
+   GameWorldManager: true
    ArmorManager: true
    BasicBuildProtection: true
    Roll: true
    HelpBookTest: true
    AnvilTest: true
-   RealmManager: true
+   RealmManager: false
    GameTipAnnouncer: true
    PlayerCompassMenu: true
    ScoreboardTeams: true

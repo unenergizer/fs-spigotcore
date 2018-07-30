@@ -29,7 +29,7 @@ public class ItemBuilder {
         // Add extra attributes
         extraAttributes.put(Attribute.DODGE, 234234.0);
 
-        // TODO: Generate item value
+        // TODO: Generate item currency value
 
         // Set Item Description Meta
         ItemMeta itemMeta = armorBase.getItemMeta();
@@ -47,6 +47,8 @@ public class ItemBuilder {
             }
         }
 
+        // TODO: Add item currency value to lore
+
         itemMeta.setLore(loreList);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
@@ -54,7 +56,7 @@ public class ItemBuilder {
         itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         armorBase.setItemMeta(itemMeta);
 
-        // Set NBTI Item Data
+        // Set NBT Item Data
         NBTItem nbtItem = new NBTItem(armorBase);
 
         for (Map.Entry<Attribute, Double> entry : baseAttributes.entrySet()) {
@@ -63,6 +65,8 @@ public class ItemBuilder {
         for (Map.Entry<Attribute, Double> entry : extraAttributes.entrySet()) {
             nbtItem.setDouble(entry.getKey().name(), entry.getValue());
         }
+
+        // TODO: Add item currency value to NBT data
 
         return nbtItem.getItem();
     }

@@ -1,6 +1,7 @@
 package com.forgestorm.spigotcore.features.optional.rpg.mobs;
 
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
+import de.tr7zw.itemnbtapi.NBTEntity;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -58,6 +59,9 @@ public class MobSpawner extends BaseWorldObject {
             spawnedEntity = location.getWorld().spawnEntity(location, mobType.getEntityType());
             spawnedEntity.setCustomNameVisible(true);
             spawnedEntity.setCustomName(ChatColor.GREEN + mobType.getMobName());
+
+            NBTEntity nbtent = new NBTEntity(spawnedEntity);
+            nbtent.setString("nbtName", mobType.getMobName());
         }
 
         void removeEntity() {

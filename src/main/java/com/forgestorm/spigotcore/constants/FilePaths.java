@@ -20,6 +20,7 @@ public enum FilePaths {
     PLAYER_LIST_TEXT("player/PlayerListText.yml"),
 
     CHAT_ICONS("resources/chaticons/"),
+    RPG_GAME_WORLDS("rpg/GameWorlds.yml"),
 
     CHEST_LOOT("world/ChestLootLocations.yml"),
     DRAGON_EGG_LOOT("world/DragonEggLocations.yml"),
@@ -27,6 +28,7 @@ public enum FilePaths {
     SERVER_SPAWN("world/ServerSpawn.yml"),
     WORLD_HOLOGRAM("world/WorldHolograms.yml"),
     WORLD_SETTINGS("world/WorldSettings.yml");
+
 
     private final String filePath;
 

@@ -2,13 +2,11 @@ package com.forgestorm.spigotcore.features.optional.rpg.armor;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.optional.rpg.Attribute;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemBuilder;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemLevel;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemQuality;
-import de.tr7zw.itemnbtapi.*;
+import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
