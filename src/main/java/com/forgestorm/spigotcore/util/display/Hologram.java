@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,12 +20,10 @@ import java.util.List;
 public class Hologram {
 
     private ArrayList<ArmorStand> armorStands = new ArrayList<>();
-    private String singleLineText;
     private List<String> multilineText;
     @Getter
     private Location location;
     private boolean isSpawned = false;
-    private boolean isMultilineHologram;
 
     /**
      * Creates a new instance of a Hologram that contains a single line of text.
@@ -33,9 +32,8 @@ public class Hologram {
      * @param location       The location the hologram will be spawned.
      */
     public Hologram(String singleLineText, Location location) {
-        this.singleLineText = singleLineText;
+        this.multilineText = new ArrayList<>(Arrays.asList(singleLineText));
         this.location = location;
-        isMultilineHologram = false;
     }
 
     /**
@@ -47,7 +45,6 @@ public class Hologram {
     public Hologram(List<String> multilineText, Location location) {
         this.multilineText = multilineText;
         this.location = location;
-        isMultilineHologram = true;
     }
 
     /**
@@ -56,9 +53,7 @@ public class Hologram {
      * @param displayMessage The new message to show.
      */
     public void changeText(String displayMessage) {
-        if (isMultilineHologram)
-            throw new RuntimeException("Tried to change multiline hologram text but used single line method. User multiline version.");
-        singleLineText = displayMessage;
+        changeText(displayMessage, 0);
     }
 
     /**
@@ -68,9 +63,12 @@ public class Hologram {
      * @param lineToChange   The line we want to change.
      */
     public void changeText(String displayMessage, int lineToChange) {
-        if (!isMultilineHologram)
-            throw new RuntimeException("Tried to change singe line hologram text but used multiline method. User single line version.");
         armorStands.get(lineToChange).setCustomName(displayMessage);
+        multilineText.set(lineToChange, displayMessage);
+    }
+
+    private boolean isMultilineHologram() {
+        return multilineText.size() > 1;
     }
 
     /**
@@ -82,9 +80,9 @@ public class Hologram {
 
         double spotsMovedDown = 0;
 
-        if (singleLineText != null) {
+        if (!isMultilineHologram()) {
             // Single line hologram
-            armorStands.add(createArmorStand(singleLineText, location));
+            armorStands.add(createArmorStand(multilineText.get(0), location));
         } else {
             // Multiline hologram
             for (String string : multilineText) {
@@ -112,7 +110,6 @@ public class Hologram {
      */
     public void remove() {
         despawnHologram();
-        singleLineText = null;
         if (multilineText != null) {
             multilineText.clear();
             multilineText = null;
