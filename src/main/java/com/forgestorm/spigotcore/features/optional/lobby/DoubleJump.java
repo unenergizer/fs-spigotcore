@@ -53,7 +53,8 @@ public class DoubleJump implements FeatureOptional, Listener {
      * @return True if they are in the main world, false otherwise.
      */
     private boolean inOtherWorld(Player player) {
-        return !player.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName());
+//        return !player.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName());
+        return false; // Enables double jump on all worlds.
     }
 
     @EventHandler
@@ -113,7 +114,7 @@ public class DoubleJump implements FeatureOptional, Listener {
     @EventHandler
     public void onPlayerPortalEvent(PlayerPortalEvent event) {
         if (event.getCause() != PlayerPortalEvent.TeleportCause.NETHER_PORTAL) return;
-        if (!Bukkit.getWorlds().get(0).getName().equals(event.getPlayer().getWorld().getName())) return;
+        // if (!Bukkit.getWorlds().get(0).getName().equals(event.getPlayer().getWorld().getName())) return;
         setupPlayer(event.getPlayer());
     }
 }

@@ -6,13 +6,11 @@ import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.ShutdownTask;
 import com.forgestorm.spigotcore.util.text.Console;
-import de.tr7zw.itemnbtapi.NBTEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -51,13 +49,13 @@ public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig, L
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof LivingEntity) {
-            NBTEntity nbti = new NBTEntity(event.getEntity());
-
-            System.out.println("[MobManager] " + event.getEventName() + " --------------------------------- START");
-            System.out.println(nbti);
-            System.out.println("[MobManager] " + event.getEventName() + " ----------------------------------- END");
-        }
+//        if (event.getEntity() instanceof LivingEntity) {
+//            NBTEntity nbti = new NBTEntity(event.getEntity());
+//
+//            System.out.println("[MobManager] " + event.getEventName() + " --------------------------------- START");
+//            System.out.println(nbti);
+//            System.out.println("[MobManager] " + event.getEventName() + " ----------------------------------- END");
+//        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.forgestorm.spigotcore.features.optional.world.gameworld;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
@@ -9,11 +10,13 @@ import com.forgestorm.spigotcore.features.required.world.worldobject.SyncWorldOb
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.file.FileUtil;
 import com.forgestorm.spigotcore.util.math.RandomChance;
+import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Text;
 import com.forgestorm.spigotcore.util.world.LocationUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,7 +46,7 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
     }
 
     private void mapSelect() {
-        int rand = RandomChance.randomInt(1, gameWorldDataList.size() - 1);
+        int rand = RandomChance.randomInt(0, gameWorldDataList.size() - 1);
 
         currentGameWorld = null;
         currentGameWorld = gameWorldDataList.get(rand);
@@ -72,13 +75,21 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
             //Set<String> topicKeySet = config.getConfigurationSection(pathStart + "." + worldName).getKeys(false);
 
-            String insidePath = pathStart + "." + worldName;
+            String insidePath = pathStart + "." + worldName + ".";
 
-            String displayName = config.getString(insidePath + ".displayName");
-            String author = config.getString(insidePath + ".author");
-            String url = config.getString(insidePath + ".url");
+            String displayName = config.getString(insidePath + "displayName");
+            String author = config.getString(insidePath + "author");
+            String url = config.getString(insidePath + "url");
 
-            GameWorldData gameWorldData = new GameWorldData(worldName, displayName, author, url);
+            insidePath = insidePath + ".spawn.";
+
+            double x = config.getDouble(insidePath + "x");
+            double y = config.getDouble(insidePath + "y");
+            double z = config.getDouble(insidePath + "z");
+            float yaw = config.getLong(insidePath + "yaw");
+            float pitch = config.getLong(insidePath + "pitch");
+
+            GameWorldData gameWorldData = new GameWorldData(worldName, displayName, author, url, x, y, z, yaw, pitch);
 
             // Loop through all topic keys and get messages.
 //            for (String topicKey : topicKeySet) {
@@ -88,14 +99,6 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 //            }
 
             gameWorldDataList.add(gameWorldData);
-
-            for (GameWorldData gameWorldData1 : gameWorldDataList) {
-                System.out.println(gameWorldData1.folderName);
-                System.out.println(gameWorldData1.displayName);
-                System.out.println(gameWorldData1.author);
-                System.out.println(gameWorldData1.url);
-            }
-            System.out.println("Size: " + gameWorldDataList.size());
         }
     }
 
@@ -108,23 +111,27 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
         // Check doorway enter/exit
         enterGameWorld(event.getPlayer());
-
     }
 
     private void unloadWorld(String worldName) {
         SpigotCore.PLUGIN.getWorldManager().unloadWorld(worldName, false);
-
-        // Delete world
-        FileUtil.removeDirectory(new File(SpigotCore.PLUGIN.getDataFolder() + File.pathSeparator + currentGameWorld.folderName).toPath());
+        FileUtil.removeDirectory(new File(currentGameWorld.folderName).toPath());
     }
 
     private void enterGameWorld(Player player) {
-        player.sendMessage("Taking you to " + currentGameWorld.displayName + " Map");
-        player.teleport(new Location(Bukkit.getWorld(currentGameWorld.folderName), -176.5, 93, 33.5));
+//        player.sendMessage("");
+//        player.sendMessage(CenterChatText.centerChatMessage(Text.color("&7- -- ---[ &aWorld Change &7]--- -- -")));
+//        player.sendMessage("");
+//        player.sendMessage(Text.color("&eWorld&7:&r " + ChatColor.RESET + currentGameWorld.displayName));
+//        player.sendMessage(Text.color("&eAuthor&7:&r " + ChatColor.RESET + currentGameWorld.getAuthor()));
+//        player.sendMessage(Text.color("&eurl&7:&r " + ChatColor.RESET + currentGameWorld.getUrl()));
+//        player.sendMessage("");
+//        player.sendMessage(Text.color("&cType &7/spawn &cto exit"));
+        SpigotCore.PLUGIN.getTeleportManager().teleportPlayer(player, new Location(Bukkit.getWorld(currentGameWorld.folderName), currentGameWorld.x, currentGameWorld.y, currentGameWorld.z, currentGameWorld.yaw, currentGameWorld.pitch));
     }
 
     private void exitGameWorld(Player player) {
-        // TODO: Exit back to the main lobby world
+        player.chat("/spawn");
     }
 
     class GameWorldHologram extends BaseWorldObject implements SyncWorldObjectTick {
@@ -134,8 +141,10 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
         GameWorldHologram(Location hologramLocation, String worldName) {
             super(hologramLocation);
-
-            hologram = new Hologram("Loaded: " + worldName, hologramLocation);
+            hologram = new Hologram(hologramLocation,
+                    Text.color("&a&lWorld Loaded&7&l:&r&l " + worldName),
+                    "0",
+                    Text.color("&d&lDifficulty&7&l:&r&l " + Text.color("Easy")));
         }
 
 
@@ -151,20 +160,34 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
         @Override
         public void onSyncTick() {
-            if (tick > 100) tick = 0;
-            hologram.changeText(Integer.toString(tick));
+            // This is just an example of changing the hologram info (animating based on tick)
+            hologram.changeText(Text.color("&e&lTicks Online&7&l:&r&l " + Integer.toString(tick)), 1);
             tick++;
         }
     }
 
     @Getter
     @AllArgsConstructor
-    class GameWorldData {
+    private class GameWorldData {
 
         private String folderName;
         private String displayName;
         private String author;
         private String url;
+        private double x;
+        private double y;
+        private double z;
+        private float yaw;
+        private float pitch;
         //private Map<String, String> nodeMap;
+    }
+
+    @AllArgsConstructor
+    enum PortalState {
+        UNLOADING(false),
+        LOADING(false),
+        READY(true);
+
+        boolean allowPortalUse;
     }
 }

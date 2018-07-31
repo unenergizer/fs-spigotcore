@@ -37,6 +37,17 @@ public class Hologram {
     }
 
     /**
+     * Creates a new instance of a Hologram that contains a single line of text.
+     *
+     * @param singleLineText The text that will be displayed on the hologram.
+     * @param location       The location the hologram will be spawned.
+     */
+    public Hologram(Location location, String ... singleLineText) {
+        this.multilineText = new ArrayList<>(Arrays.asList(singleLineText));
+        this.location = location;
+    }
+
+    /**
      * Creates a new instance of a Hologram that contains multiline text.
      *
      * @param multilineText The lines of text that will be displayed on the hologram.
@@ -62,13 +73,9 @@ public class Hologram {
      * @param displayMessage The new message to show.
      * @param lineToChange   The line we want to change.
      */
-    public void changeText(String displayMessage, int lineToChange) {
+    public synchronized void changeText(String displayMessage, int lineToChange) {
         armorStands.get(lineToChange).setCustomName(displayMessage);
         multilineText.set(lineToChange, displayMessage);
-    }
-
-    private boolean isMultilineHologram() {
-        return multilineText.size() > 1;
     }
 
     /**
@@ -78,19 +85,13 @@ public class Hologram {
         if (isSpawned) return;
         isSpawned = true;
 
-        double spotsMovedDown = 0;
+        double pixelsMovedDown = 0;
 
-        if (!isMultilineHologram()) {
-            // Single line hologram
-            armorStands.add(createArmorStand(multilineText.get(0), location));
-        } else {
-            // Multiline hologram
-            for (String string : multilineText) {
-                Location adjustedLocation = new Location(location.getWorld(), location.getX(), location.getY() - spotsMovedDown, location.getZ());
-                armorStands.add(createArmorStand(string, adjustedLocation));
+        for (String string : multilineText) {
+            Location adjustedLocation = new Location(location.getWorld(), location.getX(), location.getY() - pixelsMovedDown, location.getZ());
+            armorStands.add(createArmorStand(string, adjustedLocation));
 
-                spotsMovedDown += .3;
-            }
+            pixelsMovedDown += .3;
         }
     }
 

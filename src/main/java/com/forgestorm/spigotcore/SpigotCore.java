@@ -25,6 +25,7 @@ import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataM
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.menu.MenuManager;
+import com.forgestorm.spigotcore.features.required.world.TeleportManager;
 import com.forgestorm.spigotcore.features.required.world.loader.WorldManager;
 import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
 import com.forgestorm.spigotcore.features.required.world.worldobject.WorldObjectManager;
@@ -62,6 +63,7 @@ public class SpigotCore extends JavaPlugin {
     private final BlockRegenerationManager blockRegenerationManager = new BlockRegenerationManager();
     private final WorldObjectManager worldObjectManager = new WorldObjectManager();
     private final FeatureToggleManager featureToggleManager = new FeatureToggleManager();
+    private final TeleportManager teleportManager = new TeleportManager();
 
     private PaperCommandManager paperCommandManager;
     private TitleManagerAPI titleManager;
@@ -88,6 +90,7 @@ public class SpigotCore extends JavaPlugin {
         blockRegenerationManager.startup();
         worldObjectManager.startup();
         featureToggleManager.startup();
+        teleportManager.startup();
 
         // Init optional features last
         initOptionalFeatures();
@@ -99,6 +102,7 @@ public class SpigotCore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Maintain shutdown order
+        teleportManager.shutdown();
         featureToggleManager.shutdown();
         blockRegenerationManager.shutdown();
         worldObjectManager.shutdown();
