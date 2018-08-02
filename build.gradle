@@ -127,7 +127,7 @@ dependencies {
 
     compileOnly 'com.destroystokyo.paper:paper-api:1.12-R0.1-SNAPSHOT'
 
-    provided 'org.projectlombok:lombok:1.16.20'
+    provided 'org.projectlombok:lombok:1.18.2'
 
     provided files("src/main/Libs/Item-NBT-API.jar")
 

@@ -13,6 +13,7 @@ import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerOperator;
 import com.forgestorm.spigotcore.features.optional.player.*;
 import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
+import com.forgestorm.spigotcore.features.optional.rpg.ItemDatabase;
 import com.forgestorm.spigotcore.features.optional.rpg.armor.ArmorManager;
 import com.forgestorm.spigotcore.features.optional.rpg.mobs.MobManager;
 import com.forgestorm.spigotcore.features.optional.world.*;
@@ -134,6 +135,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new ItemDatabase());
         features.add(new GameWorldManager());
         features.add(new ArmorManager());
         features.add(new DragonEggLoot());

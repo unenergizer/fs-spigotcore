@@ -21,6 +21,7 @@ public enum FilePaths {
 
     CHAT_ICONS("resources/chaticons/"),
     RPG_GAME_WORLDS("rpg/GameWorlds.yml"),
+    RPG_ITEM_DATABASE("rpg/ItemDatabase.yml"),
 
     CHEST_LOOT("world/ChestLootLocations.yml"),
     DRAGON_EGG_LOOT("world/DragonEggLocations.yml"),

@@ -1,5 +1,7 @@
 package com.forgestorm.spigotcore.features.optional.rpg;
 
+import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.Text;
 import de.tr7zw.itemnbtapi.NBTItem;
@@ -14,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemBuilder {
+public class ItemBuilder extends FeatureRequired implements LoadsConfig {
 
     public ItemStack buildArmor(ItemQuality itemQuality, ItemLevel itemLevel) {
         Map<Attribute, Double> baseAttributes = new HashMap<>();
@@ -91,5 +93,20 @@ public class ItemBuilder {
         }
 
         return new ItemStack(Material.valueOf(itemLevel.name() + "_" + randSuffix));
+    }
+
+    @Override
+    public void loadConfiguration() {
+
+    }
+
+    @Override
+    protected void initFeatureStart() {
+
+    }
+
+    @Override
+    protected void initFeatureClose() {
+
     }
 }

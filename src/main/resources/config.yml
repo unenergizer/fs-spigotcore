@@ -5,6 +5,7 @@ Database:
    username: root
    password: ""
 Features:
+   ItemDatabase: true
    GameWorldManager: true
    ArmorManager: true
    BasicBuildProtection: true
