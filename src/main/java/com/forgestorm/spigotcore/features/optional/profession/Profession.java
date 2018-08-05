@@ -40,8 +40,10 @@ public abstract class Profession<T> extends AbstractDatabaseFeature<T> implement
     protected final ProfessionType professionType;
     protected final Experience experienceCalculator = new ProfessionExperience();
     protected final int expOffSet = experienceCalculator.getExpOffSet();
+    protected FileConfiguration fileConfiguration;
 
-    public Profession(ProfessionType professionType) {
+    public Profession(FileConfiguration fileConfiguration, ProfessionType professionType) {
+        this.fileConfiguration = fileConfiguration;
         this.professionType = professionType;
     }
 

@@ -43,11 +43,8 @@ public abstract class BlockBreakProfession<T> extends Profession<T> {
     final BlockRegenerationManager blockRegen = SpigotCore.PLUGIN.getBlockRegenerationManager();
     final Map<String, ProfessionType> blockBreakTools = new HashMap<>();
 
-    protected FileConfiguration fileConfiguration;
-
     BlockBreakProfession(FileConfiguration fileConfiguration, ProfessionType professionType) {
-        super(professionType);
-        this.fileConfiguration = fileConfiguration;
+        super(fileConfiguration, professionType);
     }
 
     /**
@@ -229,7 +226,6 @@ public abstract class BlockBreakProfession<T> extends Profession<T> {
         if (isProfileDataLoaded(player)) {
             asyncDatastoreSave(player);
             player.sendMessage(Text.color("&aSaving your &e" + professionType.getProfessionName() + " &adata..."));
-            return;
         }
     }
 }
