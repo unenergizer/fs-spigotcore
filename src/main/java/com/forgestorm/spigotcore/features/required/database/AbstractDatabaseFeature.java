@@ -2,15 +2,12 @@ package com.forgestorm.spigotcore.features.required.database;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -22,7 +19,7 @@ import java.sql.SQLException;
  */
 @Getter
 @AllArgsConstructor
-public abstract class AbstractDatabaseFeature <T> implements FeatureOptional {
+public abstract class AbstractDatabaseFeature<T> implements FeatureOptional {
 
     public abstract ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException;
 

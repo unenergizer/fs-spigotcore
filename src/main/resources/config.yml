@@ -5,6 +5,7 @@ Database:
    username: root
    password: ""
 Features:
+   Mining: true
    ItemDatabase: true
    GameWorldManager: true
    ArmorManager: true

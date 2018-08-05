@@ -3,7 +3,6 @@ package com.forgestorm.spigotcore.features.required.world.loader;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.file.FileUtil;
-import com.forgestorm.spigotcore.util.text.Console;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
@@ -110,7 +109,7 @@ public class WorldManager extends FeatureRequired implements Listener {
                 FileUtil.copyDirectory(worldData.sourceDirectory, new File(worldData.worldName));
                 syncWorldLoader.worldsToLoad.add(worldData);
             } else {
-                
+
                 // Unloading
                 FileUtil.copyDirectory(new File(worldData.worldName), worldData.sourceDirectory);
             }

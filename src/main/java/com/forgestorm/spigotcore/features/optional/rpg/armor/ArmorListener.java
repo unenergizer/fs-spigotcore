@@ -73,7 +73,7 @@ public class ArmorListener implements Listener {
                 if (e.getRawSlot() == newArmorType.getSlot()) {
                     equipping = false;
                 }
-                if (newArmorType.equals(ArmorType.HELMET) && (equipping ? e.getWhoClicked().getInventory().getHelmet() == null : e.getWhoClicked().getInventory().getHelmet() != null) || newArmorType.equals(ArmorType.CHESTPLATE) && (equipping ? e.getWhoClicked().getInventory().getChestplate() == null : e.getWhoClicked().getInventory().getChestplate() != null) || newArmorType.equals(ArmorType.LEGGINGS) && (equipping ? e.getWhoClicked().getInventory().getLeggings() == null : e.getWhoClicked().getInventory().getLeggings() != null) || newArmorType.equals(ArmorType.BOOTS) && (equipping ? e.getWhoClicked().getInventory().getBoots() == null : e.getWhoClicked().getInventory().getBoots() != null)) {
+                if (newArmorType.equals(ArmorType.HELMET) && (equipping == (e.getWhoClicked().getInventory().getHelmet() == null)) || newArmorType.equals(ArmorType.CHESTPLATE) && (equipping == (e.getWhoClicked().getInventory().getChestplate() == null)) || newArmorType.equals(ArmorType.LEGGINGS) && (equipping == (e.getWhoClicked().getInventory().getLeggings() == null)) || newArmorType.equals(ArmorType.BOOTS) && (equipping == (e.getWhoClicked().getInventory().getBoots() == null))) {
                     ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), ArmorEquipEvent.EquipMethod.SHIFT_CLICK, newArmorType, equipping ? null : e.getCurrentItem(), equipping ? e.getCurrentItem() : null);
                     Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
                     if (armorEquipEvent.isCancelled()) {

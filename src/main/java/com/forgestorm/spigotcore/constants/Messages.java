@@ -61,6 +61,9 @@ public enum Messages {
     DISCORD_INFO_2("&7If so, join our Discord server! "),
     DISCORD_INFO_3("&bLink&8: &ehttps://discord.gg/NhtvMgR"),
 
+    BAR_LEVEL_UP("&8&l&m----------------&r&l &l &l &b&lLevel Up!&l &l &l &8&l&m-----------------"),
+    LEVEL_UP_01("&e\u2748 \u2748 \u2748 Congratulations!! \u2748 \u2748 \u2748 "),
+
     BAR_SOCIAL_MEDIA("&8&l&m---------------&r&l &l &l &9&lSocial Media&l &l &l &8&l&m---------------"),
     FS_SOCIAL_WEB("&c• http://www.forgestorm.com/"),
     FS_SOCIAL_FACEBOOK("&e• https://facebook.com/ForgeStormOfficial/"),

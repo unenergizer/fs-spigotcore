@@ -59,7 +59,7 @@ public final class JsonMessageConverter {
             for (String arg : args) {
                 final int i = arg.indexOf('=');
                 final String opt = arg.substring(0, i).toLowerCase();
-                final String val = arg.substring(i + 1, arg.length());
+                final String val = arg.substring(i + 1);
 
                 switch (opt) {
                     case "hover":
@@ -85,7 +85,7 @@ public final class JsonMessageConverter {
             lastEnd = matcher.end();
         }
         if (lastEnd < (input.length() - 1)) {
-            final String after = input.substring(lastEnd, input.length());
+            final String after = input.substring(lastEnd);
             components.addAll(Arrays.asList(TextComponent.fromLegacyText(Text.color(after))));
         }
         //noinspection ToArrayCallWithZeroLengthArrayArgument

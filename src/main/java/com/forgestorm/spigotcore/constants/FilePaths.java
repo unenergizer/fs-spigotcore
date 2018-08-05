@@ -23,6 +23,12 @@ public enum FilePaths {
     RPG_GAME_WORLDS("rpg/GameWorlds.yml"),
     RPG_ITEM_DATABASE("rpg/ItemDatabase.yml"),
 
+    PROFESSION_FARMING("professions/Farming.yml"),
+    PROFESSION_FISHING("professions/Fishing.yml"),
+    PROFESSION_COOKING_AND_SMELTING("professions/CookingAndSmelting.yml"),
+    PROFESSION_WOOD_CUTTING("professions/WoodCutting.yml"),
+    PROFESSION_MINING("professions/Mining.yml"),
+
     CHEST_LOOT("world/ChestLootLocations.yml"),
     DRAGON_EGG_LOOT("world/DragonEggLocations.yml"),
     LANTERNS("world/Lanterns.yml"),

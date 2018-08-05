@@ -12,6 +12,7 @@ import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerOperator;
 import com.forgestorm.spigotcore.features.optional.player.*;
+import com.forgestorm.spigotcore.features.optional.profession.blockbreak.Mining;
 import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemDatabase;
 import com.forgestorm.spigotcore.features.optional.rpg.armor.ArmorManager;
@@ -135,6 +136,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new Mining());
         features.add(new ItemDatabase());
         features.add(new GameWorldManager());
         features.add(new ArmorManager());

@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TeleportManager extends FeatureRequired {
@@ -50,7 +51,10 @@ public class TeleportManager extends FeatureRequired {
     }
 
     private void tick() {
-        for (TeleportData teleportData : teleportDataList) {
+        Iterator<TeleportData> itr = teleportDataList.iterator();
+
+        while (itr.hasNext()) {
+            TeleportData teleportData = itr.next();
             int tick = teleportData.getAnimationTicks();
             Player player = teleportData.getPlayer();
 
@@ -61,19 +65,19 @@ public class TeleportManager extends FeatureRequired {
 
             String text = "";
             for (int i = 0; i <= tick; i++) {
-                text = text + " &r ";
+                text = text + "&r &r ";
             }
             if (tick > 1 && tick <= 10) {
-                SpigotCore.PLUGIN.getTitleManager().sendTitle(player, Text.color("&" + color + "&l" + "&k." + text + "&" + color + "&l" + "&k.&r "));
+                SpigotCore.PLUGIN.getTitleManager().sendTitle(player, Text.color("&" + color + "&l" + "&k/" + text + "&" + color + "&l" + "&k/&r "), 0, 3, 0);
             }
 
-            if (tick > 0 && tick <= 11) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 3 * 20, 100));
+            if (tick > 0 && tick <= 12) {
                 player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_FRAME_FILL, 0.5f, rand / 100f);
             }
 
             if (tick == -1) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, rand / 100f);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 260, 1));
             }
 
             if (tick == 0) {
@@ -99,15 +103,18 @@ public class TeleportManager extends FeatureRequired {
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, .3f, .1f);
             }
 
-            if (tick == 18) {
-                tick = -1;
-            }
+//            // TODO: REMOVE NEXT THREE LINES!! Do not reset ticks, remove from list.
+//            if (tick == 18) {
+//                tick = -1;
+//            }
 
             // == Animation End ============================
 
-            //TODO: Remove player from list
-
-            teleportData.setAnimationTicks(tick + 1);
+            if (tick == 18) {
+                itr.remove();
+            } else {
+                teleportData.setAnimationTicks(tick + 1);
+            }
         }
     }
 

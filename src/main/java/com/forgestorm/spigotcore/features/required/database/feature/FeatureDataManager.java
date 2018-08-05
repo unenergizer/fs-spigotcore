@@ -2,9 +2,8 @@ package com.forgestorm.spigotcore.features.required.database.feature;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.events.FeatureProfileDataLoadEvent;
-import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
-import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
+import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import lombok.AllArgsConstructor;
@@ -60,7 +59,7 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     public ProfileData getProfileData(Player player, AbstractDatabaseFeature feature) {
         if (!isProfileDataLoaded(player, feature))
-            throw new RuntimeException("Tried to get ProfileData that has no loaded data.");
+            throw new RuntimeException("[FeatureDataManager:getProfileData]Tried to get ProfileData that has no loaded data.");
         return playerProfileDataMap.get(player).get(feature);
     }
 
