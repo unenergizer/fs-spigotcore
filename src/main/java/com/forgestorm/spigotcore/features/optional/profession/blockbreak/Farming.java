@@ -15,7 +15,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
 import java.sql.Connection;
@@ -39,26 +38,126 @@ import java.sql.SQLException;
  * without the prior written permission of the owner.
  */
 
-public class Mining extends BlockBreakProfession<MiningProfileData> implements LoadsConfig {
+public class Farming extends BlockBreakProfession<FarmingProfileData> implements LoadsConfig {
 
-    public Mining() {
-        super(YamlConfiguration.loadConfiguration(new File(FilePaths.PROFESSION_MINING.toString())), ProfessionType.MINING);
-    }
-
-    @EventHandler
-    public void onFeatureProfileLoad(FeatureProfileDataLoadEvent event) {
-        if (!(event.getFeature() instanceof Mining)) return;
-        Console.sendMessage("Data loaded for: " + event.getPlayer().getDisplayName() + ", Feature: " + event.getFeature().getClass().getName());
+    public Farming() {
+        super(YamlConfiguration.loadConfiguration(new File(FilePaths.PROFESSION_FARMING.toString())),
+                ProfessionType.FARMING);
     }
 
     @Override
     public void loadConfiguration() {
-        ConfigurationSection miningSection = fileConfiguration.getConfigurationSection("");
+        ConfigurationSection farmingSection = fileConfiguration.getConfigurationSection("");
 
-        // Add mining tools.
-        for (String s : miningSection.getKeys(false)) {
+        // Add farming tools.
+        for (String s : farmingSection.getKeys(false)) {
             blockBreakTools.put(s, professionType);
         }
+    }
+
+    @EventHandler
+    public void onFeatureProfileLoad(FeatureProfileDataLoadEvent event) {
+        if (!(event.getFeature() instanceof Farming)) return;
+        Console.sendMessage("Data loaded for: " + event.getPlayer().getDisplayName() + ", Feature: " + event.getFeature().getClass().getName());
+    }
+
+    @Override
+    public int getLevel(Player player) {
+        return experienceCalculator.getLevel(getProfileData(player).getFarmingExp());
+    }
+
+    @Override
+    public long currentExperience(Player player) {
+        return getProfileData(player).getFarmingExp();
+    }
+
+    @Override
+    public void setExperience(Player player, long expGained) {
+        getProfileData(player).setFarmingExp(expGained);
+    }
+
+    @Override
+    public Material getDropMaterial(String toolName, String blockName, byte blockData, Material blockType) {
+        return Material.valueOf(fileConfiguration.getString(toolName + ".breaks." + blockName + "-" + blockData + ".drop"));
+    }
+
+    @Override
+    public void setBlockRegen(Material blockType, byte blockData, byte tempData, Location blockLocation) {
+        blockRegen.setBlock(blockType, (byte) 0, Material.AIR, blockLocation);
+    }
+
+    @Override
+    public String getUpgrades(int rankUpgradeLevel) {
+        String result = "";
+        if (rankUpgradeLevel == 20) {
+            result = "&aStone Hoe &7and &aCarrot Harvesting";
+        } else if (rankUpgradeLevel == 40) {
+            result = "&aIron Hoe &7and &aPotato Harvesting";
+        } else if (rankUpgradeLevel == 60) {
+            result = "&aDiamond Hoe &7and &aBeetroot Harvesting";
+        } else if (rankUpgradeLevel == 80) {
+            result = "&aGold Hoe &7and &aMelon Harvesting";
+        } else if (rankUpgradeLevel == 100) {
+            result = "&aPrestige level 1";
+        }
+        return Text.color(result);
+    }
+
+    @Override
+    public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
+        FarmingProfileData profileData = new FarmingProfileData();
+
+        profileData.setFarmingExp(resultSet.getLong("experience"));
+        profileData.setCropsHarvested(resultSet.getInt("crops_harvested"));
+        profileData.setCropsFailed(resultSet.getInt("crops_failed"));
+        profileData.setDataLoaded(true);
+
+        return profileData;
+    }
+
+    @Override
+    public void databaseSave(Player player, FarmingProfileData profileData, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_profession_farming SET experience=?, crops_harvested=?, crops_failed=? WHERE uuid=?");
+
+        preparedStatement.setLong(1, profileData.getFarmingExp());
+        preparedStatement.setInt(2, profileData.getCropsHarvested());
+        preparedStatement.setInt(3, profileData.getCropsFailed());
+        preparedStatement.setString(4, player.getUniqueId().toString());
+
+        preparedStatement.execute();
+    }
+
+    @Override
+    public ProfileData firstTimeSave(Player player, Connection connection) throws SQLException {
+        ProfessionExperience professionExperience = new ProfessionExperience();
+        long experience = professionExperience.getExperience(1);
+        int cropsHarvested = 0;
+        int cropsFailed = 0;
+
+
+        PreparedStatement newPlayerStatement = connection.prepareStatement("INSERT INTO fs_profession_farming " +
+                "(uuid, experience, crops_harvested, crops_failed) " +
+                "VALUES(?, ?, ?, ?)");
+
+        newPlayerStatement.setString(1, player.getUniqueId().toString());
+        newPlayerStatement.setLong(2, experience);
+        newPlayerStatement.setInt(3, cropsHarvested);
+        newPlayerStatement.setInt(4, cropsFailed);
+
+        newPlayerStatement.execute();
+
+        FarmingProfileData profileData = new FarmingProfileData();
+        profileData.setFarmingExp(experience);
+        profileData.setCropsHarvested(cropsHarvested);
+        profileData.setCropsFailed(cropsFailed);
+        profileData.setDataLoaded(true);
+
+        return profileData;
+    }
+
+    @Override
+    public SqlSearchData searchForData(Player player, Connection connection) {
+        return new SqlSearchData("fs_profession_farming", "uuid", player.getUniqueId().toString());
     }
 
     @Override
@@ -70,104 +169,5 @@ public class Mining extends BlockBreakProfession<MiningProfileData> implements L
     public void onFeatureDisable(boolean manualDisable) {
         onDisable();
         FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
-    }
-
-    @Override
-    public int getLevel(Player player) {
-        return experienceCalculator.getLevel(getProfileData(player).getMiningExp());
-    }
-
-    @Override
-    public long currentExperience(Player player) {
-        return getProfileData(player).getMiningExp();
-    }
-
-    @Override
-    public void setExperience(Player player, long expGained) {
-        getProfileData(player).setMiningExp(expGained);
-    }
-
-    @Override
-    public Material getDropMaterial(String toolName, String blockName, byte blockData, Material blockType) {
-        return blockType;
-    }
-
-    @Override
-    public void setBlockRegen(Material blockType, byte blockData, byte tempData, Location blockLocation) {
-        blockRegen.setBlock(blockType, blockData, Material.STONE, blockLocation);
-    }
-
-    @Override
-    public String getUpgrades(int rankUpgradeLevel) {
-        String result = "";
-        if (rankUpgradeLevel == 20) {
-            result = "&aStone Pickaxe &7and &aMine Iron Ore";
-        } else if (rankUpgradeLevel == 40) {
-            result = "&aIron Pickaxe &7and &aMine Emerald Ore";
-        } else if (rankUpgradeLevel == 60) {
-            result = "&aDiamond Pickaxe &7and &aMine Lapis Ore";
-        } else if (rankUpgradeLevel == 80) {
-            result = "&aGold Pickaxe &7and &aMine Gold Ore";
-        } else if (rankUpgradeLevel == 100) {
-            result = "&aPrestige level 1";
-        }
-        return Text.color(result);
-    }
-
-    @Override
-    public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
-        MiningProfileData profileData = new MiningProfileData();
-
-        profileData.setMiningExp(resultSet.getLong("experience"));
-        profileData.setOresMined(resultSet.getInt("ores_mined"));
-        profileData.setOresFailed(resultSet.getInt("ores_failed"));
-        profileData.setDataLoaded(true);
-
-        return profileData;
-    }
-
-    @Override
-    public void databaseSave(Player player, MiningProfileData profileData, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_profession_mining SET experience=?, ores_mined=?, ores_failed=? WHERE uuid=?");
-
-        preparedStatement.setLong(1, profileData.getMiningExp());
-        preparedStatement.setInt(2, profileData.getOresMined());
-        preparedStatement.setInt(3, profileData.getOresFailed());
-        preparedStatement.setString(4, player.getUniqueId().toString());
-
-        preparedStatement.execute();
-    }
-
-    @Override
-    public ProfileData firstTimeSave(Player player, Connection connection) throws SQLException {
-        ProfessionExperience professionExperience = new ProfessionExperience();
-        long experience = professionExperience.getExperience(1);
-        int oresMined = 0;
-        int oresFailed = 0;
-
-
-        PreparedStatement newPlayerStatement = connection.prepareStatement("INSERT INTO fs_profession_mining " +
-                "(uuid, experience, ores_mined, ores_failed) " +
-                "VALUES(?, ?, ?, ?)");
-
-        newPlayerStatement.setString(1, player.getUniqueId().toString());
-        newPlayerStatement.setLong(2, experience);
-        newPlayerStatement.setInt(3, oresMined);
-        newPlayerStatement.setInt(4, oresFailed);
-
-        newPlayerStatement.execute();
-
-        MiningProfileData profileData = new MiningProfileData();
-        profileData.setMiningExp(experience);
-        profileData.setOresMined(oresMined);
-        profileData.setOresFailed(oresFailed);
-        profileData.setDataLoaded(true);
-
-        return profileData;
-    }
-
-    @Override
-    public SqlSearchData searchForData(Player player, Connection connection) {
-        return new SqlSearchData("fs_profession_mining", "uuid", player.getUniqueId().toString());
     }
 }

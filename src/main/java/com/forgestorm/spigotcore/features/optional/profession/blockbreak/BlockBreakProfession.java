@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -99,6 +100,7 @@ public abstract class BlockBreakProfession<T> extends Profession<T> {
     @Override
     public void onDisable() {
         BlockBreakEvent.getHandlerList().unregister(this);
+        PlayerQuitEvent.getHandlerList().unregister(this);
     }
 
     public abstract int getLevel(Player player);
@@ -219,5 +221,15 @@ public abstract class BlockBreakProfession<T> extends Profession<T> {
 
         Material tool = player.getInventory().getItemInMainHand().getType();
         toggleProfession(player, tool, event.getBlock());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (isProfileDataLoaded(player)) {
+            asyncDatastoreSave(player);
+            player.sendMessage(Text.color("&aSaving your &e" + professionType.getProfessionName() + " &adata..."));
+            return;
+        }
     }
 }

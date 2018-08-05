@@ -5,6 +5,8 @@ Database:
    username: root
    password: ""
 Features:
+   WoodCutting: true
+   Farming: true
    Mining: true
    ItemDatabase: true
    GameWorldManager: true

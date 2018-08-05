@@ -15,7 +15,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
 import java.sql.Connection;
@@ -39,26 +38,120 @@ import java.sql.SQLException;
  * without the prior written permission of the owner.
  */
 
-public class Mining extends BlockBreakProfession<MiningProfileData> implements LoadsConfig {
+public class WoodCutting extends BlockBreakProfession<WoodCuttingProfileData> implements LoadsConfig {
 
-    public Mining() {
-        super(YamlConfiguration.loadConfiguration(new File(FilePaths.PROFESSION_MINING.toString())), ProfessionType.MINING);
-    }
-
-    @EventHandler
-    public void onFeatureProfileLoad(FeatureProfileDataLoadEvent event) {
-        if (!(event.getFeature() instanceof Mining)) return;
-        Console.sendMessage("Data loaded for: " + event.getPlayer().getDisplayName() + ", Feature: " + event.getFeature().getClass().getName());
+    public WoodCutting() {
+        super(YamlConfiguration.loadConfiguration(new File(FilePaths.PROFESSION_WOOD_CUTTING.toString())),
+                ProfessionType.WOOD_CUTTING);
     }
 
     @Override
     public void loadConfiguration() {
-        ConfigurationSection miningSection = fileConfiguration.getConfigurationSection("");
+        ConfigurationSection woodCuttingSection = fileConfiguration.getConfigurationSection("");
 
-        // Add mining tools.
-        for (String s : miningSection.getKeys(false)) {
+        // Add wood cutting tools.
+        for (String s : woodCuttingSection.getKeys(false)) {
             blockBreakTools.put(s, professionType);
         }
+    }
+
+    @Override
+    public int getLevel(Player player) {
+        return experienceCalculator.getLevel(getProfileData(player).getWoodCuttingExp());
+    }
+
+    @Override
+    public long currentExperience(Player player) {
+        return getProfileData(player).getWoodCuttingExp();
+    }
+
+    @Override
+    public void setExperience(Player player, long expGained) {
+        getProfileData(player).setWoodCuttingExp(expGained);
+    }
+
+    @Override
+    public Material getDropMaterial(String toolName, String blockName, byte blockData, Material blockType) {
+        return blockType;
+    }
+
+    @Override
+    public void setBlockRegen(Material blockType, byte blockData, byte tempData, Location blockLocation) {
+        blockRegen.setBlock(blockType, blockData, Material.STAINED_CLAY, tempData, blockLocation);
+    }
+
+    @Override
+    public String getUpgrades(int rankUpgradeLevel) {
+        String result = "";
+        if (rankUpgradeLevel == 20) {
+            result = "&aStone Axe &7and &aChop Spruce Logs";
+        } else if (rankUpgradeLevel == 40) {
+            result = "&aIron Axe &7and &aChop Birch Logs";
+        } else if (rankUpgradeLevel == 60) {
+            result = "&aDiamond Axe &7and &aChop Jungle Logs";
+        } else if (rankUpgradeLevel == 80) {
+            result = "&aGold Axe &7and &aChop Acacia Logs";
+        } else if (rankUpgradeLevel == 100) {
+            result = "&aPrestige level 1";
+        }
+        return Text.color(result);
+    }
+
+    @Override
+    public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
+        WoodCuttingProfileData profileData = new WoodCuttingProfileData();
+
+        profileData.setWoodCuttingExp(resultSet.getLong("experience"));
+        profileData.setLogsHarvested(resultSet.getInt("logs_harvested"));
+        profileData.setLogsFailed(resultSet.getInt("logs_failed"));
+        profileData.setDataLoaded(true);
+
+        return profileData;
+    }
+
+    @Override
+    public void databaseSave(Player player, WoodCuttingProfileData profileData, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_profession_wood_cutting SET experience=?, logs_harvested=?, logs_failed=? WHERE uuid=?");
+
+        preparedStatement.setLong(1, profileData.getWoodCuttingExp());
+        preparedStatement.setInt(2, profileData.getLogsHarvested());
+        preparedStatement.setInt(3, profileData.getLogsFailed());
+        preparedStatement.setString(4, player.getUniqueId().toString());
+
+        preparedStatement.execute();
+    }
+
+    @Override
+    public ProfileData firstTimeSave(Player player, Connection connection) throws SQLException {
+        ProfessionExperience professionExperience = new ProfessionExperience();
+        long experience = professionExperience.getExperience(1);
+        int logsHarvested = 0;
+        int logsFailed = 0;
+
+
+        PreparedStatement newPlayerStatement = connection.prepareStatement("INSERT INTO fs_profession_wood_cutting " +
+                "(uuid, experience, logs_harvested, logs_failed) " +
+                "VALUES(?, ?, ?, ?)");
+
+        newPlayerStatement.setString(1, player.getUniqueId().toString());
+        newPlayerStatement.setLong(2, experience);
+        newPlayerStatement.setInt(3, logsHarvested);
+        newPlayerStatement.setInt(4, logsFailed);
+
+        newPlayerStatement.execute();
+
+        WoodCuttingProfileData profileData = new WoodCuttingProfileData();
+        profileData.setWoodCuttingExp(experience);
+        profileData.setLogsHarvested(logsHarvested);
+        profileData.setLogsFailed(logsFailed);
+        profileData.setDataLoaded(true);
+
+        return profileData;
+    }
+
+    @Override
+    public SqlSearchData searchForData(Player player, Connection connection) {
+        return new SqlSearchData("fs_profession_wood_cutting", "uuid", player.getUniqueId().toString());
     }
 
     @Override
@@ -72,102 +165,9 @@ public class Mining extends BlockBreakProfession<MiningProfileData> implements L
         FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
-    @Override
-    public int getLevel(Player player) {
-        return experienceCalculator.getLevel(getProfileData(player).getMiningExp());
-    }
-
-    @Override
-    public long currentExperience(Player player) {
-        return getProfileData(player).getMiningExp();
-    }
-
-    @Override
-    public void setExperience(Player player, long expGained) {
-        getProfileData(player).setMiningExp(expGained);
-    }
-
-    @Override
-    public Material getDropMaterial(String toolName, String blockName, byte blockData, Material blockType) {
-        return blockType;
-    }
-
-    @Override
-    public void setBlockRegen(Material blockType, byte blockData, byte tempData, Location blockLocation) {
-        blockRegen.setBlock(blockType, blockData, Material.STONE, blockLocation);
-    }
-
-    @Override
-    public String getUpgrades(int rankUpgradeLevel) {
-        String result = "";
-        if (rankUpgradeLevel == 20) {
-            result = "&aStone Pickaxe &7and &aMine Iron Ore";
-        } else if (rankUpgradeLevel == 40) {
-            result = "&aIron Pickaxe &7and &aMine Emerald Ore";
-        } else if (rankUpgradeLevel == 60) {
-            result = "&aDiamond Pickaxe &7and &aMine Lapis Ore";
-        } else if (rankUpgradeLevel == 80) {
-            result = "&aGold Pickaxe &7and &aMine Gold Ore";
-        } else if (rankUpgradeLevel == 100) {
-            result = "&aPrestige level 1";
-        }
-        return Text.color(result);
-    }
-
-    @Override
-    public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
-        MiningProfileData profileData = new MiningProfileData();
-
-        profileData.setMiningExp(resultSet.getLong("experience"));
-        profileData.setOresMined(resultSet.getInt("ores_mined"));
-        profileData.setOresFailed(resultSet.getInt("ores_failed"));
-        profileData.setDataLoaded(true);
-
-        return profileData;
-    }
-
-    @Override
-    public void databaseSave(Player player, MiningProfileData profileData, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_profession_mining SET experience=?, ores_mined=?, ores_failed=? WHERE uuid=?");
-
-        preparedStatement.setLong(1, profileData.getMiningExp());
-        preparedStatement.setInt(2, profileData.getOresMined());
-        preparedStatement.setInt(3, profileData.getOresFailed());
-        preparedStatement.setString(4, player.getUniqueId().toString());
-
-        preparedStatement.execute();
-    }
-
-    @Override
-    public ProfileData firstTimeSave(Player player, Connection connection) throws SQLException {
-        ProfessionExperience professionExperience = new ProfessionExperience();
-        long experience = professionExperience.getExperience(1);
-        int oresMined = 0;
-        int oresFailed = 0;
-
-
-        PreparedStatement newPlayerStatement = connection.prepareStatement("INSERT INTO fs_profession_mining " +
-                "(uuid, experience, ores_mined, ores_failed) " +
-                "VALUES(?, ?, ?, ?)");
-
-        newPlayerStatement.setString(1, player.getUniqueId().toString());
-        newPlayerStatement.setLong(2, experience);
-        newPlayerStatement.setInt(3, oresMined);
-        newPlayerStatement.setInt(4, oresFailed);
-
-        newPlayerStatement.execute();
-
-        MiningProfileData profileData = new MiningProfileData();
-        profileData.setMiningExp(experience);
-        profileData.setOresMined(oresMined);
-        profileData.setOresFailed(oresFailed);
-        profileData.setDataLoaded(true);
-
-        return profileData;
-    }
-
-    @Override
-    public SqlSearchData searchForData(Player player, Connection connection) {
-        return new SqlSearchData("fs_profession_mining", "uuid", player.getUniqueId().toString());
+    @EventHandler
+    public void onFeatureProfileLoad(FeatureProfileDataLoadEvent event) {
+        if (!(event.getFeature() instanceof WoodCutting)) return;
+        Console.sendMessage("Data loaded for: " + event.getPlayer().getDisplayName() + ", Feature: " + event.getFeature().getClass().getName());
     }
 }
