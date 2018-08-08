@@ -139,6 +139,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new DeletePlayerWorldData());
         features.add(new PersistentInventory());
         features.add(new FishingProfession());
         features.add(new WoodCutting());
@@ -176,6 +177,7 @@ public class SpigotCore extends JavaPlugin {
         features.add(new EzImgMessage());
 
         // Finally, add all features
+
         featureToggleManager.addFeatures(features);
     }
 }

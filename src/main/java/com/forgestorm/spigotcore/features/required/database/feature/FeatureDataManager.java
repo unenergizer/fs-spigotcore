@@ -6,6 +6,8 @@ import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
+import com.forgestorm.spigotcore.util.text.Console;
+import com.forgestorm.spigotcore.util.text.Text;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -94,6 +96,8 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     public void asyncDatastoreLoad(Player player, AbstractDatabaseFeature feature) {
         new AsyncLoad(player, feature).runTaskAsynchronously(SpigotCore.PLUGIN);
+        player.sendMessage(Text.color("&7[&9Database&7] &aLoading your data from &e" + feature.getClass().getSimpleName() + "&a."));
+        Console.sendMessage("&7[&9Database&7] &aLoading data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
     }
 
     /**
@@ -105,6 +109,8 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     public void asyncDatastoreSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
         new AsyncSave(player, feature, profileData).runTaskAsynchronously(SpigotCore.PLUGIN);
+        player.sendMessage(Text.color("&7[&9Database&7] &aSaving your data from &e" + feature.getClass().getSimpleName() + "&a."));
+        Console.sendMessage("&7[&9Database&7] &aSaving data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
     }
 
     /**

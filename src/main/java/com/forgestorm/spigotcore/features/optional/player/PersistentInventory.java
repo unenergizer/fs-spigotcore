@@ -21,12 +21,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PersistentInventory extends AbstractDatabaseFeature<PersistentInventoryData> implements Listener {
 
-    private Queue<Player> inventoriesLoadingQueue = new ConcurrentLinkedDeque<>();
+    private List<Player> playerInventorySyncList = new CopyOnWriteArrayList<>();
 
     private BukkitRunnable syncRunnable;
 
@@ -40,9 +41,9 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
                 processInventoriesSync();
             }
         };
-        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 1);
+        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 5);
 
-        Bukkit.getOnlinePlayers().forEach(this::asyncDatastoreLoad); // Load player if feature enabled manually
+        Bukkit.getOnlinePlayers().forEach(this::loadInventory); // Load player if feature enabled manually
     }
 
     @Override
@@ -55,10 +56,12 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
         Bukkit.getOnlinePlayers().forEach(this::saveInventory); // Save player if feature disabled manually
     }
 
-    // Compile and apply Base64 inventory for players from the database.
+    /**
+     * Compile and apply Base64 inventory for players from the database.
+     */
     private void processInventoriesSync() {
-        while (!inventoriesLoadingQueue.isEmpty()) {
-            Player player = inventoriesLoadingQueue.remove();
+        for (Iterator<Player> iterator = playerInventorySyncList.iterator(); iterator.hasNext(); ) {
+            Player player = iterator.next();
 
             if (isProfileDataLoaded(player)) {
                 String persistentInventoryData = getProfileData(player).getInventoryBase64();
@@ -70,25 +73,21 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
                     ItemStack[] inventory = InventoryStringDeSerializer.stacksFromBase64(persistentInventoryData);
                     player.getInventory().setContents(inventory);
 
+                    player.sendMessage(Text.color("&aLoading complete!"));
+
                     getProfileData(player).setInventoryBase64(""); // Clearing data (watching for wipes/dupes)
                 } catch (IllegalArgumentException | IOException e) {
                     e.printStackTrace();
                 }
 
-                inventoriesLoadingQueue.remove(player);
+                playerInventorySyncList.remove(player);
             }
         }
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        if (!isProfileDataLoaded(player)) {
-            asyncDatastoreLoad(player);
-            inventoriesLoadingQueue.add(player);
-            player.sendMessage(Text.color("&aLoading your inventory data..."));
-        }
+        loadInventory(event.getPlayer());
     }
 
     @EventHandler
@@ -96,10 +95,18 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
         saveInventory(event.getPlayer());
     }
 
+    private void loadInventory(Player player) {
+        if (!isProfileDataLoaded(player)) {
+            asyncDatastoreLoad(player);
+            playerInventorySyncList.add(player);
+//            player.sendMessage(Text.color("&aLoading your inventory data..."));
+        }
+    }
+
     private void saveInventory(Player player) {
         if (isProfileDataLoaded(player)) {
             asyncDatastoreSave(player);
-            player.sendMessage(Text.color("&aSaving your inventory data..."));
+//            player.sendMessage(Text.color("&aSaving your inventory data..."));
 
             PersistentInventoryData persistentInventoryData = getProfileData(player);
             persistentInventoryData.setInventoryBase64(InventoryStringDeSerializer.toBase64(player.getInventory().getContents()));

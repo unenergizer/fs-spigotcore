@@ -5,7 +5,8 @@ Database:
   username: root
   password: ""
 Features:
-  PersistantInventory: true
+  DeletePlayerWorldData: false
+  PersistentInventory: true
   FishingProfession: true
   WoodCutting: true
   Farming: true

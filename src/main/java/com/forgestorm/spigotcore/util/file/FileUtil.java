@@ -1,9 +1,7 @@
 package com.forgestorm.spigotcore.util.file;
 
 import java.io.*;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.Comparator;
 
 public class FileUtil {
@@ -70,6 +68,19 @@ public class FileUtil {
                     .forEach(File::delete);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void removeFile(Path file) {
+        try {
+            Files.delete(file);
+        } catch (NoSuchFileException x) {
+            System.err.format("%s: no such" + " file or directory%n", file);
+        } catch (DirectoryNotEmptyException x) {
+            System.err.format("%s not empty%n", file);
+        } catch (IOException x) {
+            // File permission problems are caught here.
+            System.err.println(x);
         }
     }
 }
