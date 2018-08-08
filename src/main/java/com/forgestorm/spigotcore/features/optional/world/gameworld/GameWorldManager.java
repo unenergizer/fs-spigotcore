@@ -1,7 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.world.gameworld;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
@@ -10,13 +9,11 @@ import com.forgestorm.spigotcore.features.required.world.worldobject.SyncWorldOb
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.file.FileUtil;
 import com.forgestorm.spigotcore.util.math.RandomChance;
-import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Text;
 import com.forgestorm.spigotcore.util.world.LocationUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -38,7 +35,7 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         hologramLocation = new Location(Bukkit.getWorlds().get(0), 7.5, 79, 22.5);
 

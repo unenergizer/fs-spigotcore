@@ -43,7 +43,7 @@ public class RealmManager extends AbstractDatabaseFeature<RealmProfileData> impl
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         realmCooldownTimer = new RealmCooldownTimer();
         realmCooldownTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 20);

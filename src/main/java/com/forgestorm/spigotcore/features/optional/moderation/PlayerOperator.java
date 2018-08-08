@@ -3,6 +3,7 @@ package com.forgestorm.spigotcore.features.optional.moderation;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -11,7 +12,7 @@ public class PlayerOperator implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override

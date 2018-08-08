@@ -26,13 +26,14 @@ import java.util.List;
  *
  * @since Jul 30, 2015 6:43:34 PM
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class ArmorListener implements Listener {
 
     private final List<String> blockedMaterials = new ArrayList<>();
 
 
     void onEnable() {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
 

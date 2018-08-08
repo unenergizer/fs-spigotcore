@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 public abstract class Experience {
 	protected int expOffSet;
 	protected int minLevel = 1;
-	private final int maxLevel = 100;
 	int var1;
 	double var2;
 	double var3;
@@ -33,6 +32,7 @@ public abstract class Experience {
 		int points = 0;
 		int output;
 
+		int maxLevel = 100;
 		for (int lvl = 1; lvl <= maxLevel; lvl++) {
 			points += Math.floor(var1 * Math.pow(2, lvl / var2));
 			

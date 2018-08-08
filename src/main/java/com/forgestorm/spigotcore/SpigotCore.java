@@ -139,6 +139,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new PersistentInventory());
         features.add(new FishingProfession());
         features.add(new WoodCutting());
         features.add(new Farming());

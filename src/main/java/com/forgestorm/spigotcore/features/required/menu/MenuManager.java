@@ -32,7 +32,7 @@ public class MenuManager extends FeatureRequired implements Listener {
 
     @Override
     public void initFeatureStart() {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         canOpenMenus = true;
 
         menuTickTask = new BukkitRunnable() {

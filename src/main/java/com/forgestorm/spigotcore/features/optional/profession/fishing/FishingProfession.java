@@ -11,6 +11,7 @@ import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.math.exp.ProfessionExperience;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -52,7 +53,7 @@ public class FishingProfession extends Profession<FishingProfileData> implements
 
     @Override
     public void onEnable() {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override

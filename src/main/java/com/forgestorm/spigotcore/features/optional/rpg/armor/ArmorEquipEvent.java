@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * Website http://codingforcookies.com/
  * @since Jul 30, 2015
  */
+@SuppressWarnings("FinalStaticMethod")
 public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();

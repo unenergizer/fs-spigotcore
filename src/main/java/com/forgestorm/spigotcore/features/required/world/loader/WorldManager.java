@@ -26,7 +26,7 @@ public class WorldManager extends FeatureRequired implements Listener {
 
     @Override
     public void initFeatureStart() {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         syncWorldLoader = new SyncWorldLoader();
         syncWorldLoader.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
         asyncWorldCopier = new AsyncWorldCopy();

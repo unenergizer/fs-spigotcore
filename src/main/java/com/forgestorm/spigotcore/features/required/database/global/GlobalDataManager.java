@@ -32,7 +32,7 @@ public class GlobalDataManager extends FeatureRequired implements Listener {
 
     @Override
     public void initFeatureStart() {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         globalDataLoaders.add(new PlayerAccountSQL());
     }
 

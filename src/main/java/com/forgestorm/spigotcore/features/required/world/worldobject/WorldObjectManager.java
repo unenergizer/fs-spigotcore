@@ -54,7 +54,7 @@ public class WorldObjectManager extends FeatureRequired {
                 processWorldObjectsAsync();
             }
         };
-        asyncRunnable.runTaskTimerAsynchronously(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 20);
+        asyncRunnable.runTaskTimerAsynchronously(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 1);
 
         syncRunnable = new BukkitRunnable() {
             @Override
@@ -62,7 +62,7 @@ public class WorldObjectManager extends FeatureRequired {
                 processWorldObjectsSync();
             }
         };
-        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 20);
+        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 1);
     }
 
     @Override

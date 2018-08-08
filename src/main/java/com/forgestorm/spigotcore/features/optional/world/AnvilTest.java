@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class AnvilTest implements FeatureOptional, Listener {
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AnvilTest implements FeatureOptional, Listener {
         if (event.getClickedBlock() == null) return;
         if (event.getClickedBlock().getType() != Material.ANVIL) return;
         Location anvilLocation = event.getClickedBlock().getLocation();
-        SpigotCore.PLUGIN.getServer().getWorlds().get(0).strikeLightning(anvilLocation);
+        Bukkit.getServer().getWorlds().get(0).strikeLightning(anvilLocation);
     }
 
     @EventHandler

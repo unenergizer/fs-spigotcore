@@ -3,12 +3,13 @@ package com.forgestorm.spigotcore.features.optional.realm;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.CommonSounds;
 import com.forgestorm.spigotcore.features.events.FeatureProfileDataLoadEvent;
+import com.forgestorm.spigotcore.util.scheduler.ResetTimer;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Text;
-import com.forgestorm.spigotcore.util.scheduler.ResetTimer;
 import com.forgestorm.spigotcore.util.world.LocationUtil;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -64,7 +65,7 @@ class Realm implements Listener {
      * Called when a realm needs to start up.
      */
     void onRealmEnable() {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         realmAlignment = RealmAlignment.HOSTILE;
         resetTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 20);
     }

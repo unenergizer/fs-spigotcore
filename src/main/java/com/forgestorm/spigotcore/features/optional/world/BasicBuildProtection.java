@@ -2,6 +2,7 @@ package com.forgestorm.spigotcore.features.optional.world;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -31,7 +32,7 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         doorResetTimer = new DoorResetTimer();
         doorResetTimer.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
@@ -89,7 +90,8 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
             case SPRUCE_DOOR:
             case WOOD_DOOR:
             case WOODEN_DOOR:
-                if (doorResetTimer.contains(event.getClickedBlock())) doorResetTimer.removeDoor(event.getClickedBlock());
+                if (doorResetTimer.contains(event.getClickedBlock()))
+                    doorResetTimer.removeDoor(event.getClickedBlock());
                 doorResetTimer.addDoor(event.getClickedBlock());
                 break;
             default:

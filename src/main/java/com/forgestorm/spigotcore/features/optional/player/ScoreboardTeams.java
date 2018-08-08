@@ -27,7 +27,7 @@ public class ScoreboardTeams implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         enableScoreboard();
         setupTeams();

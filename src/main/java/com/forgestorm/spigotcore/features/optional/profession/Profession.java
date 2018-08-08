@@ -39,7 +39,7 @@ public abstract class Profession<T> extends AbstractDatabaseFeature<T> implement
 
     protected final ProfessionType professionType;
     protected final Experience experienceCalculator = new ProfessionExperience();
-    protected final int expOffSet = experienceCalculator.getExpOffSet();
+    private final int expOffSet = experienceCalculator.getExpOffSet();
     protected FileConfiguration fileConfiguration;
 
     public Profession(FileConfiguration fileConfiguration, ProfessionType professionType) {
@@ -56,16 +56,15 @@ public abstract class Profession<T> extends AbstractDatabaseFeature<T> implement
     public static String getProfessionRank(int level) {
         if (level < 20) {
             return "&7Rank: &fNovice";
-        } else if (level >= 20 && level < 40) {
+        } else if (level < 40) {
             return "&7Rank: &aIntermediate";
-        } else if (level >= 40 && level < 60) {
+        } else if (level < 60) {
             return "&7Rank: &9Proficient";
-        } else if (level >= 60 && level < 80) {
+        } else if (level < 80) {
             return "&7Rank: &5Expert";
-        } else if (level >= 80) {
+        } else {
             return "&7Rank: &6Grand Master";
         }
-        return null;
     }
 
     /**

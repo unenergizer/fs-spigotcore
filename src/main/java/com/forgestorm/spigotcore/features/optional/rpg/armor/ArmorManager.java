@@ -6,6 +6,7 @@ import com.forgestorm.spigotcore.features.optional.rpg.ItemBuilder;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemLevel;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemQuality;
 import de.tr7zw.itemnbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ public class ArmorManager implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         armorListener.onEnable();
     }
 

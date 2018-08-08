@@ -5,6 +5,7 @@ Database:
   username: root
   password: ""
 Features:
+  PersistantInventory: true
   FishingProfession: true
   WoodCutting: true
   Farming: true

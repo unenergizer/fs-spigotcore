@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
  * Website http://codingforcookies.com/
  * @Since Jul 30, 2015 6:46:16 PM
  */
+@SuppressWarnings("FinalStaticMethod")
 public enum ArmorType {
     HELMET(5), CHESTPLATE(6), LEGGINGS(7), BOOTS(8);
 

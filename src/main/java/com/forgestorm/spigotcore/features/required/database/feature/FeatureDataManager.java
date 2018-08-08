@@ -153,7 +153,7 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
     private class AsyncSave extends BukkitRunnable {
 
         private Player player;
-        private AbstractDatabaseFeature feature;
+        private AbstractDatabaseFeature<ProfileData> feature;
         private ProfileData profileData;
 
         @Override

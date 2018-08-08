@@ -9,6 +9,7 @@ import com.forgestorm.spigotcore.features.required.menu.ClickAction;
 import com.forgestorm.spigotcore.features.required.menu.MenuClickType;
 import com.forgestorm.spigotcore.features.required.menu.MenuTick;
 import com.forgestorm.spigotcore.util.text.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ import java.util.List;
 public class PlayerCompassMenu implements FeatureOptional, Listener {
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         SpigotCore.PLUGIN.getMenuManager().addMenu(new MainMenu());
     }
 
