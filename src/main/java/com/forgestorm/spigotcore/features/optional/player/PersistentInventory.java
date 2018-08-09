@@ -6,7 +6,6 @@ import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.util.item.InventoryStringDeSerializer;
-import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +40,7 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
                 processInventoriesSync();
             }
         };
-        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 5);
+        syncRunnable.runTaskTimer(SpigotCore.PLUGIN, FeatureToggleManager.FEATURE_TASK_START_DELAY, 1);
 
         Bukkit.getOnlinePlayers().forEach(this::loadInventory); // Load player if feature enabled manually
     }
@@ -60,6 +59,7 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
      * Compile and apply Base64 inventory for players from the database.
      */
     private void processInventoriesSync() {
+        //noinspection ForLoopReplaceableByForEach
         for (Iterator<Player> iterator = playerInventorySyncList.iterator(); iterator.hasNext(); ) {
             Player player = iterator.next();
 
@@ -73,8 +73,6 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
                     ItemStack[] inventory = InventoryStringDeSerializer.stacksFromBase64(persistentInventoryData);
                     player.getInventory().setContents(inventory);
 
-                    player.sendMessage(Text.color("&aLoading complete!"));
-
                     getProfileData(player).setInventoryBase64(""); // Clearing data (watching for wipes/dupes)
                 } catch (IllegalArgumentException | IOException e) {
                     e.printStackTrace();
@@ -85,6 +83,28 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
         }
     }
 
+    /**
+     * Attempts to load a players inventory from the database.
+     *
+     * @param player The player that is loading an inventory.
+     */
+    private void loadInventory(Player player) {
+        if (isProfileDataLoaded(player)) return;
+        asyncDatastoreLoad(player);
+        playerInventorySyncList.add(player);
+    }
+
+    /**
+     * Attempts to save a players inventory to the database.
+     *
+     * @param player The player that is saving an inventory.
+     */
+    private void saveInventory(Player player) {
+        if (!isProfileDataLoaded(player)) return;
+        asyncDatastoreSave(player);
+        getProfileData(player).setInventoryBase64(InventoryStringDeSerializer.toBase64(player.getInventory().getContents()));
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         loadInventory(event.getPlayer());
@@ -93,24 +113,6 @@ public class PersistentInventory extends AbstractDatabaseFeature<PersistentInven
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         saveInventory(event.getPlayer());
-    }
-
-    private void loadInventory(Player player) {
-        if (!isProfileDataLoaded(player)) {
-            asyncDatastoreLoad(player);
-            playerInventorySyncList.add(player);
-//            player.sendMessage(Text.color("&aLoading your inventory data..."));
-        }
-    }
-
-    private void saveInventory(Player player) {
-        if (isProfileDataLoaded(player)) {
-            asyncDatastoreSave(player);
-//            player.sendMessage(Text.color("&aSaving your inventory data..."));
-
-            PersistentInventoryData persistentInventoryData = getProfileData(player);
-            persistentInventoryData.setInventoryBase64(InventoryStringDeSerializer.toBase64(player.getInventory().getContents()));
-        }
     }
 
     @Override
