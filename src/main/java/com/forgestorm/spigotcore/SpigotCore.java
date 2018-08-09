@@ -28,6 +28,7 @@ import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
+import com.forgestorm.spigotcore.features.required.economy.EconomyManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.menu.MenuManager;
 import com.forgestorm.spigotcore.features.required.world.TeleportManager;
@@ -42,9 +43,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * SpigotCore is our main plugin class for Bukkit/Spigot. This is the plugin start class.
@@ -62,6 +61,7 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final EconomyManager economyManager = new EconomyManager();
     private final WorldManager worldManager = new WorldManager();
     private final MenuManager menuManager = new MenuManager();
     private final DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager();
@@ -89,6 +89,7 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
+        economyManager.startup();
         worldManager.startup();
         menuManager.startup();
         databaseConnectionManager.startup();
@@ -118,6 +119,7 @@ public class SpigotCore extends JavaPlugin {
         databaseConnectionManager.shutdown();
         menuManager.shutdown();
         worldManager.shutdown();
+        economyManager.shutdown();
     }
 
     /**

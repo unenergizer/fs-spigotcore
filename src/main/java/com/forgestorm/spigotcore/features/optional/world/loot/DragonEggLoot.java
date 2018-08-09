@@ -6,6 +6,7 @@ import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.events.WorldObjectAddEvent;
 import com.forgestorm.spigotcore.features.events.WorldObjectSpawnEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerEconomy;
 import com.forgestorm.spigotcore.features.required.world.worldobject.AsyncWorldObjectTick;
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import com.forgestorm.spigotcore.features.required.world.worldobject.CooldownWorldObject;
@@ -144,13 +145,16 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
         player.sendMessage(CenterChatText.centerChatMessage("&7&lCAN YOU FIND IT AGAIN?"));
         player.sendMessage("");
         player.sendMessage(CenterChatText.centerChatMessage(rewardText));
-        player.sendMessage(CenterChatText.centerChatMessage("&cREWARDS NOT IMPLEMENTED YET. COMING SOON!"));
+        player.sendMessage(CenterChatText.centerChatMessage("&cREWARDS NOT FINISHED YET."));
         player.sendMessage("");
 
         //TODO: Give Reward
 //            PlayerRewards reward = new PlayerRewards(plugin, player);
 //            reward.giveExp(100);
 //            reward.giveMoney(100);
+
+        PlayerEconomy economy = SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(player).getPlayerEconomy();
+        economy.addGems(100);
 
         //Play Sound
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, .8f);

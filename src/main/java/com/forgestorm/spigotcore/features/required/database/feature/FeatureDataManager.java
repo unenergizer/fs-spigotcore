@@ -8,7 +8,6 @@ import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
-import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -96,8 +95,6 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     public void asyncDatastoreLoad(Player player, AbstractDatabaseFeature feature) {
         new AsyncLoad(player, feature).runTaskAsynchronously(SpigotCore.PLUGIN);
-        player.sendMessage(Text.color("&7[&9Database&7] &aLoading your data from &e" + feature.getClass().getSimpleName() + "&a."));
-        Console.sendMessage("&7[&9Database&7] &aLoading data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
     }
 
     /**
@@ -109,18 +106,23 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     public void asyncDatastoreSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
         new AsyncSave(player, feature, profileData).runTaskAsynchronously(SpigotCore.PLUGIN);
-        player.sendMessage(Text.color("&7[&9Database&7] &aSaving your data from &e" + feature.getClass().getSimpleName() + "&a."));
-        Console.sendMessage("&7[&9Database&7] &aSaving data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
     }
 
     /**
      * Runs an {@link AbstractDatabaseFeature} MySQL load query asynchronously.
      */
-    @AllArgsConstructor
     private class AsyncLoad extends BukkitRunnable {
 
         private Player player;
         private AbstractDatabaseFeature feature;
+
+        AsyncLoad(Player player, AbstractDatabaseFeature feature) {
+            this.player = player;
+            this.feature = feature;
+
+            player.sendMessage(Text.color("&7[&9Database&7] &aLoading your data from &e" + feature.getClass().getSimpleName() + "&a."));
+            Console.sendMessage("&7[&9Database&7] &aLoading data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
+        }
 
         @Override
         public void run() {
@@ -140,6 +142,9 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
                 }
             } catch (SQLException exe) {
                 exe.printStackTrace();
+            } finally {
+                player.sendMessage(Text.color("&7[&9Database&7] &aLoading complete for &e" + feature.getClass().getSimpleName() + "&a."));
+                Console.sendMessage("&7[&9Database&7] &aLoading complete via &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
             }
 
             new BukkitRunnable() {
@@ -155,12 +160,20 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
     /**
      * Runs an {@link AbstractDatabaseFeature} MySQL save query asynchronously.
      */
-    @AllArgsConstructor
     private class AsyncSave extends BukkitRunnable {
 
         private Player player;
         private AbstractDatabaseFeature<ProfileData> feature;
         private ProfileData profileData;
+
+        AsyncSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
+            this.player = player;
+            this.feature = feature;
+            this.profileData = profileData;
+
+            player.sendMessage(Text.color("&7[&9Database&7] &aSaving your data from &e" + feature.getClass().getSimpleName() + "&a."));
+            Console.sendMessage("&7[&9Database&7] &aSaving data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
+        }
 
         @Override
         public void run() {
@@ -170,6 +183,9 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
 
             } catch (SQLException exe) {
                 exe.printStackTrace();
+            } finally {
+                player.sendMessage(Text.color("&7[&9Database&7] &aSaving complete for &e" + feature.getClass().getSimpleName() + "&a."));
+                Console.sendMessage("&7[&9Database&7] &aSaving complete via &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
             }
         }
     }

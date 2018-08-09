@@ -6,6 +6,7 @@ import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeature;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.features.required.database.global.player.sql.PlayerAccountSQL;
+import com.forgestorm.spigotcore.features.required.database.global.player.sql.PlayerEconomySQL;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,6 +35,7 @@ public class GlobalDataManager extends FeatureRequired implements Listener {
     public void initFeatureStart() {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         globalDataLoaders.add(new PlayerAccountSQL());
+        globalDataLoaders.add(new PlayerEconomySQL());
     }
 
     @Override
