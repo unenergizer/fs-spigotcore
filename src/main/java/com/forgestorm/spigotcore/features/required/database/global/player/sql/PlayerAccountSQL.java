@@ -6,6 +6,8 @@ import com.forgestorm.spigotcore.features.required.database.global.BaseGlobalDat
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
+import com.forgestorm.spigotcore.util.math.exp.PlayerExperience;
+import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -18,6 +20,7 @@ public class PlayerAccountSQL implements BaseGlobalData {
     public void databaseLoad(Player player, Connection connection, ResultSet resultSet, GlobalPlayerData playerData) throws SQLException {
         PlayerAccount playerAccount = new PlayerAccount();
 
+        playerAccount.setExperience(resultSet.getLong("experience"));
         playerAccount.setFirstJoinDate(resultSet.getTimestamp("first_join_date"));
         playerAccount.setRank(PlayerRanks.valueOf(resultSet.getString("rank")));
         playerAccount.setDuties(resultSet.getString("duties"));
@@ -42,14 +45,15 @@ public class PlayerAccountSQL implements BaseGlobalData {
         if (playerAccount == null) return;
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_player_account" +
-                " SET username=?, rank=?, duties=?, is_banned=?, warning_points=?" +
+                " SET username=?, experience=?, rank=?, duties=?, is_banned=?, warning_points=?" +
                 " WHERE player_uuid=?");
         preparedStatement.setString(1, player.getName());
-        preparedStatement.setString(2, playerAccount.getRank().toString());
-        preparedStatement.setString(3, playerAccount.getDuties() != null ? playerAccount.getDuties() : "");
-        preparedStatement.setBoolean(4, playerAccount.isBanned());
-        preparedStatement.setInt(5, playerAccount.getWarningPoints());
-        preparedStatement.setString(6, player.getUniqueId().toString());
+        preparedStatement.setLong(2, playerAccount.getExperience());
+        preparedStatement.setString(3, playerAccount.getRank().toString());
+        preparedStatement.setString(4, playerAccount.getDuties() != null ? playerAccount.getDuties() : "");
+        preparedStatement.setBoolean(5, playerAccount.isBanned());
+        preparedStatement.setInt(6, playerAccount.getWarningPoints());
+        preparedStatement.setString(7, player.getUniqueId().toString());
 
         preparedStatement.execute();
     }
@@ -57,25 +61,28 @@ public class PlayerAccountSQL implements BaseGlobalData {
     @Override
     public void firstTimeSave(Player player, Connection connection, GlobalPlayerData globalPlayerData) throws SQLException {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
+        long experience = new PlayerExperience().getExperience(1);
 
         PreparedStatement newPlayerStatement = connection.prepareStatement("INSERT INTO fs_player_account " +
-                "(player_uuid, username, ip_address, first_join_date, last_join_date, rank, is_banned, is_admin, is_moderator, warning_points) " +
-                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                "(player_uuid, username, ip_address, experience, first_join_date, last_join_date, rank, is_banned, is_admin, is_moderator, warning_points) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         newPlayerStatement.setString(1, player.getUniqueId().toString());
         newPlayerStatement.setString(2, player.getName());
-        newPlayerStatement.setString(3, player.getAddress().getAddress().toString());
-        newPlayerStatement.setTimestamp(4, timestamp);
+        newPlayerStatement.setString(3, player.getAddress().getAddress().toString().replace("/", ""));
+        newPlayerStatement.setLong(4, experience);
         newPlayerStatement.setTimestamp(5, timestamp);
-        newPlayerStatement.setString(6, PlayerRanks.NEW_PLAYER.toString());
-        newPlayerStatement.setBoolean(7, false);
+        newPlayerStatement.setTimestamp(6, timestamp);
+        newPlayerStatement.setString(7, PlayerRanks.NEW_PLAYER.toString());
         newPlayerStatement.setBoolean(8, false);
         newPlayerStatement.setBoolean(9, false);
-        newPlayerStatement.setInt(10, 0);
+        newPlayerStatement.setBoolean(10, false);
+        newPlayerStatement.setInt(11, 0);
 
         newPlayerStatement.execute();
 
         PlayerAccount playerAccount = new PlayerAccount();
+        playerAccount.setExperience(experience);
         playerAccount.setFirstJoinDate(timestamp);
         playerAccount.setLastJoinDate(timestamp);
         playerAccount.setRank(PlayerRanks.NEW_PLAYER);

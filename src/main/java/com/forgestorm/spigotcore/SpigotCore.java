@@ -28,7 +28,8 @@ import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
-import com.forgestorm.spigotcore.features.required.economy.EconomyManager;
+import com.forgestorm.spigotcore.features.required.player.AccountManager;
+import com.forgestorm.spigotcore.features.required.player.EconomyManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.menu.MenuManager;
 import com.forgestorm.spigotcore.features.required.world.TeleportManager;
@@ -61,6 +62,7 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final AccountManager accountManager = new AccountManager();
     private final EconomyManager economyManager = new EconomyManager();
     private final WorldManager worldManager = new WorldManager();
     private final MenuManager menuManager = new MenuManager();
@@ -89,6 +91,7 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
+        accountManager.startup();
         economyManager.startup();
         worldManager.startup();
         menuManager.startup();
@@ -120,6 +123,7 @@ public class SpigotCore extends JavaPlugin {
         menuManager.shutdown();
         worldManager.shutdown();
         economyManager.shutdown();
+        accountManager.shutdown();
     }
 
     /**

@@ -1,24 +1,23 @@
 package com.forgestorm.spigotcore.features.required.database.global.player.sql;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.required.database.global.BaseGlobalData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
-import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerEconomy;
 import org.bukkit.entity.Player;
 
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class PlayerEconomySQL implements BaseGlobalData {
 
     @Override
     public void databaseLoad(Player player, Connection connection, ResultSet resultSet, GlobalPlayerData playerData) throws SQLException {
         PlayerEconomy playerEconomy = new PlayerEconomy();
-        playerEconomy.addGems(resultSet.getInt("gems"));
+        playerEconomy.setGems(resultSet.getInt("gems"));
 
         playerData.setPlayerEconomy(playerEconomy);
     }
@@ -32,7 +31,7 @@ public class PlayerEconomySQL implements BaseGlobalData {
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE fs_player_economy" +
                 " SET gems=?" +
                 " WHERE player_uuid=?");
-        preparedStatement.setInt(1, playerEconomy.getBalance());
+        preparedStatement.setInt(1, playerEconomy.getGems());
         preparedStatement.setString(2, player.getUniqueId().toString());
 
         preparedStatement.execute();
@@ -52,7 +51,7 @@ public class PlayerEconomySQL implements BaseGlobalData {
         newPlayerStatement.execute();
 
         PlayerEconomy playerEconomy = new PlayerEconomy();
-        playerEconomy.addGems(startingGems);
+        playerEconomy.setGems(startingGems);
         globalPlayerData.setPlayerEconomy(playerEconomy);
     }
 

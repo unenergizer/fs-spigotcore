@@ -23,6 +23,7 @@ public class PlayerAccount extends ProfileData {
     private UUID uuid;
     private String username;
     private String ip;
+    private long experience;
     private Timestamp firstJoinDate;
     private Timestamp lastJoinDate;
     private List<PlayerDuties> duties;

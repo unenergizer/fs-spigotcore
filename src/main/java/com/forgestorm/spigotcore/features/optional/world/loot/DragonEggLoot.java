@@ -6,7 +6,6 @@ import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.events.WorldObjectAddEvent;
 import com.forgestorm.spigotcore.features.events.WorldObjectSpawnEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerEconomy;
 import com.forgestorm.spigotcore.features.required.world.worldobject.AsyncWorldObjectTick;
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
 import com.forgestorm.spigotcore.features.required.world.worldobject.CooldownWorldObject;
@@ -131,11 +130,11 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
         Bukkit.getWorlds().get(0).playSound(location, Sound.ENTITY_SHULKER_BULLET_HURT, 1, .7f);
 
         //Reward Text
-        long exp = 100;
-        int money = 100;
+        long expReward = 100;
+        int gemReward = 100;
 
         //Send player text
-        String rewardText = "&a&lEXP: &r&m+" + exp + "&r &e&lMoney: &r&m+" + money;
+        String rewardText = "&a&lEXP: &r+" + expReward + "&r &e&lMoney: &r+" + gemReward;
 
         player.sendMessage("");
         player.sendMessage("");
@@ -145,16 +144,11 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
         player.sendMessage(CenterChatText.centerChatMessage("&7&lCAN YOU FIND IT AGAIN?"));
         player.sendMessage("");
         player.sendMessage(CenterChatText.centerChatMessage(rewardText));
-        player.sendMessage(CenterChatText.centerChatMessage("&cREWARDS NOT FINISHED YET."));
         player.sendMessage("");
 
-        //TODO: Give Reward
-//            PlayerRewards reward = new PlayerRewards(plugin, player);
-//            reward.giveExp(100);
-//            reward.giveMoney(100);
-
-        PlayerEconomy economy = SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(player).getPlayerEconomy();
-        economy.addGems(100);
+        //Give Reward
+        SpigotCore.PLUGIN.getAccountManager().addExperience(player, expReward);
+        SpigotCore.PLUGIN.getEconomyManager().addGems(player, gemReward);
 
         //Play Sound
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, .8f);
@@ -205,7 +199,8 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
 
         @Override
         public void onAsyncTick() {
-            if (!isOnCooldown()) location.getWorld().playEffect(LocationUtil.addToLocation(location, .5, .5, .5), Effect.ENDER_SIGNAL, 0);
+            if (!isOnCooldown())
+                location.getWorld().playEffect(LocationUtil.addToLocation(location, .5, .5, .5), Effect.ENDER_SIGNAL, 0);
         }
     }
 }
