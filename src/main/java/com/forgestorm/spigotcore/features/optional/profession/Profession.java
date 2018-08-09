@@ -15,7 +15,9 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -91,6 +93,20 @@ public abstract class Profession<T> extends AbstractDatabaseFeature<T> implement
     public abstract void onDisable();
 
     public abstract String getUpgrades(int rankUpgradeLevel);
+
+    public abstract boolean toolCheck(Player player, Material tool);
+
+    public abstract void loadDatabase(Player player);
+
+    @EventHandler
+    public void onToolEquip(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        ItemStack itemStack = player.getInventory().getItem(event.getNewSlot());
+
+        if (itemStack == null) return;
+        if (!toolCheck(player, itemStack.getType())) return; // Check to see if a profession item was put into their hand
+        if (!isProfileDataLoaded(player)) loadDatabase(player);
+    }
 
     /**
      * Calls the profession toggle event. Great if a profession needs to be canceled for

@@ -119,11 +119,7 @@ public abstract class BlockBreakProfession<T> extends Profession<T> {
      */
     private void toggleProfession(Player player, Material toolMaterial, Block brokenBlock) {
 
-        if (!isProfileDataLoaded(player)) {
-            asyncDatastoreLoad(player);
-            player.sendMessage(Text.color("&aLoading your profession data..."));
-            return;
-        }
+        if (!isProfileDataLoaded(player)) return;
 
         String toolName = toolMaterial.toString();
         String blockName = brokenBlock.getType().toString();

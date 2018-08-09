@@ -114,6 +114,25 @@ public class Mining extends BlockBreakProfession<MiningProfileData> implements L
     }
 
     @Override
+    public boolean toolCheck(Player player, Material tool) {
+        switch (tool) {
+            case DIAMOND_PICKAXE:
+            case GOLD_PICKAXE:
+            case IRON_PICKAXE:
+            case STONE_PICKAXE:
+            case WOOD_PICKAXE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void loadDatabase(Player player) {
+        asyncDatastoreLoad(player);
+    }
+
+    @Override
     public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
         MiningProfileData profileData = new MiningProfileData();
 

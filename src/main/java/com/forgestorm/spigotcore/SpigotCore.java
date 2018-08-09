@@ -42,7 +42,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * SpigotCore is our main plugin class for Bukkit/Spigot. This is the plugin start class.
@@ -177,7 +179,6 @@ public class SpigotCore extends JavaPlugin {
         features.add(new EzImgMessage());
 
         // Finally, add all features
-
         featureToggleManager.addFeatures(features);
     }
 }

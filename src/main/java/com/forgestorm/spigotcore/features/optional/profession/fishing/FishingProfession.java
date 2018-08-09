@@ -68,11 +68,7 @@ public class FishingProfession extends Profession<FishingProfileData> implements
      */
     private void toggleFishingProfession(Player player) {
 
-        if (!isProfileDataLoaded(player)) {
-            asyncDatastoreLoad(player);
-            player.sendMessage(Text.color("&aLoading your profession data..."));
-            return;
-        }
+        if (!isProfileDataLoaded(player)) return;
 
         long currentExperience = getProfileData(player).getFishingExp();
         long currentLevel = experienceCalculator.getLevel(currentExperience);
@@ -171,6 +167,16 @@ public class FishingProfession extends Profession<FishingProfileData> implements
             result = "&aPrestige level 1";
         }
         return Text.color(result);
+    }
+
+    @Override
+    public boolean toolCheck(Player player, Material tool) {
+        return  tool == Material.FISHING_ROD;
+    }
+
+    @Override
+    public void loadDatabase(Player player) {
+        asyncDatastoreLoad(player);
     }
 
     @Override

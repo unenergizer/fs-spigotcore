@@ -104,6 +104,25 @@ public class Farming extends BlockBreakProfession<FarmingProfileData> implements
     }
 
     @Override
+    public boolean toolCheck(Player player, Material tool) {
+        switch (tool) {
+            case DIAMOND_HOE:
+            case IRON_HOE:
+            case WOOD_HOE:
+            case GOLD_HOE:
+            case STONE_HOE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void loadDatabase(Player player) {
+        asyncDatastoreLoad(player);
+    }
+
+    @Override
     public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
         FarmingProfileData profileData = new FarmingProfileData();
 

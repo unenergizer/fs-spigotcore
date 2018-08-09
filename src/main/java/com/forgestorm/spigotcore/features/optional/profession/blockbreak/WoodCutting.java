@@ -98,6 +98,25 @@ public class WoodCutting extends BlockBreakProfession<WoodCuttingProfileData> im
     }
 
     @Override
+    public boolean toolCheck(Player player, Material tool) {
+        switch (tool) {
+            case DIAMOND_AXE:
+            case GOLD_AXE:
+            case IRON_AXE:
+            case STONE_AXE:
+            case WOOD_AXE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void loadDatabase(Player player) {
+        asyncDatastoreLoad(player);
+    }
+
+    @Override
     public ProfileData databaseLoad(Player player, Connection connection, ResultSet resultSet) throws SQLException {
         WoodCuttingProfileData profileData = new WoodCuttingProfileData();
 
