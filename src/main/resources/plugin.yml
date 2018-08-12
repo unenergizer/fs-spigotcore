@@ -5,4 +5,4 @@ description: ForgeStorm SpigotCore
 author: Andrew Brown & Joseph Rugh
 website: http://www.forgestorm.com/
 load: POSTWORLD
-depend: [TitleManager, Citizens, ItemNBTAPI]
+depend: [ProtocolLib, LibsDisguises, TitleManager, Citizens, ItemNBTAPI, NoteBlockAPI]

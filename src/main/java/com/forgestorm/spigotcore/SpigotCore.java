@@ -1,14 +1,17 @@
 package com.forgestorm.spigotcore;
 
 import co.aikar.commands.PaperCommandManager;
+import com.forgestorm.spigotcore.bungeecord.BungeeCord;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.chat.EzImgMessage;
 import com.forgestorm.spigotcore.features.optional.chat.GameTipAnnouncer;
 import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
+import com.forgestorm.spigotcore.features.optional.commands.PlayMidi;
 import com.forgestorm.spigotcore.features.optional.commands.Roll;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
+import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerOperator;
 import com.forgestorm.spigotcore.features.optional.player.*;
@@ -28,14 +31,15 @@ import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
-import com.forgestorm.spigotcore.features.required.player.AccountManager;
-import com.forgestorm.spigotcore.features.required.player.EconomyManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.menu.MenuManager;
+import com.forgestorm.spigotcore.features.required.player.AccountManager;
+import com.forgestorm.spigotcore.features.required.player.EconomyManager;
 import com.forgestorm.spigotcore.features.required.world.TeleportManager;
 import com.forgestorm.spigotcore.features.required.world.loader.WorldManager;
 import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
 import com.forgestorm.spigotcore.features.required.world.worldobject.WorldObjectManager;
+import com.forgestorm.spigotcore.util.scoreboard.ScoreboardManager;
 import com.forgestorm.spigotcore.util.text.Console;
 import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
 import lombok.Getter;
@@ -62,6 +66,8 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final BungeeCord bungeeCord = new BungeeCord();
+    private final ScoreboardManager scoreboardManager = new ScoreboardManager();
     private final AccountManager accountManager = new AccountManager();
     private final EconomyManager economyManager = new EconomyManager();
     private final WorldManager worldManager = new WorldManager();
@@ -91,6 +97,8 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
+        bungeeCord.startup();
+        scoreboardManager.startup();
         accountManager.startup();
         economyManager.startup();
         worldManager.startup();
@@ -124,6 +132,8 @@ public class SpigotCore extends JavaPlugin {
         worldManager.shutdown();
         economyManager.shutdown();
         accountManager.shutdown();
+        scoreboardManager.shutdown();
+        bungeeCord.shutdown();
     }
 
     /**
@@ -147,6 +157,8 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new MinigameFramework());
+        features.add(new PlayMidi());
         features.add(new DeletePlayerWorldData());
         features.add(new PersistentInventory());
         features.add(new FishingProfession());

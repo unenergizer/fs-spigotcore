@@ -3,7 +3,6 @@ package com.forgestorm.spigotcore.features.required.world.loader;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.file.FileUtil;
-import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
@@ -88,7 +87,7 @@ public class WorldManager extends FeatureRequired implements Listener {
         public void run() {
             if (worldsToLoad.isEmpty()) return;
             WorldData worldData = worldsToLoad.remove();
-            WorldCreator worldCreator = new WorldCreator(worldData.worldName);
+            WorldCreator worldCreator = new WorldCreator(worldData.getWorldName());
             worldCreator.createWorld();
         }
     }
@@ -103,28 +102,20 @@ public class WorldManager extends FeatureRequired implements Listener {
             WorldData worldData = worldsToCopy.remove();
 
             // World loading / unloading operations.
-            if (worldData.loadingWorld) {
+            if (worldData.isLoadingWorld()) {
 
                 // Loading
-                FileUtil.copyDirectory(worldData.sourceDirectory, new File(worldData.worldName));
+                FileUtil.copyDirectory(worldData.getSourceDirectory(), new File(worldData.getWorldName()));
                 syncWorldLoader.worldsToLoad.add(worldData);
             } else {
 
                 // Unloading
-                FileUtil.copyDirectory(new File(worldData.worldName), worldData.sourceDirectory);
+                FileUtil.copyDirectory(new File(worldData.getWorldName()), worldData.getSourceDirectory());
             }
 
             // Remove source directory if enabled
-            if (!worldData.removeSourceDirectory) return;
-            FileUtil.removeDirectory(new File(worldData.worldName).toPath());
+            if (!worldData.isRemoveSourceDirectory()) return;
+            FileUtil.removeDirectory(new File(worldData.getWorldName()).toPath());
         }
-    }
-
-    @AllArgsConstructor
-    private class WorldData {
-        private final String worldName;
-        private final File sourceDirectory;
-        private final boolean removeSourceDirectory;
-        private final boolean loadingWorld;
     }
 }

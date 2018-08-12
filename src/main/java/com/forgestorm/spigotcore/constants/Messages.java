@@ -10,6 +10,14 @@ public enum Messages {
 
     ITEM_PICKUP_GEMS("         &a&l+%s Gems"),
 
+    SCOREBOARD_TITLE("- &e&lFORGESTORM &r-"),
+    SCOREBOARD_BLANK_LINE_1("&r"),
+    SCOREBOARD_GEMS("&a&lGEMS&7&l:&r "),
+    SCOREBOARD_LEVEL("&a&lLVL&7&l:&r "),
+    SCOREBOARD_XP("&a&lXP&7&l:&r "),
+    SCOREBOARD_BLANK_LINE_2("&r&r"),
+    SCOREBOARD_SERVER("&b&lSERVER&7&l:&r "),
+
     ECONOMY_PURCHASE_SUCCESS("&aYour purchase was successful!!"),
     ECONOMY_PURCHASE_FAILED("&cYou do not have enough money to make this purchase."),
 

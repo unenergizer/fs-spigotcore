@@ -2,6 +2,7 @@ package com.forgestorm.spigotcore.features.optional.world.gameworld;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.constants.WorldDirectories;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.world.worldobject.BaseWorldObject;
@@ -50,7 +51,7 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
         SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(hologramLocation, new GameWorldHologram(hologramLocation, currentGameWorld.displayName));
         SpigotCore.PLUGIN.getWorldManager().loadWorld(currentGameWorld.folderName,
-                new File(".." + File.separator + "game_worlds" + File.separator + currentGameWorld.folderName));
+                new File(WorldDirectories.RPG.getWorldDirectory() + File.separator + currentGameWorld.folderName));
     }
 
     @Override

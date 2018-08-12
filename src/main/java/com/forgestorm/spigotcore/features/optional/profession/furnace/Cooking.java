@@ -50,6 +50,6 @@ public class Cooking {
 //        } else if (rankUpgradeLevel == 100) {
 //            result = "&aPrestige level 1";
 //        }
-//        return ColorMessage.color(result);
+//        return Text.color(result);
 //    }
 //}

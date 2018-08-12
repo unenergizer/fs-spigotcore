@@ -85,7 +85,7 @@ public class EzImgMessage implements FeatureOptional, InitCommands {
         @CommandCompletion("@allIcons")
         public void showIcons(CommandSender commandSender, String chatIcon) {
             commandSender.sendMessage("");
-            new EzImgMessage().sendEzImgMessage(commandSender, ChatIcons.valueOf(chatIcon), "Hi! Some text here.");
+            sendEzImgMessage(commandSender, ChatIcons.valueOf(chatIcon), "Hi! Some text here.");
         }
 
         @Subcommand("list")

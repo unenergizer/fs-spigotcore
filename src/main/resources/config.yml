@@ -4,7 +4,16 @@ Database:
   dbname: forgestormdb
   username: root
   password: ""
+Games:
+- INFECTION
+- MOB_MURDER
+- OITC
+- PIRATE_ATTACK
+- SHEER_SHEEP
+#- MOW_GRASS
 Features:
+  MinigameFramework: true
+  PlayMidi: true
   DeletePlayerWorldData: false
   PersistentInventory: true
   FishingProfession: true
@@ -12,7 +21,7 @@ Features:
   Farming: true
   Mining: true
   ItemDatabase: true
-  GameWorldManager: true
+  GameWorldManager: false #false when minigames enabled
   ArmorManager: true
   BasicBuildProtection: true
   Roll: true
@@ -22,7 +31,7 @@ Features:
   GameTipAnnouncer: true
   PlayerCompassMenu: true
   ScoreboardTeams: true
-  PlayerNewChecker: true
+  PlayerNewChecker: false #false when minigames enabled
   PlayerOperator: true
   PlayerBanKicker: true
   ServerSpawn: true
@@ -31,7 +40,7 @@ Features:
   LobbyPlayer: true
   PlayerGreeting: true
   PlayerListText: true
-  PlayerBossBar: true
+  PlayerBossBar: false #false when minigames enabled
   CitizenManager: true
   WorldSettings: true
   ChestLoot: true

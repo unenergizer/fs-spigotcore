@@ -1,48 +1,25 @@
 package com.forgestorm.spigotcore.util.scoreboard;
 
 import com.forgestorm.spigotcore.constants.PlayerRanks;
+import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-public class ScoreboardManager implements Listener {
+public class ScoreboardManager extends FeatureRequired {
 
-    private final JavaPlugin plugin;
     private Scoreboard scoreboard;
 
-    public ScoreboardManager(JavaPlugin plugin) {
-        this.plugin = plugin;
-
-        initScoreboard();
-        initDefaultTeams();
-    }
-
-    /**
-     * Enables the scoreboard manager. This will register listener
-     * events and this will also create a new scoreboard,
-     * overwriting the old one.
-     */
-    private void initScoreboard() {
-        // Register all events.
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-
-        // Register new scoreboard.
+    @Override
+    protected void initFeatureStart() {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-    }
 
-    /**
-     * This will enable all the default scoreboard teams.
-     */
-    private void initDefaultTeams() {
-        // Loop through the list of user groups and register
-        // them as teams.
+        // This will enable all the default scoreboard teams.
         for (PlayerRanks playerRanks : PlayerRanks.values()) {
             // Register the new Team.
             Team team = scoreboard.registerNewTeam(playerRanks.getScoreboardTeamName());
@@ -53,6 +30,16 @@ public class ScoreboardManager implements Listener {
 
             // Add the prefix.
             team.setPrefix(playerRanks.getUsernamePrefix());
+        }
+    }
+
+    @Override
+    protected void initFeatureClose() {
+        // TODO: Remove all players
+
+        // Remove all ranks/teams
+        for (Team team : scoreboard.getTeams()) {
+            team.unregister();
         }
     }
 
@@ -156,7 +143,7 @@ public class ScoreboardManager implements Listener {
     /**
      * This will add a player to the scoreboard with PlayerRanks properties.
      *
-     * @param player    The player we want to add to the scoreboard.
+     * @param player      The player we want to add to the scoreboard.
      * @param playerRanks The usergroup we want to assign the player to.
      */
     public void addPlayer(Player player, PlayerRanks playerRanks) {
