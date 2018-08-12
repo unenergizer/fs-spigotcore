@@ -94,7 +94,7 @@ class Realm implements Listener {
         realmDoorwayInside.disable();
 
         // Save the realm world
-        File file = new File(".." + File.separator + "player_realms" + File.separator + realmWorld.getName());
+        File file = new File(".." + File.separator + "worlds" + File.separator + "player_realms" + File.separator + realmWorld.getName());
         SpigotCore.PLUGIN.getWorldManager().unloadWorld(realmWorld.getName(), true, file, true);
     }
 
@@ -248,7 +248,7 @@ class Realm implements Listener {
             realmProfileData.setHasRealm(true);
         } else {
             SpigotCore.PLUGIN.getWorldManager().loadWorld(realmOwner.getUniqueId().toString(),
-                    new File(".." + File.separator + "player_realms" + File.separator + realmOwner.getUniqueId()));
+                    new File(".." + File.separator + "worlds" + File.separator + "player_realms" + File.separator + realmOwner.getUniqueId()));
         }
     }
 
