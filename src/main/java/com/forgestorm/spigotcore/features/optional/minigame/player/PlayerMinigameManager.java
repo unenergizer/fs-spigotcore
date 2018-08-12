@@ -137,7 +137,7 @@ public class PlayerMinigameManager implements Listener {
             ///////////////////////////
             //// LOBBY PLAYER QUIT ////
             ///////////////////////////
-            Console.sendMessage("PlayerManager - onPlayerQuit() -> Lobby Quit");
+            Console.sendMessage("PlayerManager - onPlayerQuit() -> LobbyBungeeCommand Quit");
 
             // Remove from the core lobby.
             GameLobby gameLobby = gameManager.getGameLobby();
@@ -147,7 +147,7 @@ public class PlayerMinigameManager implements Listener {
             // Remove profile and save data.
             removeProfileData(player);
 
-            // Lobby quit message
+            // LobbyBungeeCommand quit message
             String onlinePlayers = Integer.toString(Bukkit.getOnlinePlayers().size() - 1);
             String maxPlayers = Integer.toString(gameManager.getMaxPlayersOnline());
             return MinigameMessages.PLAYER_QUIT_LOBBY.toString()
@@ -252,7 +252,7 @@ public class PlayerMinigameManager implements Listener {
 
         if (gameManager.isInLobby()) {
 
-            // Lobby enter message.
+            // LobbyBungeeCommand enter message.
             String onlinePlayers = Integer.toString(Bukkit.getOnlinePlayers().size());
             String maxPlayers = Integer.toString(gameManager.getMaxPlayersOnline());
             joinMessage = joinMessage.concat(MinigameMessages.PLAYER_JOIN_LOBBY.toString()

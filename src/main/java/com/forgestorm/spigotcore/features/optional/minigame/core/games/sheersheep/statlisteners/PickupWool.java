@@ -31,7 +31,8 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class PickupWool implements StatListener {
 
-    public PickupWool() {
+    @Override
+    public void register() {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 

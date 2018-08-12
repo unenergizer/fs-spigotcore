@@ -1,14 +1,15 @@
 package com.forgestorm.spigotcore.features.optional.minigame.commands;
 
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
+import co.aikar.commands.PaperCommandManager;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
+import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.location.GameArena;
 import com.forgestorm.spigotcore.features.optional.minigame.core.location.access.ArenaPlayerAccess;
 import com.forgestorm.spigotcore.features.optional.minigame.core.location.access.ArenaSpectatorAccess;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameManager;
-import lombok.AllArgsConstructor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,13 +29,16 @@ import org.bukkit.entity.Player;
  * without the prior written permission of the owner.
  */
 
-@AllArgsConstructor
-public class Lobby implements CommandExecutor {
-
-    private final MinigameFramework plugin;
+@CommandAlias("lobby|l")
+public class LobbyBungeeCommand extends FeatureOptionalCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void setupCommand(PaperCommandManager paperCommandManager) {
+
+    }
+
+    @Default
+    public void onCommand(CommandSender sender) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             GameManager gameManager = GameManager.getInstance();
@@ -59,8 +63,7 @@ public class Lobby implements CommandExecutor {
             }
 
             // TODO: Now teleport to lobby.
-//            plugin.getSpigotCore().getBungeecord().connectToBungeeServer(player, "hub-01");
+            SpigotCore.PLUGIN.getBungeeCord().connectToBungeeServer(player, "server_rpg");
         }
-        return false;
     }
 }

@@ -5,10 +5,10 @@ Database:
   username: root
   password: ""
 Games:
-- INFECTION
-- MOB_MURDER
-- OITC
-- PIRATE_ATTACK
+#- INFECTION
+#- MOB_MURDER
+#- OITC
+#- PIRATE_ATTACK
 - SHEER_SHEEP
 #- MOW_GRASS
 Features:
@@ -38,7 +38,7 @@ Features:
   SimpleChat: true
   UsergroupChat: false
   LobbyPlayer: true
-  PlayerGreeting: true
+  PlayerGreeting: false #false when minigames enabled
   PlayerListText: true
   PlayerBossBar: false #false when minigames enabled
   CitizenManager: true

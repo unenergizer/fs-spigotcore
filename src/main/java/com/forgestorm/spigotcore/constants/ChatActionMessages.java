@@ -17,7 +17,7 @@ public enum ChatActionMessages {
     SOCIAL_TWITTER("[jmc|hover=&eClick to join our Twitter!|jmc|link=https://twitter.com/TheForgeStorm]&a<TWITTER>[/jmc]"),
     SOCIAL_YOUTUBE("[jmc|hover=&eClick to join our YouTube!|jmc|link=https://youtube.com/channel/UCOupaY4xuutRjeHzlHH7seA]&c<YOUTUBE>[/jmc]"),
 
-    TELEPORT_LOBBY("[jmc|hover=&eClick to join the Main Lobby|jmc|run=/lobby]&c<JOIN_LOBBY>[/jmc]");
+    TELEPORT_LOBBY("[jmc|hover=&eClick to join the Main LobbyBungeeCommand|jmc|run=/lobby]&c<JOIN_LOBBY>[/jmc]");
 
     private final String message;
 }

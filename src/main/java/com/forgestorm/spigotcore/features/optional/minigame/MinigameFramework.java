@@ -1,11 +1,15 @@
 package com.forgestorm.spigotcore.features.optional.minigame;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
+import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
+import com.forgestorm.spigotcore.features.optional.minigame.commands.LobbyBungeeCommand;
+import com.forgestorm.spigotcore.features.optional.minigame.commands.MinigameAdminCommands;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
-import com.forgestorm.spigotcore.util.text.Console;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*********************************************************************************
@@ -25,29 +29,25 @@ import java.util.List;
  */
 
 @Getter
-public class MinigameFramework implements FeatureOptional {
+public class MinigameFramework implements FeatureOptional, InitCommands {
 
     private final List<String> configGameList = SpigotCore.PLUGIN.getConfig().getStringList("Games");
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Console.sendMessage("STARTING UP MinigameFramework");
-
         GameManager.getInstance().setup(this);
-
-        registerCommands();
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-
-        // Disable the core manager
         GameManager.getInstance().onDisable();
     }
 
-    private void registerCommands() {
-        // TODO: CHANGE TO NEW COMMAND SYSTEM
-//        SpigotCore.PLUGIN.getCommand("mgadmin").setExecutor(new Admin(this));
-//        SpigotCore.PLUGIN.getCommand("lobby").setExecutor(new Lobby(this));
+    @Override
+    public List<FeatureOptionalCommand> registerAllCommands() {
+        List<FeatureOptionalCommand> commands = new ArrayList<>();
+        commands.add(new MinigameAdminCommands());
+        commands.add(new LobbyBungeeCommand());
+        return commands;
     }
 }

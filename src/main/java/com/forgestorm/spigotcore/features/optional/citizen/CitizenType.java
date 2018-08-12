@@ -9,7 +9,7 @@ public enum CitizenType {
     BARTENDER("Bartender"),
     BUILDER("Epic Builds By"),
     DIRTY_HOBO("Dirty Old Hobo"),
-    LOBBY("Back To Lobby"),
+    LOBBY("Back To LobbyBungeeCommand"),
     MERCHANT("Item Merchant"),
     MERCHANT_BOAT("Boat Merchant"),
     MERCHANT_REALM("Realm Merchant"),

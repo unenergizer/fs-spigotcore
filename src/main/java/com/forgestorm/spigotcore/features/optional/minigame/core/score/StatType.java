@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.score;
 
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.core.games.sheersheep.statlisteners.PickupWool;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.statlisteners.FirstKill;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.statlisteners.StatListener;
@@ -35,9 +34,9 @@ public enum StatType {
         this.listener = listener;
     }
 
-    public StatListener registerListener(MinigameFramework plugin) {
+    public StatListener registerListener() {
         try {
-            return listener.getConstructor(MinigameFramework.class).newInstance(plugin);
+            return listener.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }

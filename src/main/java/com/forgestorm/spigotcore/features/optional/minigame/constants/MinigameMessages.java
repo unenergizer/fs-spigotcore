@@ -63,11 +63,11 @@ public enum MinigameMessages {
     GAME_ARENA_SPECTATOR_SUBTITLE("&7Relax, another minigame will start soon!"),
 
     //Join and Quit MinigameMessages
-    PLAYER_JOIN_LOBBY("&a+ &8[&7%s&8/&7%f&8] &7%e"),
-    PLAYER_QUIT_LOBBY("&c- &8[&7%s&8/&7%f&8] &7%e"),
+    PLAYER_JOIN_LOBBY("&8[&7%s&8/&7%f&8] &a+ &7%e"),
+    PLAYER_QUIT_LOBBY("&8[&7%s&8/&7%f&8] &c- &7%e"),
     PLAYER_QUIT_GAME("&8[&cQuit&8] &7%s"),
-    SPECTATOR_JOIN("&a+ &8[&7Spectator&8] &7%s"),
-    SPECTATOR_QUIT("&c- &8[&7Spectator&8] &7%s"),
+    SPECTATOR_JOIN("&8[&7Spectator&8] &a+ &7%s"),
+    SPECTATOR_QUIT("&8[&7Spectator&8] &c- &7%s"),
 
     //Scoreboard
     SB_GAME_STATUS_WAITING_1("Need players"),

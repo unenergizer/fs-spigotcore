@@ -47,7 +47,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 @Getter
 public class GameArena extends GameLocation {
 
-    private final ItemStack spectatorServerExit = new ItemBuilder(Material.WATCH).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Back To Lobby").build(true);
+    private final ItemStack spectatorServerExit = new ItemBuilder(Material.WATCH).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Back To LobbyBungeeCommand").build(true);
     private final ItemStack trackPlayers = new ItemBuilder(Material.SKULL_ITEM).setTitle(ChatColor.LIGHT_PURPLE + "Track Players").build(true);
     private final ItemStack flySpeed = new ItemBuilder(Material.MINECART).setTitle(ChatColor.YELLOW + "Move Speed").build(true);
     private final BossBarUtil spectatorBar = new BossBarUtil(MinigameMessages.BOSS_BAR_SPECTATOR_MESSAGE.toString());

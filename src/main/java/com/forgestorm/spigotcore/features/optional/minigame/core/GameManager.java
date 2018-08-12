@@ -182,7 +182,7 @@ public class GameManager extends BukkitRunnable implements Listener {
         Console.sendMessage("GameLobby setup ran");
 
         // Setup the stat manager.
-        statManager = new StatManager(plugin);
+        statManager = new StatManager();
     }
 
     /**
@@ -278,7 +278,7 @@ public class GameManager extends BukkitRunnable implements Listener {
         // End game and prevent a new game from starting up.
         endGame(false);
 
-        // Disable Game Arena and Game Lobby
+        // Disable Game Arena and Game LobbyBungeeCommand
         if (gameArena != null) gameArena.destroyGameLocation();
         if (gameLobby != null) gameLobby.destroyGameLocation();
 

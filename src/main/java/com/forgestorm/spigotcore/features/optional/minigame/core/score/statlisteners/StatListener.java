@@ -19,5 +19,6 @@ import org.bukkit.event.Listener;
  */
 
 public interface StatListener extends Listener {
+    void register();
     void deregister();
 }

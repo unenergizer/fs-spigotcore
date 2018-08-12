@@ -31,15 +31,10 @@ import java.util.stream.Collectors;
 
 public class StatManager {
 
-    private final MinigameFramework plugin;
     private final GameManager gameManager = GameManager.getInstance();
 
     private final Map<Player, Map<StatType, Double>> playerStats = new HashMap<>();
     private final List<StatListener> statListeners = new ArrayList<>();
-
-    public StatManager(MinigameFramework plugin) {
-        this.plugin = plugin;
-    }
 
     /**
      * Register all stats that the game will listen to during the game play.
@@ -63,7 +58,7 @@ public class StatManager {
 
         // Save stat stat listeners
         for (StatType stat : statType) {
-            statListeners.add(stat.registerListener(plugin));
+            statListeners.add(stat.registerListener());
         }
     }
 

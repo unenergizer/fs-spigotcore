@@ -1,7 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.score.statlisteners;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.StatType;
 import org.bukkit.Bukkit;
@@ -30,7 +29,8 @@ public class FirstKill implements StatListener {
 
     private boolean firstKillRegistered = false;
 
-    public FirstKill(MinigameFramework plugin) {
+    @Override
+    public void register() {
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
