@@ -59,6 +59,8 @@ public class PlayMidi implements FeatureOptional, InitCommands {
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         syncRunnable.cancel();
+
+        if (songPlayer == null) return;
         songPlayer.setPlaying(false);
         songPlayer.destroy();
     }

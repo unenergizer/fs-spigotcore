@@ -401,11 +401,11 @@ public class GameManager extends BukkitRunnable implements Listener {
         // Get all worlds
         for (String worldNumber : outerSection.getKeys(false)) {
 
-            String worldName = configuration.getString("Worlds." + worldNumber + ".Name");
-            String randSuffix = worldName + "-" + RandomString.getSaltString(10);
-            File file = new File(WorldDirectories.MINIGAME.getWorldDirectory() + File.separator + worldName + "_backup");
+            String originalName = configuration.getString("Worlds." + worldNumber + ".Name");
+            String saltedName = originalName + "-" + RandomString.getSaltString(10);
+            File file = new File(WorldDirectories.MINIGAME.getWorldDirectory() + File.separator + originalName + "_backup");
 
-            worldDataList.add(new WorldData(worldName + randSuffix, file, false, false));
+            worldDataList.add(new WorldData(saltedName, file, false, false));
         }
 
         // Return random world data.

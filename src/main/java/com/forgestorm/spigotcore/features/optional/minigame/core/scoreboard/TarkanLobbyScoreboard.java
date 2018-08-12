@@ -4,7 +4,6 @@ import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.Messages;
 import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.events.UpdateScoreboardEvent;
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.MinigameMessages;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.location.GameLobby;
@@ -12,8 +11,10 @@ import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.kit.
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.team.Team;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
+import com.forgestorm.spigotcore.util.file.FileUtil;
 import com.forgestorm.spigotcore.util.math.exp.PlayerExperience;
 import com.forgestorm.spigotcore.util.text.Console;
+import com.forgestorm.spigotcore.util.text.Text;
 import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,9 +40,9 @@ import org.bukkit.event.Listener;
 
 public class TarkanLobbyScoreboard implements Listener {
 
-    private final MinigameFramework plugin;
     private final GameManager gameManager;
     private final GameLobby gameLobby;
+    private final int maxStringLength = 42;
     private int gameWaitingAnimate = 1;
     private TitleManagerAPI titleManagerAPI = SpigotCore.PLUGIN.getTitleManager();
     private PlayerExperience expCalc = new PlayerExperience();
@@ -49,8 +50,6 @@ public class TarkanLobbyScoreboard implements Listener {
 
     public TarkanLobbyScoreboard() {
         gameManager = GameManager.getInstance();
-
-        plugin = GameManager.getInstance().getPlugin();
         gameLobby = gameManager.getGameLobby();
 
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
@@ -128,8 +127,10 @@ public class TarkanLobbyScoreboard implements Listener {
         Console.sendMessage("TarkanLobbyScoreboard - updatePlayerKit(" + player.getDisplayName() + ")");
         Kit kit = playerMinigameData.getSelectedKit();
         String kitName = kit.getKitColor() + kit.getKitName();
-        titleManagerAPI.setScoreboardValue(player, 11, trimString(MinigameMessages.TSB_KIT.toString() +
-                kitName));
+        titleManagerAPI.setScoreboardValue(
+                player,
+                11,
+                Text.trimString(MinigameMessages.TSB_KIT.toString() + kitName, maxStringLength));
     }
 
     /**
@@ -142,8 +143,10 @@ public class TarkanLobbyScoreboard implements Listener {
         Console.sendMessage("TarkanLobbyScoreboard - updatePlayerTeam(" + player.getDisplayName() + ")");
         Team team = playerMinigameData.getSelectedTeam();
         String teamName = team.getTeamColor() + team.getTeamName();
-        titleManagerAPI.setScoreboardValue(player, 10, trimString(MinigameMessages.TSB_TEAM.toString() +
-                teamName));
+        titleManagerAPI.setScoreboardValue(
+                player,
+                10,
+                Text.trimString(MinigameMessages.TSB_TEAM.toString() + teamName, maxStringLength));
     }
 
     /**
@@ -178,8 +181,8 @@ public class TarkanLobbyScoreboard implements Listener {
         titleManagerAPI.setScoreboardValue(player, 5, Messages.SCOREBOARD_BLANK_LINE_2.toString());
 
         // GAME
-        titleManagerAPI.setScoreboardValue(player, 6, trimString(MinigameMessages.TSB_GAME.toString() +
-                gameName));
+        titleManagerAPI.setScoreboardValue(player, 6, Text.trimString(MinigameMessages.TSB_GAME.toString() +
+                gameName, maxStringLength));
 
         // STATUS
         titleManagerAPI.setScoreboardValue(player, 7, MinigameMessages.TSB_STATUS.toString());
@@ -193,14 +196,14 @@ public class TarkanLobbyScoreboard implements Listener {
         // TEAM
         Team team = playerMinigameData.getSelectedTeam();
         String teamName = team.getTeamColor() + team.getTeamName();
-        titleManagerAPI.setScoreboardValue(player, 10, trimString(MinigameMessages.TSB_TEAM.toString() +
-                teamName));
+        titleManagerAPI.setScoreboardValue(player, 10, Text.trimString(MinigameMessages.TSB_TEAM.toString() +
+                teamName, maxStringLength));
 
         // KIT
         Kit kit = playerMinigameData.getSelectedKit();
         String kitName = kit.getKitColor() + kit.getKitName();
-        titleManagerAPI.setScoreboardValue(player, 11, trimString(MinigameMessages.TSB_KIT.toString() +
-                kitName));
+        titleManagerAPI.setScoreboardValue(player, 11, Text.trimString(MinigameMessages.TSB_KIT.toString() +
+                kitName, maxStringLength));
 
         // Blank line 4
         titleManagerAPI.setScoreboardValue(player, 12, MinigameMessages.TSB_BLANK_LINE_4.toString());
@@ -208,28 +211,7 @@ public class TarkanLobbyScoreboard implements Listener {
         // SERVER
         titleManagerAPI.setScoreboardValue(player, 13, Messages.SCOREBOARD_SERVER.toString());
 
-        titleManagerAPI.setScoreboardValue(player, 14, Bukkit.getServer().getServerName());
-    }
-
-    /**
-     * This will make sure a string is not longer than 14 characters.
-     * If it is, we will shorten the string.
-     *
-     * @param input The string we want to trim.
-     * @return The trimmed string.
-     */
-    private String trimString(String input) {
-        Console.sendMessage("TarkanLobbyScoreboard - trimString()");
-        final int maxWidth = 42; // Tarkan Scoreboard length is 42.
-
-        // Check to see if the input length is greater than the maxWidth of characters.
-        if (input.length() > maxWidth) {
-            int amountOver = input.length() - maxWidth;
-            return input.substring(0, input.length() - amountOver - 2) + "..";
-        } else {
-            // The input is less than 15 characters so it does not need to be trimmed.
-            return input;
-        }
+        titleManagerAPI.setScoreboardValue(player, 14, Text.trimString(FileUtil.getServerFolderName(), maxStringLength));
     }
 
     private boolean shouldAnimate = false;

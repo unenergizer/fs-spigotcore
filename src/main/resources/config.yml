@@ -42,7 +42,7 @@ Features:
   PlayerListText: true
   PlayerBossBar: false #false when minigames enabled
   CitizenManager: true
-  WorldSettings: true
+  WorldSettings: false #false when minigames enabled
   ChestLoot: true
   DragonEggLoot: true
   HiddenPaths: true

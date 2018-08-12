@@ -1,10 +1,27 @@
 package com.forgestorm.spigotcore.util.file;
 
+import com.forgestorm.spigotcore.SpigotCore;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.Comparator;
 
 public class FileUtil {
+
+    /**
+     * This will get the name of the folder that this plugins server is held.
+     *
+     * @return The name of the folder this server is contained.
+     */
+    public static String getServerFolderName() {
+        File serverFolder = null;
+        try {
+            serverFolder = SpigotCore.PLUGIN.getServer().getWorldContainer().getCanonicalFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return serverFolder.getName();
+    }
 
     public static void copyDirectory(File src, File dest) {
         if (src.isDirectory()) {
