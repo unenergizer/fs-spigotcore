@@ -33,6 +33,7 @@ public class Text {
      * Note: Tarkan Scoreboard length is 42.
      *
      * @param input The string we want to trim.
+     * @param maxWidth The max with allowed for the input.
      * @return The trimmed string.
      */
     public static String trimString(String input, int maxWidth) {

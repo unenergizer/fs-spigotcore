@@ -8,18 +8,25 @@ import com.forgestorm.spigotcore.features.required.database.ProfileData;
 import com.forgestorm.spigotcore.features.required.database.global.SqlSearchData;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * INFO:
@@ -41,14 +48,63 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
 
     private final Map<Player, Map<AbstractDatabaseFeature, ProfileData>> playerProfileDataMap = new ConcurrentHashMap<>();
 
+    private Queue<AsyncLoad> asyncLoadQueue = new ConcurrentLinkedQueue<>();
+    private Queue<AsyncSave> asyncSaveQueue = new ConcurrentLinkedQueue<>();
+    private Queue<PostLoadData> syncPostLoadQueue = new ConcurrentLinkedQueue<>();
+
+    private BukkitTask asyncLoadRunnable;
+    private BukkitTask asyncSaveRunnable;
+    private BukkitTask syncPostLoadRunnable;
+
     @Override
     public void initFeatureStart() {
 //        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+
+        asyncLoadRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Iterator<AsyncLoad> iterator = asyncLoadQueue.iterator(); iterator.hasNext(); ) {
+                    AsyncLoad asyncLoad = iterator.next();
+                    asyncLoad.run();
+                    iterator.remove();
+                }
+            }
+        }.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 1);
+
+        asyncSaveRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Iterator<AsyncSave> iterator = asyncSaveQueue.iterator(); iterator.hasNext(); ) {
+                    AsyncSave asyncSave = iterator.next();
+                    asyncSave.run();
+                    iterator.remove();
+                }
+            }
+        }.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 1);
+
+        syncPostLoadRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Iterator<PostLoadData> iterator = syncPostLoadQueue.iterator(); iterator.hasNext(); ) {
+                    PostLoadData data = iterator.next();
+                    Bukkit.getPluginManager().callEvent(new FeatureProfileDataLoadEvent(data.getPlayer(), data.getFeature(), data.getProfileData()));
+                    addProfileData(data.getPlayer(), data.getFeature(), data.getProfileData());
+                    iterator.remove();
+                }
+            }
+        }.runTaskTimer(SpigotCore.PLUGIN, 0, 1);
     }
 
     @Override
     public void initFeatureClose() {
 //        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
+
+        asyncLoadRunnable.cancel();
+        asyncSaveRunnable.cancel();
+        syncPostLoadRunnable.cancel();
+        asyncLoadQueue.clear();
+        asyncSaveQueue.clear();
+        syncPostLoadQueue.clear();
     }
 
     /**
@@ -94,7 +150,7 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      * @param feature The features to get data for.
      */
     public void asyncDatastoreLoad(Player player, AbstractDatabaseFeature feature) {
-        new AsyncLoad(player, feature).runTaskAsynchronously(SpigotCore.PLUGIN);
+        asyncLoadQueue.add(new AsyncLoad(player, feature));
     }
 
     /**
@@ -105,13 +161,13 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      * @param profileData The data we intend to save.
      */
     public void asyncDatastoreSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
-        new AsyncSave(player, feature, profileData).runTaskAsynchronously(SpigotCore.PLUGIN);
+        asyncSaveQueue.add(new AsyncSave(player, feature, profileData));
     }
 
     /**
      * Runs an {@link AbstractDatabaseFeature} MySQL load query asynchronously.
      */
-    private class AsyncLoad extends BukkitRunnable {
+    private class AsyncLoad {
 
         private Player player;
         private AbstractDatabaseFeature feature;
@@ -124,7 +180,6 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
             Console.sendMessage("&7[&9Database&7] &aLoading data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
         }
 
-        @Override
         public void run() {
 
             ProfileData[] profileData = new ProfileData[1];
@@ -147,20 +202,31 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
                 Console.sendMessage("&7[&9Database&7] &aLoading complete via &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new FeatureProfileDataLoadEvent(player, feature, profileData[0]));
-                    addProfileData(player, feature, profileData[0]);
-                }
-            }.runTask(SpigotCore.PLUGIN);
+            syncPostLoadQueue.add(new PostLoadData(player, feature, profileData[0]));
+
+//            new BukkitRunnable() {
+//                @Override
+//                public void run() {
+//                    Bukkit.getPluginManager().callEvent(new FeatureProfileDataLoadEvent(player, feature, profileData[0]));
+//                    addProfileData(player, feature, profileData[0]);
+//                }
+//            }.runTask(SpigotCore.PLUGIN);
         }
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    class PostLoadData {
+        private Player player;
+        private AbstractDatabaseFeature feature;
+        private ProfileData profileData;
     }
 
     /**
      * Runs an {@link AbstractDatabaseFeature} MySQL save query asynchronously.
      */
-    private class AsyncSave extends BukkitRunnable {
+    private class AsyncSave {
 
         private Player player;
         private AbstractDatabaseFeature<ProfileData> feature;
@@ -175,7 +241,6 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
             Console.sendMessage("&7[&9Database&7] &aSaving data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
         }
 
-        @Override
         public void run() {
             try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
 
