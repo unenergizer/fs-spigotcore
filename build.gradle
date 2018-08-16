@@ -116,11 +116,11 @@ repositories {
         url 'http://repo.citizensnpcs.co/'
     }
 
-//    maven {
-//        name 'BungeeCord'
-//        url 'https://oss.sonatype.org/content/repositories/snapshots'
-//    }
-//
+    maven {
+        name 'BungeeCord'
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+
 //    maven {
 //        name 'sk89q-snapshots'
 //        url 'https://maven.sk89q.com/repo'
@@ -141,6 +141,7 @@ dependencies {
 
     compileOnly 'com.destroystokyo.paper:paper-api:1.12-R0.1-SNAPSHOT'
 
+    provided group: 'net.md-5', name: 'bungeecord-api', version: '1.10-SNAPSHOT'
     provided group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.23-SNAPSHOT'
     provided group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.3.1-SNAPSHOT'
     provided group: 'LibsDisguises', name: 'LibsDisguises', version: '9.5.2-SNAPSHOT'
@@ -149,7 +150,5 @@ dependencies {
     provided files("src/main/Libs/Item-NBT-API.jar")
 
     //compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT' // Giving PaperSpigot a try. If it sucks, uncomment :)
-
-    //provided group: 'net.md-5', name: 'bungeecord-api', version: '1.10-SNAPSHOT'
     //provided group: 'com.sk89q', name: 'worldedit', version: '6.0.0-SNAPSHOT'
 }

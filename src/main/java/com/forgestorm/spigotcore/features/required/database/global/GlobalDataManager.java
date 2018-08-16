@@ -33,9 +33,9 @@ public class GlobalDataManager extends FeatureRequired implements Listener {
     private final Map<Player, GlobalPlayerData> playerProfileDataMap = new ConcurrentHashMap<>();
     private final List<BaseGlobalData> globalDataLoaders = new ArrayList<>();
 
-    private Queue<AsyncLoad> asyncLoadQueue = new ConcurrentLinkedQueue<>();
-    private Queue<AsyncSave> asyncSaveQueue = new ConcurrentLinkedQueue<>();
-    private Queue<PostLoadData> syncPostLoadQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<AsyncLoad> asyncLoadQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<AsyncSave> asyncSaveQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<PostLoadData> syncPostLoadQueue = new ConcurrentLinkedQueue<>();
 
     private BukkitTask asyncLoadRunnable;
     private BukkitTask asyncSaveRunnable;
@@ -122,7 +122,7 @@ public class GlobalDataManager extends FeatureRequired implements Listener {
 
         private Player player;
 
-        public void run() {
+        void run() {
 
             GlobalPlayerData profileData = new GlobalPlayerData();
 
@@ -166,7 +166,7 @@ public class GlobalDataManager extends FeatureRequired implements Listener {
 
         private Player player;
 
-        public void run() {
+        void run() {
             try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
                 for (BaseGlobalData baseGlobalData : globalDataLoaders) {
                     baseGlobalData.databaseSave(player, connection);

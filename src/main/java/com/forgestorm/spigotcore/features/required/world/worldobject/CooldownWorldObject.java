@@ -13,7 +13,7 @@ public abstract class CooldownWorldObject extends BaseWorldObject {
     @Getter
     private int timeLeft = 0;
 
-    public CooldownWorldObject(Location location, int defaultCooldownTime) {
+    protected CooldownWorldObject(Location location, int defaultCooldownTime) {
         super(location);
         this.DEFAULT_COOLDOWN_TIME = defaultCooldownTime;
     }

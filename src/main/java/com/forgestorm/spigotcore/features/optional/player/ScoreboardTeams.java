@@ -19,7 +19,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-public class ScoreboardTeams implements FeatureOptional, Listener {
+public class ScoreboardTeams implements FeatureOptional {
 
     private Scoreboard scoreboard;
     private Objective objectivePlayerList;
@@ -27,8 +27,6 @@ public class ScoreboardTeams implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         enableScoreboard();
         setupTeams();
 
@@ -42,10 +40,6 @@ public class ScoreboardTeams implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
-        PlayerRankChangeEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
-
         disableScoreboard();
     }
 

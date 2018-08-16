@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+@SuppressWarnings("WeakerAccess")
 public class AccountManager extends FeatureRequired implements Listener {
 
     private final PlayerExperience playerExperience = new PlayerExperience();

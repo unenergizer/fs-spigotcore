@@ -21,8 +21,8 @@ public enum Messages {
     ECONOMY_PURCHASE_SUCCESS("&aYour purchase was successful!!"),
     ECONOMY_PURCHASE_FAILED("&cYou do not have enough money to make this purchase."),
 
-    PROFESSION_ACTION_FAILED("&cYour profession action was unsuccessful."),
-    PROFESSION_NOT_LEARNED("&cYou have not learned this profession."),
+    PROFESSION_ACTION_FAILED("&cYour skill action was unsuccessful."),
+    PROFESSION_NOT_LEARNED("&cYou have not learned this skill."),
     PROFESSION_LEVEL_NOT_HIGH_ENOUGH("&cYou don't have the required level to use this tool."),
     PROFESSION_WRONG_TOOL("&cYou're using the wrong tool for this."),
 

@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.lobby;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -9,27 +8,18 @@ import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 
-public class DoubleJump implements FeatureOptional, Listener {
+public class DoubleJump implements FeatureOptional {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         Bukkit.getOnlinePlayers().forEach(this::setupPlayer);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerJoinEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
-        PlayerMoveEvent.getHandlerList().unregister(this);
-        PlayerToggleFlightEvent.getHandlerList().unregister(this);
-        EntityDamageEvent.getHandlerList().unregister(this);
-
         Bukkit.getOnlinePlayers().forEach(this::removePlayer);
     }
 
@@ -43,19 +33,19 @@ public class DoubleJump implements FeatureOptional, Listener {
         player.setFlying(false);
     }
 
-    /**
-     * Test to see if the player is in a main lobby world.
-     * The main lobby world is:
-     * -Bukkit.getWorlds().get(0);
-     * -Bukkit.getWorlds().get("World");
-     *
-     * @param player The player we will test.
-     * @return True if they are in the main world, false otherwise.
-     */
-    private boolean inOtherWorld(Player player) {
-//        return !player.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName());
-        return false; // Enables double jump on all worlds.
-    }
+//    /**
+//     * Test to see if the player is in a main lobby world.
+//     * The main lobby world is:
+//     * -Bukkit.getWorlds().get(0);
+//     * -Bukkit.getWorlds().get("World");
+//     *
+//     * @param player The player we will test.
+//     * @return True if they are in the main world, false otherwise.
+//     */
+//    private boolean inOtherWorld(Player player) {
+////        return !player.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName());
+//        return false; // Enables double jump on all worlds.
+//    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -71,7 +61,7 @@ public class DoubleJump implements FeatureOptional, Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (inOtherWorld(player)) return;
+//        if (inOtherWorld(player)) return;
         if (player.getGameMode() == GameMode.CREATIVE) return;
         if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) return;
 
@@ -84,7 +74,7 @@ public class DoubleJump implements FeatureOptional, Listener {
     public void onPlayerFly(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
 
-        if (inOtherWorld(player)) return;
+//        if (inOtherWorld(player)) return;
         if (player.getGameMode() == GameMode.CREATIVE) return;
 
         // Stop double jump

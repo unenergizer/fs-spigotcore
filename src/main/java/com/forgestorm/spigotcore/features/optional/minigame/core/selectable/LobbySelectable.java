@@ -5,7 +5,7 @@ import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.PedestalLocations;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
-import com.forgestorm.spigotcore.features.optional.minigame.util.world.PlatformBuilder;
+import com.forgestorm.spigotcore.features.optional.minigame.world.PlatformBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -42,7 +42,7 @@ public abstract class LobbySelectable implements Listener {
     protected final MinigameFramework plugin = GameManager.getInstance().getPlugin();
     protected final GameManager gameManager = GameManager.getInstance();
     protected final PlatformBuilder platformBuilder = new PlatformBuilder();
-    protected List<PedestalLocations> pedestalLocations = new ArrayList<>();
+    protected final List<PedestalLocations> pedestalLocations = new ArrayList<>();
 
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
@@ -56,11 +56,11 @@ public abstract class LobbySelectable implements Listener {
         pedestalLocations.clear();
     }
 
-    public abstract void setup();
+    protected abstract void setup();
 
-    public abstract void destroy();
+    protected abstract void destroy();
 
-    public abstract void toggleInteract(Player player, Entity entity);
+    protected abstract void toggleInteract(Player player, Entity entity);
 
     /**
      * This will spawn the selectable entity in the lobby world.

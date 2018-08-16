@@ -44,8 +44,8 @@ public class TarkanLobbyScoreboard implements Listener {
     private final GameLobby gameLobby;
     private final int maxStringLength = 42;
     private int gameWaitingAnimate = 1;
-    private TitleManagerAPI titleManagerAPI = SpigotCore.PLUGIN.getTitleManager();
-    private PlayerExperience expCalc = new PlayerExperience();
+    private final TitleManagerAPI titleManagerAPI = SpigotCore.PLUGIN.getTitleManager();
+    private final PlayerExperience expCalc = new PlayerExperience();
 
 
     public TarkanLobbyScoreboard() {

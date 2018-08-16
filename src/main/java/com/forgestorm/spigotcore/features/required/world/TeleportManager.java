@@ -22,7 +22,7 @@ import java.util.List;
 
 public class TeleportManager extends FeatureRequired {
 
-    private List<TeleportData> teleportDataList = new ArrayList<>();
+    private final List<TeleportData> teleportDataList = new ArrayList<>();
     private Location endGateway;
     private BukkitTask animationTick;
 

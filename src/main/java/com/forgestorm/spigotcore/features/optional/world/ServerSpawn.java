@@ -9,6 +9,7 @@ import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
 import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.events.PlayerTeleportSpawnEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -19,9 +20,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -37,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Simple features to control where a player spawns in the world.
  * If the player fall's into the void, we can teleport them back to the main spawn.
  */
-public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig, Listener {
+public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig {
 
     private boolean spawnOnVoidDamage;
     private CommandOptions commandOptions;
@@ -48,7 +50,6 @@ public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig, 
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         Bukkit.getWorlds().get(0).setSpawnLocation(
                 (int) spawnLocation.getX(),
                 (int) spawnLocation.getY(),
@@ -72,10 +73,6 @@ public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig, 
             spawnTimer.cancel();
             timeLeft.clear();
         }
-
-        PlayerMoveEvent.getHandlerList().unregister(this);
-        PlayerSpawnLocationEvent.getHandlerList().unregister(this);
-        EntityDamageEvent.getHandlerList().unregister(this);
     }
 
     @Override
@@ -131,13 +128,54 @@ public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig, 
      * Consistent teleport with added effects.
      *
      * @param player The player to teleport.
+     */
+    private void teleport(Player player) {
+        teleport(player, null);
+    }
+
+    /**
+     * Consistent teleport with added effects.
+     *
+     * @param player The player to teleport.
      * @param sound  The sound to play when a player is teleported.
      */
     private void teleport(Player player, CommonSounds sound) {
         player.teleport(spawnLocation);
         player.setFallDistance(0F);
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 100));
-        sound.play(player);
+        if (sound != null) sound.play(player);
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerPortalEvent event) {
+        Player player = event.getPlayer();
+
+        //If player enters a Ender portal, teleport them back to spawn pad.
+        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)) {
+
+            //Cancel teleportation to the END_GAME
+            event.setCancelled(true);
+
+            new BukkitRunnable() {
+                public void run() {
+
+                    //Teleport the player.
+                    teleport(player, CommonSounds.ACTION_SUCCESS);
+
+                    cancel();
+                }
+            }.runTaskLater(SpigotCore.PLUGIN, 1L);
+        }
+
+//        //If player enters a Ender portal, teleport them back to spawn pad.
+//        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
+//
+//            // Cancel teleportation to the NETHER
+//            event.setCancelled(true);
+//
+//            // Send player to the lobby
+//            player.chat("/lobby");
+//        }
     }
 
     @EventHandler
@@ -191,6 +229,11 @@ public class ServerSpawn implements FeatureOptional, InitCommands, LoadsConfig, 
                 cancel();
             }
         }.runTaskLater(SpigotCore.PLUGIN, 1L);
+    }
+
+    @EventHandler
+    public void onPlayerTeleportSpawn(PlayerTeleportSpawnEvent event) {
+        teleport(event.getPlayer());
     }
 
     @AllArgsConstructor

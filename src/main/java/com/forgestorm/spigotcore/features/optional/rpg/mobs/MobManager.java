@@ -12,7 +12,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.io.File;
@@ -20,14 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig, Listener {
+public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig {
 
     private final Map<String, MobType> mobTypes = new HashMap<>();
     private final Map<Location, MobSpawner> mobSpawners = new HashMap<>();
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         addSpawnersToWorldObjectManager();
 
         Console.sendMessage("[MobManager] MobTypes Loaded: " + Integer.toString(mobTypes.size()));
@@ -36,8 +34,6 @@ public class MobManager implements FeatureOptional, ShutdownTask, LoadsConfig, L
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        EntityDamageEvent.getHandlerList().unregister(this);
-
         removeSpawnersFromWorldObjectManager();
     }
 

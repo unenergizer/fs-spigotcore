@@ -10,7 +10,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.File;
@@ -18,22 +17,18 @@ import java.io.File;
 /**
  * Simple class to change the PlayerList header and footer text.
  */
-public class PlayerListText implements FeatureOptional, LoadsConfig, Listener {
+public class PlayerListText implements FeatureOptional, LoadsConfig {
 
     private String header;
     private String footer;
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         for (Player player : Bukkit.getOnlinePlayers()) setPlayerListText(player);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerJoinEvent.getHandlerList().unregister(this);
-
         for (Player player : Bukkit.getOnlinePlayers())
             SpigotCore.PLUGIN.getTitleManager().setHeaderAndFooter(player, "", "");
     }

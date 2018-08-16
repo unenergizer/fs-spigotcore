@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class RealmDoorway extends BaseWorldObject {
 
-    private String doorOwnerName;
+    private final String doorOwnerName;
     private Hologram realmDoorTitle;
     private Location topPortalBlock;
     private Location bottomPortalBlock;

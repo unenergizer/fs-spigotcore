@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  *
  * @author unenergizer
  */
+@SuppressWarnings("unused")
 public class Hologram {
 
     private ArrayList<ArmorStand> armorStands = new ArrayList<>();
@@ -32,18 +34,18 @@ public class Hologram {
      * @param location       The location the hologram will be spawned.
      */
     public Hologram(String singleLineText, Location location) {
-        this.multilineText = new ArrayList<>(Arrays.asList(singleLineText));
+        this.multilineText = new ArrayList<>(Collections.singletonList(singleLineText));
         this.location = location;
     }
 
     /**
-     * Creates a new instance of a Hologram that contains a single line of text.
+     * Creates a new instance of a Hologram that contains one ore more lines of text.
      *
-     * @param singleLineText The text that will be displayed on the hologram.
+     * @param multiLineText The text that will be displayed on the hologram.
      * @param location       The location the hologram will be spawned.
      */
-    public Hologram(Location location, String ... singleLineText) {
-        this.multilineText = new ArrayList<>(Arrays.asList(singleLineText));
+    public Hologram(Location location, String ... multiLineText) {
+        this.multilineText = new ArrayList<>(Arrays.asList(multiLineText));
         this.location = location;
     }
 

@@ -1,32 +1,30 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.location;
 
 import com.forgestorm.spigotcore.SpigotCore;
+import com.forgestorm.spigotcore.features.events.PlayerTeleportSpawnEvent;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.MinigameMessages;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.location.access.LobbyAccess;
 import com.forgestorm.spigotcore.features.optional.minigame.core.scoreboard.TarkanLobbyScoreboard;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.kit.KitSelectable;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.team.TeamSelectable;
-import com.forgestorm.spigotcore.features.optional.minigame.util.display.TipAnnouncer;
-import com.forgestorm.spigotcore.features.optional.minigame.util.world.PlatformBuilder;
+import com.forgestorm.spigotcore.features.optional.minigame.world.PlatformBuilder;
 import com.forgestorm.spigotcore.util.display.BossBarUtil;
+import com.forgestorm.spigotcore.util.display.TipAnnouncer;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCombustEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /*********************************************************************************
  *
@@ -48,23 +46,22 @@ public class GameLobby extends GameLocation {
 
     private final PlatformBuilder platformBuilder = new PlatformBuilder();
     private final BossBarUtil bar = new BossBarUtil(MinigameMessages.BOSS_BAR_LOBBY_MESSAGE.toString());
-    private final Location spawn = new Location(Bukkit.getWorlds().get(0), 0.5, 101, 0.5);
     private final int maxCountdown = 30;
     private TarkanLobbyScoreboard tarkanLobbyScoreboard;
-//    private DoubleJump doubleJump;
+    //    private DoubleJump doubleJump;
     private TipAnnouncer tipAnnouncer;
     private KitSelectable kitSelectable;
     private TeamSelectable teamSelectable;
     private boolean countdownStarted = false;
     @Setter
     private int countdown = maxCountdown;
-//    private ProfessionToggle professionToggle;
+//    private SkillToggle skillToggle;
 
     @Override
     public void setupGameLocation() {
         // Initialize needed classes
         tarkanLobbyScoreboard = new TarkanLobbyScoreboard();
-//        doubleJump = new DoubleJump(plugin);
+//     TODO:   doubleJump = new DoubleJump(plugin);
 
         // Kit Setup
         kitSelectable = new KitSelectable();
@@ -75,14 +72,14 @@ public class GameLobby extends GameLocation {
         teamSelectable.onEnable();
 
         // Display core tips
-        tipAnnouncer = new TipAnnouncer(GameManager.getInstance().getPlugin(), GameManager.getInstance().getGameSelector().getMinigame().getGamePlayTipsList());
+        tipAnnouncer = new TipAnnouncer(GameManager.getInstance().getGameSelector().getMinigame().getGamePlayTipsList());
 
         // Register Listeners
         Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
-        // Enable Professions
-//        professionToggle = new ProfessionToggle(plugin.getSpigotCore());
-//        professionToggle.enableProfessions();
+        // TODO: Enable Skills
+//        skillToggle = new SkillToggle(plugin.getSpigotCore());
+//        skillToggle.enableSkills();
 
         // Set weather
         World world = Bukkit.getWorlds().get(0);
@@ -110,17 +107,15 @@ public class GameLobby extends GameLocation {
         // Stop core play tips.
         tipAnnouncer.setShowTips(false);
 
-        // Test Profession Implementation
-//        professionToggle.disableProfessions();
-//        Console.sendMessage(Boolean.toString(professionToggle.isProfessionsEnabled()));
+        // TODO: Test Skill Implementation
+//        skillToggle.disableSkills();
+//        Console.sendMessage(Boolean.toString(skillToggle.isSkillsEnabled()));
 
         // Unregister stat listeners
         EntityCombustEvent.getHandlerList().unregister(this);
-        EntityDamageEvent.getHandlerList().unregister(this);
         FoodLevelChangeEvent.getHandlerList().unregister(this);
         ItemSpawnEvent.getHandlerList().unregister(this);
         PlayerDropItemEvent.getHandlerList().unregister(this);
-        PlayerTeleportEvent.getHandlerList().unregister(this);
         WeatherChangeEvent.getHandlerList().unregister(this);
 
         // All players quit
@@ -201,17 +196,10 @@ public class GameLobby extends GameLocation {
      *
      * @param player The player to teleport.
      */
-    private void sendToSpawn(Player player) {
+    public void sendToSpawn(Player player) {
         Console.sendMessage("GameLobby - sendToSpawn()");
         //Teleport the player.
-        player.teleport(spawn);
-        player.setFallDistance(0F);
-
-        //Play sound
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASS, 1F, .5F);
-
-        //Give player potion effect.
-        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, 100));
+        Bukkit.getServer().getPluginManager().callEvent(new PlayerTeleportSpawnEvent(player));
     }
 
     /**
@@ -225,32 +213,6 @@ public class GameLobby extends GameLocation {
     @EventHandler
     public void onEntityCombust(EntityCombustEvent event) {
         event.setCancelled(true);
-    }
-
-    /**
-     * We listen to the EntityDamageEvent to prevent players
-     * from taking damage while in the core lobby.
-     * <p>
-     * Additionally we listen for VOID damage. If a player
-     * jumps into the void, we will teleport them back to
-     * the main spawn position.
-     *
-     * @param event This is a Bukkit EntityDamageEvent.
-     */
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        event.setCancelled(true); // Prevent all damage in the lobby.
-        if (event.getCause() != EntityDamageEvent.DamageCause.VOID) return;
-        if (!(event.getEntity() instanceof Player)) return;
-
-        //Run on the next tick to prevent teleport bug.
-        new BukkitRunnable() {
-            public void run() {
-                sendToSpawn((Player) event.getEntity());
-
-                cancel();
-            }
-        }.runTaskLater(SpigotCore.PLUGIN, 1L);
     }
 
     /**
@@ -304,37 +266,5 @@ public class GameLobby extends GameLocation {
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
         if (event.toWeatherState()) event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onPlayerTeleport(PlayerPortalEvent event) {
-        Player player = event.getPlayer();
-
-        //If player enters a Ender portal, teleport them back to spawn pad.
-        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)) {
-
-            //Cancel teleportation to the END_GAME
-            event.setCancelled(true);
-
-            new BukkitRunnable() {
-                public void run() {
-
-                    //Teleport the player.
-                    sendToSpawn(player);
-
-                    cancel();
-                }
-            }.runTaskLater(SpigotCore.PLUGIN, 1L);
-        }
-
-        //If player enters a Ender portal, teleport them back to spawn pad.
-        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
-
-            // Cancel teleportation to the NETHER
-            event.setCancelled(true);
-
-            // Send player to the lobby
-            player.chat("/lobby");
-        }
     }
 }

@@ -11,6 +11,8 @@ public enum FilePaths {
     CITIZENS("citizen/Citizens.yml"),
     CITIZENS_MESSAGES("citizen/CitizenMessages.yml"),
 
+    JAZZY_JUKEBOX("gadget/JazzyJukebox.yml"),
+
     MOB_TYPES("mobs/MobTypes.yml"),
     MOB_SPAWNERS("mobs/MobSpawners.yml"),
 
@@ -23,11 +25,11 @@ public enum FilePaths {
     RPG_GAME_WORLDS("rpg/GameWorlds.yml"),
     RPG_ITEM_DATABASE("rpg/ItemDatabase.yml"),
 
-    PROFESSION_FARMING("professions/Farming.yml"),
-    PROFESSION_FISHING("professions/Fishing.yml"),
-    PROFESSION_COOKING_AND_SMELTING("professions/CookingAndSmelting.yml"),
-    PROFESSION_WOOD_CUTTING("professions/WoodCutting.yml"),
-    PROFESSION_MINING("professions/Mining.yml"),
+    PROFESSION_FARMING("skills/Farming.yml"),
+    PROFESSION_FISHING("skills/Fishing.yml"),
+    PROFESSION_COOKING_AND_SMELTING("skills/CookingAndSmelting.yml"),
+    PROFESSION_WOOD_CUTTING("skills/WoodCutting.yml"),
+    PROFESSION_MINING("skills/Mining.yml"),
 
     CHEST_LOOT("world/ChestLootLocations.yml"),
     DRAGON_EGG_LOOT("world/DragonEggLocations.yml"),

@@ -27,7 +27,7 @@ public abstract class AbstractDatabaseFeature<T> implements FeatureOptional {
 
     public abstract ProfileData firstTimeSave(Player player, Connection connection) throws SQLException;
 
-    public abstract SqlSearchData searchForData(Player player, Connection connection) throws SQLException;
+    public abstract SqlSearchData searchForData(Player player, Connection connection);
 
     /**
      * Gets ProfileData for the player from the FeatureDataManager for this specific features.
@@ -36,6 +36,7 @@ public abstract class AbstractDatabaseFeature<T> implements FeatureOptional {
      * @return A ProfileData that contains saved information.
      */
     public T getProfileData(Player player) {
+        //noinspection unchecked
         return (T) SpigotCore.PLUGIN.getFeatureDataManager().getProfileData(player, this);
     }
 

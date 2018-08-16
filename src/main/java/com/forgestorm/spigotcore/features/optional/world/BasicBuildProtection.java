@@ -26,25 +26,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BasicBuildProtection implements FeatureOptional, Listener {
+public class BasicBuildProtection implements FeatureOptional {
 
     private DoorResetTimer doorResetTimer;
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         doorResetTimer = new DoorResetTimer();
         doorResetTimer.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        BlockBreakEvent.getHandlerList().unregister(this);
-        BlockPlaceEvent.getHandlerList().unregister(this);
-        PlayerInteractEntityEvent.getHandlerList().unregister(this);
-        PlayerInteractEvent.getHandlerList().unregister(this);
-        HangingBreakByEntityEvent.getHandlerList().unregister(this);
+        doorResetTimer.cancel();
     }
 
     private boolean preventBuild(Player player) {
@@ -104,7 +98,7 @@ public class BasicBuildProtection implements FeatureOptional, Listener {
         event.setCancelled(event.getEntity().getType() == EntityType.PAINTING && preventBuild((Player) event.getRemover()));
     }
 
-    public class DoorResetTimer extends BukkitRunnable {
+    class DoorResetTimer extends BukkitRunnable {
 
         private final Map<Block, Integer> countDowns = new ConcurrentHashMap<>();
 

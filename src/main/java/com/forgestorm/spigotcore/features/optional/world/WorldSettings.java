@@ -15,7 +15,6 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -32,7 +31,7 @@ import java.io.File;
  * recreating the wheel, we set some "world game rules" instead of writing
  * custom bukkit listeners to produce the exact same effect.
  */
-public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
+public class WorldSettings implements FeatureOptional, LoadsConfig {
 
     private int timeOfDay;
     private boolean pvp;
@@ -48,8 +47,6 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -60,13 +57,6 @@ public class WorldSettings implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        BlockIgniteEvent.getHandlerList().unregister(this);
-        ChunkLoadEvent.getHandlerList().unregister(this);
-        EntityChangeBlockEvent.getHandlerList().unregister(this);
-        EntityCombustEvent.getHandlerList().unregister(this);
-        EntityDamageByEntityEvent.getHandlerList().unregister(this);
-        EntityDamageEvent.getHandlerList().unregister(this);
-        PlayerTeleportEvent.getHandlerList().unregister(this);
     }
 
     @Override

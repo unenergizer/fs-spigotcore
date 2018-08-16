@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
  *
  * @author xYourFreindx
  */
+@SuppressWarnings("WeakerAccess")
 public enum TimeUnit {
 
     SEC("second", 1, 's'),

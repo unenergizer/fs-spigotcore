@@ -7,7 +7,7 @@ import com.forgestorm.spigotcore.features.optional.minigame.constants.PedestalLo
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.LobbySelectable;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
-import com.forgestorm.spigotcore.features.optional.minigame.util.world.PedestalMapping;
+import com.forgestorm.spigotcore.features.optional.minigame.world.PedestalMapping;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

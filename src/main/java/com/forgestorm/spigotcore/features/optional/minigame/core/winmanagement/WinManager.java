@@ -1,7 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.MinigameMessages;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.team.Team;
@@ -9,7 +8,7 @@ import com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement.w
 import com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement.winevents.LastManStandingWinEvent;
 import com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement.winevents.LastTeamStandingWinEvent;
 import com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement.winevents.TeamTopScoreWinEvent;
-import com.forgestorm.spigotcore.features.optional.minigame.util.MapUtil;
+import com.forgestorm.spigotcore.util.collection.MapUtil;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
 import lombok.Getter;
 import org.bukkit.Bukkit;

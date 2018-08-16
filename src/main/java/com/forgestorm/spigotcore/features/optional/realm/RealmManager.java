@@ -18,7 +18,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RealmManager extends AbstractDatabaseFeature<RealmProfileData> implements FeatureOptional, InitCommands, Listener {
+public class RealmManager extends AbstractDatabaseFeature<RealmProfileData> implements FeatureOptional, InitCommands {
 
 
     private final Map<Player, Realm> openRealmsMap = new ConcurrentHashMap<>();
@@ -43,20 +42,12 @@ public class RealmManager extends AbstractDatabaseFeature<RealmProfileData> impl
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         realmCooldownTimer = new RealmCooldownTimer();
         realmCooldownTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 20);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerInteractEvent.getHandlerList().unregister(this);
-        BlockDamageEvent.getHandlerList().unregister(this);
-        EntityDamageByEntityEvent.getHandlerList().unregister(this);
-        BlockPhysicsEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
-
         for (Map.Entry<Player, Realm> entry : openRealmsMap.entrySet()) {
             closeRealm(entry.getKey());
         }
@@ -321,7 +312,7 @@ public class RealmManager extends AbstractDatabaseFeature<RealmProfileData> impl
 
         private final String message;
 
-        public String getMessage() {
+        String getMessage() {
             return Text.color(message);
         }
     }

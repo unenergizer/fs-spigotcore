@@ -3,7 +3,6 @@ package com.forgestorm.spigotcore.features.optional.world.loot;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
-import com.forgestorm.spigotcore.features.events.WorldObjectAddEvent;
 import com.forgestorm.spigotcore.features.events.WorldObjectSpawnEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.world.worldobject.AsyncWorldObjectTick;
@@ -20,7 +19,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -29,7 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
+public class DragonEggLoot implements FeatureOptional, LoadsConfig {
 
     private static final int MAX_EGG_TIMEOUT = 30;
 
@@ -40,17 +38,12 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         hologramText.add("&5&lTP EGG GAME");
         hologramText.add(ChatColor.BOLD + "RIGHT-CLICK");
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        WorldObjectAddEvent.getHandlerList().unregister(this);
-        PlayerInteractEvent.getHandlerList().unregister(this);
-
         dragonEggMap.stream()
                 .filter(baseWorldObject -> baseWorldObject instanceof DragonEgg)
                 .forEach(baseWorldObject -> SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(baseWorldObject));
@@ -80,7 +73,7 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
             double z = config.getDouble("Locations." + i + ".z");
 
             Location location = new Location(world, x, y, z);
-            DragonEgg dragonEgg = new DragonEgg(location, MAX_EGG_TIMEOUT);
+            DragonEgg dragonEgg = new DragonEgg(location);
 
             dragonEggMap.add(dragonEgg);
             SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(location, dragonEgg);
@@ -160,10 +153,10 @@ public class DragonEggLoot implements FeatureOptional, LoadsConfig, Listener {
      */
     private class DragonEgg extends CooldownWorldObject implements AsyncWorldObjectTick {
 
-        private Hologram hologram;
+        private final Hologram hologram;
 
-        DragonEgg(Location location, int defaultCooldownTime) {
-            super(location, defaultCooldownTime);
+        DragonEgg(Location location) {
+            super(location, DragonEggLoot.MAX_EGG_TIMEOUT);
 
             //Spawn the hologram.
             double x = location.getX() + .5;

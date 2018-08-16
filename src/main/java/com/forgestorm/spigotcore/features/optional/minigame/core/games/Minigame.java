@@ -154,6 +154,7 @@ public abstract class Minigame implements Listener {
      * @param entity The entity we want to check.
      * @return True if the player is a spectator, false otherwise.
      */
+    @SuppressWarnings("WeakerAccess")
     protected boolean isSpectator(Entity entity) {
         return entity instanceof Player && getPlayerMinigameData((Player) entity).isSpectator();
     }

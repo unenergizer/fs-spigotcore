@@ -1,5 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.games.mobmurder;
 
+import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.games.Minigame;
@@ -49,7 +50,7 @@ public class MobMurder extends Minigame {
     private final List<EntityType> allowedMobs = new ArrayList<>();
     private SpawnMobs spawnMobs;
     private ArenaPointsCounter arenaPointsCounter;
-    private Random rn = new Random();
+    private final Random rn = new Random();
 
     public MobMurder(MinigameFramework plugin) {
         super(plugin);
@@ -68,8 +69,8 @@ public class MobMurder extends Minigame {
         arenaPointsCounter.addAllPlayers();
 
         // Spawn mobs
-        spawnMobs = new SpawnMobs(plugin);
-        spawnMobs.run();
+        spawnMobs = new SpawnMobs();
+        spawnMobs.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
     }
 
     @Override

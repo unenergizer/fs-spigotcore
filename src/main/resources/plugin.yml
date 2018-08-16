@@ -1,6 +1,6 @@
 name: ForgeStorm-SpigotCore
 main: com.forgestorm.spigotcore.SpigotCore
-version: 0.1.0
+version: 1.0.0
 description: ForgeStorm SpigotCore
 author: Andrew Brown & Joseph Rugh
 website: http://www.forgestorm.com/

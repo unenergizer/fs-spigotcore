@@ -2,6 +2,7 @@ package com.forgestorm.spigotcore.util.math.exp;
 
 import java.text.DecimalFormat;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Experience {
 	protected int expOffSet;
 	protected int minLevel = 1;

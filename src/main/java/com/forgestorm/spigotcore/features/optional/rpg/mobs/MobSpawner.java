@@ -42,7 +42,7 @@ public class MobSpawner extends BaseWorldObject {
     }
 
     class SpawnerMobDetails {
-        private MobType mobType;
+        private final MobType mobType;
         private int respawnTimeLeft;
         private Entity spawnedEntity;
 

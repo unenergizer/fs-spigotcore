@@ -61,7 +61,7 @@ public class WorldHologram implements FeatureOptional, LoadsConfig {
 
         private final Hologram hologram;
 
-        public HologramWorldObject(Location location, Hologram hologram) {
+        HologramWorldObject(Location location, Hologram hologram) {
             super(location);
             this.hologram = hologram;
         }
@@ -70,7 +70,7 @@ public class WorldHologram implements FeatureOptional, LoadsConfig {
             return hologram.getLocation();
         }
 
-        public void remove() {
+        void remove() {
             hologram.remove();
         }
 

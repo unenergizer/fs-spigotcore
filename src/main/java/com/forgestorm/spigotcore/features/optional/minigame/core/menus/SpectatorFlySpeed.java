@@ -16,7 +16,7 @@ package com.forgestorm.spigotcore.features.optional.minigame.core.menus;
  * without the prior written permission of the owner.
  */
 
-public class SpectatorFlySpeed {
+class SpectatorFlySpeed {
     //TODO: IMPLEMENT MENU
 //    public class SpectatorFlySpeed extends Menu {
 //

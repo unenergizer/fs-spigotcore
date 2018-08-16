@@ -8,15 +8,16 @@ Games:
 #- INFECTION
 #- MOB_MURDER
 #- OITC
-#- PIRATE_ATTACK
+- PIRATE_ATTACK
 - SHEER_SHEEP
 #- MOW_GRASS
 Features:
+  JazzyJukebox: true
   MinigameFramework: true
   PlayMidi: true
   DeletePlayerWorldData: false
-  PersistentInventory: true
-  FishingProfession: true
+  PersistentInventory: false
+  FishingSkill: true
   WoodCutting: true
   Farming: true
   Mining: true
@@ -28,9 +29,9 @@ Features:
   HelpBookTest: true
   AnvilTest: true
   RealmManager: false
-  GameTipAnnouncer: true
+  GameTipAnnouncer: false #false when minigames enabled
   PlayerCompassMenu: true
-  ScoreboardTeams: true
+  ScoreboardTeams: false #false when minigames enabled
   PlayerNewChecker: false #false when minigames enabled
   PlayerOperator: true
   PlayerBanKicker: true

@@ -1,32 +1,27 @@
 package com.forgestorm.spigotcore.features.optional.rpg.armor;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemBuilder;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemLevel;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemQuality;
 import de.tr7zw.itemnbtapi.NBTItem;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ArmorManager implements FeatureOptional, Listener {
+public class ArmorManager implements FeatureOptional {
 
-    private ArmorListener armorListener = new ArmorListener();
+    private final ArmorListener armorListener = new ArmorListener();
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         armorListener.onEnable();
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        ArmorEquipEvent.getHandlerList().unregister(this);
         armorListener.onDisable();
     }
 

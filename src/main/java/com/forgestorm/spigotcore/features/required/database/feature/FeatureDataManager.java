@@ -48,9 +48,9 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
 
     private final Map<Player, Map<AbstractDatabaseFeature, ProfileData>> playerProfileDataMap = new ConcurrentHashMap<>();
 
-    private Queue<AsyncLoad> asyncLoadQueue = new ConcurrentLinkedQueue<>();
-    private Queue<AsyncSave> asyncSaveQueue = new ConcurrentLinkedQueue<>();
-    private Queue<PostLoadData> syncPostLoadQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<AsyncLoad> asyncLoadQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<AsyncSave> asyncSaveQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<PostLoadData> syncPostLoadQueue = new ConcurrentLinkedQueue<>();
 
     private BukkitTask asyncLoadRunnable;
     private BukkitTask asyncSaveRunnable;
@@ -169,8 +169,8 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     private class AsyncLoad {
 
-        private Player player;
-        private AbstractDatabaseFeature feature;
+        private final Player player;
+        private final AbstractDatabaseFeature feature;
 
         AsyncLoad(Player player, AbstractDatabaseFeature feature) {
             this.player = player;
@@ -180,7 +180,7 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
             Console.sendMessage("&7[&9Database&7] &aLoading data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
         }
 
-        public void run() {
+        void run() {
 
             ProfileData[] profileData = new ProfileData[1];
             try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
@@ -228,9 +228,9 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
      */
     private class AsyncSave {
 
-        private Player player;
-        private AbstractDatabaseFeature<ProfileData> feature;
-        private ProfileData profileData;
+        private final Player player;
+        private final AbstractDatabaseFeature<ProfileData> feature;
+        private final ProfileData profileData;
 
         AsyncSave(Player player, AbstractDatabaseFeature feature, ProfileData profileData) {
             this.player = player;
@@ -241,7 +241,7 @@ public class FeatureDataManager extends FeatureRequired implements Listener {
             Console.sendMessage("&7[&9Database&7] &aSaving data from &e" + feature.getClass().getSimpleName() + "&a for &e" + player.getName() + "&a.");
         }
 
-        public void run() {
+        void run() {
             try (Connection connection = SpigotCore.PLUGIN.getDatabaseConnectionManager().getHikariDataSource().getConnection()) {
 
                 feature.databaseSave(player, profileData, connection);

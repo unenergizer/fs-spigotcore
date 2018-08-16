@@ -1,5 +1,7 @@
 package com.forgestorm.spigotcore.features.optional;
 
+import org.bukkit.event.Listener;
+
 /**
  * Provides a safe way to enable and disable features.
  * <p>
@@ -9,7 +11,7 @@ package com.forgestorm.spigotcore.features.optional;
  * access anywhere in the plugin.  Lets keep as much code
  * decoupled as possible!
  */
-public interface FeatureOptional {
+public interface FeatureOptional extends Listener {
 
     /**
      * Called when we want to enable a features.

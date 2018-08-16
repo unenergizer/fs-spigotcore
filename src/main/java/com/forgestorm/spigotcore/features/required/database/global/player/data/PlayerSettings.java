@@ -6,6 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PlayerSettings extends ProfileData {
+class PlayerSettings extends ProfileData {
 
 }

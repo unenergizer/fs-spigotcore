@@ -10,17 +10,15 @@ import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.player.PlayerUtil;
 import com.forgestorm.spigotcore.util.text.JsonMessageConverter;
 import com.forgestorm.spigotcore.util.text.Text;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
+public class ChatManager implements FeatureOptional, CommandExecutor {
 
 
     private final JsonMessageConverter messageConverter = new JsonMessageConverter();
@@ -29,12 +27,10 @@ public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        AsyncPlayerChatEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
@@ -48,8 +44,8 @@ public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
 
         PlayerRanks playerRanks = SpigotCore.PLUGIN.getGlobalDataManager().getGlobalPlayerData(event.getPlayer()).getPlayerAccount().getRank();
 
-        for (Player player : Bukkit.getOnlinePlayers())
-            player.sendMessage(messageConverter.convert("[jmc|run=/profile " + playerRanks.getUsernamePrefix() + "][/jmc] &7" + event.getPlayer().getName() + "&8: " + playerRanks.getChatColor() + event.getMessage()));
+//        for (Player player : Bukkit.getOnlinePlayers())
+//            player.sendMessage(messageConverter.convert("[jmc|run=/profile " + playerRanks.getUsernamePrefix() + "][/jmc] &7" + event.getPlayer().getName() + "&8: " + playerRanks.getChatColor() + event.getMessage()));
     }
 
     @Override
@@ -81,7 +77,7 @@ public class ChatManager implements FeatureOptional, CommandExecutor, Listener {
             if (commandSenderAccount.getRank() != PlayerRanks.ADMINISTRATOR || commandSenderAccount.getRank() != PlayerRanks.MODERATOR) {
                 viewPrivateProfile(commandSender, profileToView);
                 commandSender.sendMessage("");
-                commandSender.sendMessage(messageConverter.convert("&7Click&7: [jmc|run=/pm " + profileToView.getName() + "]&c<PM>[/jmc] &r| [jmc|run=/friend " + profileToView.getName() + "]&e<ADD-FRIEND>[/jmc] &r| [jmc|run=/party " + profileToView.getName() + "]&a<PARTY>[/jmc]", "ChatMessage", Integer.toString(uniqueCommandKey), ""));
+//                commandSender.sendMessage(messageConverter.convert("&7Click&7: [jmc|run=/pm " + profileToView.getName() + "]&c<PM>[/jmc] &r| [jmc|run=/friend " + profileToView.getName() + "]&e<ADD-FRIEND>[/jmc] &r| [jmc|run=/party " + profileToView.getName() + "]&a<PARTY>[/jmc]", "ChatMessage", Integer.toString(uniqueCommandKey), ""));
             }
         } else {
             viewPrivateProfile(commandSender, profileToView);

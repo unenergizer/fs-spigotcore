@@ -1,6 +1,6 @@
 package com.forgestorm.spigotcore.util.scoreboard;
 
-public class TarkanScoreboard {
+class TarkanScoreboard {
 
 //    private final UserManager plugin;
 //

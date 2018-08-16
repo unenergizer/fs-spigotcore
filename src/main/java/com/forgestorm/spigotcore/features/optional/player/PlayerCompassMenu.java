@@ -24,18 +24,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerCompassMenu implements FeatureOptional, Listener {
+public class PlayerCompassMenu implements FeatureOptional {
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
         SpigotCore.PLUGIN.getMenuManager().addMenu(new MainMenu());
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         SpigotCore.PLUGIN.getMenuManager().removeMenu(MainMenu.class);
-        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
-        PlayerInteractEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

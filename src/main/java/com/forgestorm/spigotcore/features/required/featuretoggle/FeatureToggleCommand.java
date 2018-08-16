@@ -18,7 +18,7 @@ import java.util.Map;
 @CommandAlias("feature|f")
 public class FeatureToggleCommand extends FeatureOptionalCommand {
 
-    private FeatureToggleManager featureToggleManager;
+    private final FeatureToggleManager featureToggleManager;
     private Map<Class, FeatureToggleManager.FeatureData> featureDataMap;
 
     FeatureToggleCommand(FeatureToggleManager featureToggleManager) {

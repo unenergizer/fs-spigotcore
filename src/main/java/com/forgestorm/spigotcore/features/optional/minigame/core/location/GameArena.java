@@ -9,6 +9,7 @@ import com.forgestorm.spigotcore.features.optional.minigame.core.location.access
 import com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement.WinManager;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameManager;
+import com.forgestorm.spigotcore.features.optional.skill.SkillToggleEvent;
 import com.forgestorm.spigotcore.util.display.BossBarUtil;
 import com.forgestorm.spigotcore.util.item.ItemBuilder;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
@@ -88,12 +89,12 @@ public class GameArena extends GameLocation {
         spectatorSpawn = null;
 
         // Unregister stat listeners
+        SkillToggleEvent.getHandlerList().unregister(this);
         BlockBreakEvent.getHandlerList().unregister(this);
         BlockPlaceEvent.getHandlerList().unregister(this);
         CreatureSpawnEvent.getHandlerList().unregister(this);
         EntityDamageEvent.getHandlerList().unregister(this);
         EntityDamageByEntityEvent.getHandlerList().unregister(this);
-        //noinspection deprecation
         PlayerPickupItemEvent.getHandlerList().unregister(this);
         PlayerDropItemEvent.getHandlerList().unregister(this);
         PlayerInteractEvent.getHandlerList().unregister(this);
@@ -123,7 +124,7 @@ public class GameArena extends GameLocation {
      * Game rules are defined in the minigame class
      * that is currently loaded and being played.
      */
-    public void showTutorialInfo() {
+    private void showTutorialInfo() {
         Console.sendMessage("GameArena - showTutorialInfo()");
         arenaState = ArenaState.ARENA_TUTORIAL;
 
@@ -283,6 +284,11 @@ public class GameArena extends GameLocation {
         }
     }
 
+    @EventHandler
+    public void onSkillToggle(SkillToggleEvent event) {
+        event.setCancelled(true);
+    }
+
     @EventHandler(priority = EventPriority.LOW)
     public void onBlockBreak(BlockBreakEvent event) {
         event.setCancelled(true);
@@ -368,15 +374,16 @@ public class GameArena extends GameLocation {
                 Console.sendMessage("spectatorServerExit");
             }
 
-            if (material == trackPlayers.getType()) {
+            // TODO : SPECTATOR MENUS
+//            if (material == trackPlayers.getType()) {
 //                new SpectatorPlayerTracker(plugin).open(player);
 //                Console.sendMessage("trackPlayers");
-            }
-
-            if (material == flySpeed.getType()) {
+//            }
+//
+//            if (material == flySpeed.getType()) {
 //                new SpectatorFlySpeed(plugin).open(player);
 //                Console.sendMessage("flySpeed");
-            }
+//            }
         }
 
         event.setCancelled(true);

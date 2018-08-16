@@ -48,6 +48,7 @@ public enum PedestalLocations {
     private final double yaw;
     private final double pitch;
 
+    @SuppressWarnings("SameParameterValue")
     PedestalLocations(int x, int y, int z, double yaw, double pitch) {
         this.x = x;
         this.y = y;

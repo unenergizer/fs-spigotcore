@@ -11,13 +11,12 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewLantern implements FeatureOptional, LoadsConfig, Listener {
+public class NewLantern implements FeatureOptional, LoadsConfig {
 
     private List<BaseWorldObject> lanternLightList;
     private WorldTime worldTime;
@@ -25,16 +24,12 @@ public class NewLantern implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         worldTime = new WorldTime();
         worldTime.onEnable();
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        TimeOfDayChangeEvent.getHandlerList().unregister(this);
-
         worldTime.onDisable();
 
         lanternLightList.stream()

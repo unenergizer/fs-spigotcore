@@ -21,6 +21,7 @@ import java.util.*;
  *         <p>
  *         This however was modified for my own needs
  */
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
 @Getter
 @Setter
 public class ItemBuilder {

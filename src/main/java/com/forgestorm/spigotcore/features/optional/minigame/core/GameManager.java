@@ -316,13 +316,13 @@ public class GameManager extends BukkitRunnable implements Listener {
      * @param num           The new number of max players allowed online.
      * @return True if the request was a success, false otherwise.
      */
-    public boolean setMaxPlayersOnline(CommandSender commandSender, int num) {
+    public void setMaxPlayersOnline(CommandSender commandSender, int num) {
         Console.sendMessage("GameManager - setMaxPlayersOnline()");
         // Make sure the max players online is greater than the minimum needed to start a game.
         if (num < minPlayersToStartGame) {
             commandSender.sendMessage(MinigameMessages.ADMIN.toString() + ChatColor.RED + "" + ChatColor.BOLD +
                     "The number must be greater than the minimum players needed to start a game!");
-            return false;
+            return;
         }
 
         // If in the lobby, update the scoreboard to reflect the new max players change.
@@ -336,7 +336,6 @@ public class GameManager extends BukkitRunnable implements Listener {
         }
 
         maxPlayersOnline = num;
-        return true;
     }
 
     /**

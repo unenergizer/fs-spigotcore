@@ -2,13 +2,12 @@ package com.forgestorm.spigotcore.features.optional.minigame.core.selectable.tea
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.MinigameMessages;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.PedestalLocations;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.LobbySelectable;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
-import com.forgestorm.spigotcore.features.optional.minigame.util.world.PedestalMapping;
+import com.forgestorm.spigotcore.features.optional.minigame.world.PedestalMapping;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.scoreboard.ScoreboardManager;

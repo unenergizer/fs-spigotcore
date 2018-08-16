@@ -1,31 +1,27 @@
 package com.forgestorm.spigotcore.features.optional.player;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
+import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.events.PlayerRankChangeEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.TimeUnit;
 
-public class PlayerNewChecker implements FeatureOptional, Listener {
+public class PlayerNewChecker implements FeatureOptional {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        GlobalProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

@@ -30,8 +30,7 @@ public abstract class GameLocation extends BukkitRunnable implements Listener {
     private boolean running = false;
 
     GameLocation() {
-        GameManager gameManager = GameManager.getInstance();
-        this.gameManager = gameManager;
+        this.gameManager = GameManager.getInstance();
         this.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
     }
 

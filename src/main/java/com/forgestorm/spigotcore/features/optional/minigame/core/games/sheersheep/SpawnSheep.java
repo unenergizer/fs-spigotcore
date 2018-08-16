@@ -26,10 +26,10 @@ import java.util.Random;
  * without the prior written permission of the owner.
  */
 
-public class SpawnSheep {
+class SpawnSheep {
 
     private final int maxSheepCount = 30;
-    private Random random = new Random();
+    private final Random random = new Random();
     private boolean cancel = false;
 
     void cancelRunnable() {

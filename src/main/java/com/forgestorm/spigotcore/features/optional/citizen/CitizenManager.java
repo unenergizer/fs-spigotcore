@@ -24,13 +24,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.io.File;
 import java.util.*;
 
-public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTask, LoadsConfig, Listener {
+public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTask, LoadsConfig {
 
     private final Map<String, BasicCitizen> basicCitizenMap = new HashMap<>();
 
@@ -41,8 +40,6 @@ public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTa
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         resetTimer = new ResetTimer();
         resetTimer.runTaskTimerAsynchronously(SpigotCore.PLUGIN, 0, 20);
 
@@ -53,8 +50,6 @@ public class CitizenManager implements FeatureOptional, InitCommands, ShutdownTa
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerInteractEntityEvent.getHandlerList().unregister(this);
-
         resetTimer.cancel();
         resetTimer = null;
 

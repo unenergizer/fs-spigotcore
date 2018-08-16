@@ -79,14 +79,12 @@ public class BungeeCord extends FeatureRequired implements PluginMessageListener
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if (!channel.equals("BungeeCord")) {
-            return;
-        }
+        if (!channel.equals("BungeeCord")) return;
 
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
-        String subchannel = in.readUTF();
+        String subChannel = in.readUTF();
 
-        if (subchannel.equals("PlayerCount")) {
+        if (subChannel.equals("PlayerCount")) {
             String server = in.readUTF(); // Name of server, as given in the arguments
             int playerCount = in.readInt();
 

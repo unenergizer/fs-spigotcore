@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 @Getter
 public abstract class AbstractMenu {
     /**

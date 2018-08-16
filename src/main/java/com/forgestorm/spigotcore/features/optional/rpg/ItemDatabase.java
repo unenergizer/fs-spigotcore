@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class ItemDatabase implements FeatureOptional, LoadsConfig {
 
-    private Map<Integer, AbstractItem> abstractItemMap = new HashMap<>();
+    private final Map<Integer, AbstractItem> abstractItemMap = new HashMap<>();
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {

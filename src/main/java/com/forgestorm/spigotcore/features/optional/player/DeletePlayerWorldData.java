@@ -6,20 +6,17 @@ import com.forgestorm.spigotcore.util.file.FileUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 
-public class DeletePlayerWorldData implements FeatureOptional, Listener {
+public class DeletePlayerWorldData implements FeatureOptional {
 
     // TODO : Remove player data from "Game Worlds"
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         for (World world : Bukkit.getWorlds()) {
             FileUtil.removeDirectory(new File(world.getName()
                     + File.separator
@@ -29,7 +26,6 @@ public class DeletePlayerWorldData implements FeatureOptional, Listener {
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerQuitEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

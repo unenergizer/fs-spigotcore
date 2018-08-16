@@ -18,7 +18,6 @@ import java.util.Random;
  * without the prior written permission of the owner.
  */
 
-@SuppressWarnings("unused")
 public class RandomString {
 
     /**
@@ -37,14 +36,13 @@ public class RandomString {
      * @return A random string.
      */
     public static String getSaltString(int length) {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        final String SALT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
         while (salt.length() < length) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
+            int index = (int) (rnd.nextFloat() * SALT_CHARS.length());
+            salt.append(SALT_CHARS.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return salt.toString();
     }
 }

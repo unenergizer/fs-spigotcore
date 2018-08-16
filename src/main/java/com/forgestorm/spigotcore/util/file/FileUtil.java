@@ -92,9 +92,9 @@ public class FileUtil {
         try {
             Files.delete(file);
         } catch (NoSuchFileException x) {
-            System.err.format("%s: no such" + " file or directory%n", file);
+            System.out.format("%s: no such" + " file or directory%n", file);
         } catch (DirectoryNotEmptyException x) {
-            System.err.format("%s not empty%n", file);
+            System.out.format("%s not empty%n", file);
         } catch (IOException x) {
             // File permission problems are caught here.
             System.err.println(x);

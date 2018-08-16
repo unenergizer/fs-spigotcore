@@ -81,7 +81,7 @@ public class WorldManager extends FeatureRequired implements Listener {
 
     class SyncWorldLoader extends BukkitRunnable {
 
-        private Queue<WorldData> worldsToLoad = new ConcurrentLinkedQueue<>();
+        private final Queue<WorldData> worldsToLoad = new ConcurrentLinkedQueue<>();
 
         @Override
         public void run() {
@@ -94,7 +94,7 @@ public class WorldManager extends FeatureRequired implements Listener {
 
     class AsyncWorldCopy extends BukkitRunnable {
 
-        private Queue<WorldData> worldsToCopy = new ConcurrentLinkedQueue<>();
+        private final Queue<WorldData> worldsToCopy = new ConcurrentLinkedQueue<>();
 
         @Override
         public void run() {

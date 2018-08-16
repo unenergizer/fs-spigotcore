@@ -1,9 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.player;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
-import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.util.display.BossBarUtil;
@@ -12,37 +9,24 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple boss bar to show players additional information.
  * Shows a static message at the top of the players game.
  */
-public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands, Listener {
+public class PlayerBossBar implements FeatureOptional, LoadsConfig {
 
     private String barText;
     private BossBarUtil bossBarUtil;
 
     @Override
-    public List<FeatureOptionalCommand> registerAllCommands() {
-        // TODO: REMOVE TEST COMMAND!! <---------------------------------------------------------------------------
-        List<FeatureOptionalCommand> commands = new ArrayList<>();
-        commands.add(new TestCommand());
-        return commands;
-    }
-
-    @Override
     public void onFeatureEnable(boolean manualEnable) {
         bossBarUtil = new BossBarUtil(barText);
         bossBarUtil.setBossBarProgress(1);
-
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 
         // For server reloads
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -52,9 +36,6 @@ public class PlayerBossBar implements FeatureOptional, LoadsConfig, InitCommands
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerJoinEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
-
         bossBarUtil.removeAllBossBar();
     }
 

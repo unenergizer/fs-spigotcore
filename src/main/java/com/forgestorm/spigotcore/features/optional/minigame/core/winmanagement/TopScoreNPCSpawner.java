@@ -26,7 +26,7 @@ import java.util.List;
  * without the prior written permission of the owner.
  */
 
-public class TopScoreNPCSpawner {
+class TopScoreNPCSpawner {
 
     private final List<NPC> npcs = new ArrayList<>();
 

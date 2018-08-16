@@ -2,7 +2,7 @@ package com.forgestorm.spigotcore.features.optional.minigame.core.scoreboard;
 
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.winmanagement.winevents.IndividualTopScoreWinEvent;
-import com.forgestorm.spigotcore.features.optional.minigame.util.MapUtil;
+import com.forgestorm.spigotcore.util.collection.MapUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

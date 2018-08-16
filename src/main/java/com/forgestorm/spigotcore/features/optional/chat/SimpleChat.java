@@ -7,22 +7,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * Provides very basic chat formatting.
  */
-public class SimpleChat implements FeatureOptional, Listener {
+public class SimpleChat implements FeatureOptional {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        AsyncPlayerChatEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

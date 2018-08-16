@@ -1,16 +1,14 @@
 package com.forgestorm.spigotcore.features.optional.lobby;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -19,7 +17,7 @@ import java.io.File;
 /**
  * Provides very basic player setup.
  */
-public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
+public class LobbyPlayer implements FeatureOptional, LoadsConfig {
 
     private boolean allowHunger;
     private boolean fixHealth;
@@ -28,9 +26,6 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
-        // Encase of reloads
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             if (player.hasMetadata("NPC")) continue;
             setupPlayer(player);
@@ -39,8 +34,6 @@ public class LobbyPlayer implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerJoinEvent.getHandlerList().unregister(this);
-        FoodLevelChangeEvent.getHandlerList().unregister(this);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.forgestorm.spigotcore.features.optional.world.loot;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
-import com.forgestorm.spigotcore.features.events.WorldObjectAddEvent;
 import com.forgestorm.spigotcore.features.events.WorldObjectSpawnEvent;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.features.required.world.worldobject.AsyncWorldObjectTick;
@@ -16,7 +15,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,7 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
+public class ChestLoot implements FeatureOptional, LoadsConfig {
 
     private static final int MAX_CHEST_PER_PLAYER_ONLINE = 2;
     private static final int MAX_CHEST_TIMEOUT = 30;
@@ -39,15 +37,10 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        WorldObjectAddEvent.getHandlerList().unregister(this);
-        PlayerInteractEvent.getHandlerList().unregister(this);
-        BlockBreakEvent.getHandlerList().unregister(this);
-
         chestMap.stream()
                 .filter(baseWorldObject -> baseWorldObject instanceof Chest)
                 .forEach(baseWorldObject -> SpigotCore.PLUGIN.getWorldObjectManager().removeWorldObject(baseWorldObject));
@@ -77,7 +70,7 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
             double z = config.getDouble("Locations." + i + ".z");
 
             Location location = new Location(world, x, y, z);
-            Chest chest = new Chest(location, MAX_CHEST_TIMEOUT);
+            Chest chest = new Chest(location);
 
             chestMap.add(chest);
             SpigotCore.PLUGIN.getWorldObjectManager().addWorldObject(location, chest);
@@ -89,7 +82,8 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
     @EventHandler
     public void onWorldObjectSpawn(WorldObjectSpawnEvent event) {
         // Cancel spawning chests if we have reached max spawns.
-        if (event.getBaseWorldObject() instanceof Chest) event.setCancelled(currentChestsSpawned >= MAX_CHEST_PER_PLAYER_ONLINE);
+        if (event.getBaseWorldObject() instanceof Chest)
+            event.setCancelled(currentChestsSpawned >= MAX_CHEST_PER_PLAYER_ONLINE);
     }
 
     /**
@@ -160,8 +154,8 @@ public class ChestLoot implements FeatureOptional, LoadsConfig, Listener {
      */
     private class Chest extends CooldownWorldObject implements AsyncWorldObjectTick {
 
-        Chest(Location location, int defaultCooldownTime) {
-            super(location, defaultCooldownTime);
+        Chest(Location location) {
+            super(location, ChestLoot.MAX_CHEST_TIMEOUT);
         }
 
         @Override

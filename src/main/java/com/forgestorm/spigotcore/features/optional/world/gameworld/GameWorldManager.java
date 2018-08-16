@@ -20,7 +20,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 import java.io.File;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener {
+public class GameWorldManager implements FeatureOptional, LoadsConfig {
 
     private final List<GameWorldData> gameWorldDataList = new ArrayList<>();
     private Location hologramLocation;
@@ -36,8 +35,6 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         hologramLocation = new Location(Bukkit.getWorlds().get(0), 7.5, 79, 22.5);
 
         mapSelect();
@@ -56,8 +53,6 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerPortalEvent.getHandlerList().unregister(this);
-
         unloadWorld(currentGameWorld.folderName);
     }
 
@@ -134,7 +129,7 @@ public class GameWorldManager implements FeatureOptional, LoadsConfig, Listener 
 
     class GameWorldHologram extends BaseWorldObject implements SyncWorldObjectTick {
 
-        private Hologram hologram;
+        private final Hologram hologram;
         private int tick;
 
         GameWorldHologram(Location hologramLocation, String worldName) {

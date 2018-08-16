@@ -1,9 +1,8 @@
 package com.forgestorm.spigotcore.features.optional.world.lantern;
 
-import com.forgestorm.spigotcore.features.optional.FeatureOptional;
-import com.forgestorm.spigotcore.features.LoadsConfig;
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
+import com.forgestorm.spigotcore.features.LoadsConfig;
+import com.forgestorm.spigotcore.features.optional.FeatureOptional;
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +14,13 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Lantern implements FeatureOptional, LoadsConfig, Listener {
+public class Lantern implements FeatureOptional, LoadsConfig {
 
     private final static String FILE_PATH = FilePaths.LANTERNS.toString();
     private final World world = Bukkit.getWorlds().get(0);
@@ -35,8 +33,6 @@ public class Lantern implements FeatureOptional, LoadsConfig, Listener {
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
-
         worldTime.onEnable();
     }
 
@@ -45,8 +41,6 @@ public class Lantern implements FeatureOptional, LoadsConfig, Listener {
         worldTime.onDisable();
 
         if (timeOfDay == TimeOfDay.DUSK) putOutLanterns();
-
-        TimeOfDayChangeEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

@@ -9,16 +9,17 @@ import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
 import com.forgestorm.spigotcore.features.optional.commands.PlayMidi;
 import com.forgestorm.spigotcore.features.optional.commands.Roll;
+import com.forgestorm.spigotcore.features.optional.gadget.JazzyJukebox;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
 import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerBanKicker;
 import com.forgestorm.spigotcore.features.optional.moderation.PlayerOperator;
 import com.forgestorm.spigotcore.features.optional.player.*;
-import com.forgestorm.spigotcore.features.optional.profession.blockbreak.Farming;
-import com.forgestorm.spigotcore.features.optional.profession.blockbreak.Mining;
-import com.forgestorm.spigotcore.features.optional.profession.blockbreak.WoodCutting;
-import com.forgestorm.spigotcore.features.optional.profession.fishing.FishingProfession;
+import com.forgestorm.spigotcore.features.optional.skill.blockbreak.Farming;
+import com.forgestorm.spigotcore.features.optional.skill.blockbreak.Mining;
+import com.forgestorm.spigotcore.features.optional.skill.blockbreak.WoodCutting;
+import com.forgestorm.spigotcore.features.optional.skill.fishing.FishingSkill;
 import com.forgestorm.spigotcore.features.optional.realm.RealmManager;
 import com.forgestorm.spigotcore.features.optional.rpg.ItemDatabase;
 import com.forgestorm.spigotcore.features.optional.rpg.armor.ArmorManager;
@@ -157,11 +158,12 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new JazzyJukebox());
         features.add(new MinigameFramework());
         features.add(new PlayMidi());
         features.add(new DeletePlayerWorldData());
         features.add(new PersistentInventory());
-        features.add(new FishingProfession());
+        features.add(new FishingSkill());
         features.add(new WoodCutting());
         features.add(new Farming());
         features.add(new Mining());

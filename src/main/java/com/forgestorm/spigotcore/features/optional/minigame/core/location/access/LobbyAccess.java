@@ -4,7 +4,7 @@ import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.location.GameLobby;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
-import com.forgestorm.spigotcore.features.optional.minigame.util.world.TeleportFix2;
+import com.forgestorm.spigotcore.features.optional.minigame.world.TeleportFix2;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -49,7 +49,7 @@ public class LobbyAccess implements AccessBehavior {
         player.setFireTicks(0);
 
         // Teleport the player to the main spawn.
-        player.teleport(gameLobby.getSpawn());
+        gameLobby.sendToSpawn(player);
 
         // Setup player for double jump.
         // TODO: gameLobby.getDoubleJump().setupPlayer(player);

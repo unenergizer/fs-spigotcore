@@ -1,7 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.games.mobmurder;
 
-import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,42 +28,28 @@ import java.util.Random;
  * without the prior written permission of the owner.
  */
 
-public class SpawnMobs {
+class SpawnMobs extends BukkitRunnable {
 
     private static final int MAX_MOB_COUNT = 30;
     private static final int MAX_BAD_MOB_COUNT = 10;
-    private final MinigameFramework plugin;
     private int goodMobs;
     private int badMobs;
     private boolean cancel = false;
-
-    SpawnMobs(MinigameFramework plugin) {
-        this.plugin = plugin;
-    }
 
     void cancelRunnable() {
         cancel = true;
     }
 
+    @Override
     public void run() {
-        new BukkitRunnable() {
+        if (cancel) cancel();
+        getMobCount();
 
-            @Override
-            public void run() {
-                if (cancel) cancel();
-                getMobCount();
+        //Spawn good mobs
+        if (goodMobs <= MAX_MOB_COUNT) spawnMob(false);
 
-                //Spawn good mobs
-                if (goodMobs <= MAX_MOB_COUNT) {
-                    spawnMob(false);
-                }
-
-                //Spawn bad mobs
-                if (badMobs <= MAX_BAD_MOB_COUNT) {
-                    spawnMob(true);
-                }
-            }
-        }.runTaskTimer(SpigotCore.PLUGIN, 0, 20);
+        //Spawn bad mobs
+        if (badMobs <= MAX_BAD_MOB_COUNT) spawnMob(true);
     }
 
     private void spawnMob(boolean badMob) {
@@ -83,13 +67,13 @@ public class SpawnMobs {
 
             if (rarity >= 50) {
                 name = ChatColor.WHITE + "+1 Point";
-            } else if (rarity >= 25 && rarity < 50) {
+            } else if (rarity >= 25) {
                 name = ChatColor.BLUE + "+2 Point";
-            } else if (rarity >= 10 && rarity < 25) {
+            } else if (rarity >= 10) {
                 name = ChatColor.GREEN + "+3 Point";
-            } else if (rarity >= 3 && rarity < 10) {
+            } else if (rarity >= 3) {
                 name = ChatColor.YELLOW + "+4 Point";
-            } else if (rarity >= 1 && rarity < 3) {
+            } else if (rarity >= 1) {
                 name = ChatColor.GOLD + "+5 Point";
             }
         }

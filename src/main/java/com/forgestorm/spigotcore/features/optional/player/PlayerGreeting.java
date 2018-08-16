@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.player;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.features.LoadsConfig;
 import com.forgestorm.spigotcore.features.optional.FeatureOptional;
@@ -11,7 +10,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -20,19 +18,16 @@ import java.io.File;
 /**
  * Simple class to broadcast custom player join and quit messages.
  */
-public class PlayerGreeting implements FeatureOptional, LoadsConfig, Listener {
+public class PlayerGreeting implements FeatureOptional, LoadsConfig {
 
     private boolean showPersonalLoginMessage = false;
 
     @Override
     public void onFeatureEnable(boolean manualEnable) {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
-        PlayerJoinEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.forgestorm.spigotcore.features.required.database.AbstractDatabaseFeat
 import com.forgestorm.spigotcore.util.text.Console;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,6 +160,8 @@ public class FeatureToggleManager extends FeatureRequired {
         // Next enable the features.
         featureOptional.onFeatureEnable(manualEnable);
 
+        SpigotCore.PLUGIN.getServer().getPluginManager().registerEvents(featureOptional, SpigotCore.PLUGIN);
+
         // Initialize commands
         if (featureOptional instanceof InitCommands) {
             featureData.addCommands(((InitCommands) featureOptional).registerAllCommands());
@@ -179,6 +182,9 @@ public class FeatureToggleManager extends FeatureRequired {
         featureData.isEnabled = false;
 
         Console.sendMessage(ChatColor.GREEN + "Disabling: " + featureName);
+
+        // Unregister all event listeners for specific feature
+        HandlerList.unregisterAll(featureOptional);
 
         // Unregister commands
         if (featureOptional instanceof InitCommands) {
@@ -236,7 +242,7 @@ public class FeatureToggleManager extends FeatureRequired {
      * Data class that holds information about a {@link FeatureOptional} object.
      */
     @Getter
-    public class FeatureData {
+    class FeatureData {
 
         private final List<FeatureOptionalCommand> commandMap = new ArrayList<>();
         private final Class clazz;
