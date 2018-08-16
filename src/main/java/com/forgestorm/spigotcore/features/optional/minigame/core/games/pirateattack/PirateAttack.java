@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -62,11 +63,7 @@ public class PirateAttack extends Minigame {
     @Override
     public void disableGame() {
         pirateAmmoSpawn.cancel();
-        ProjectileHitEvent.getHandlerList().unregister(this);
-        EntityDamageEvent.getHandlerList().unregister(this);
-        EntityDamageByEntityEvent.getHandlerList().unregister(this);
-        PlayerMoveEvent.getHandlerList().unregister(this);
-        EntityRegainHealthEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
     }
 
     @Override

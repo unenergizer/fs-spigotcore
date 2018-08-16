@@ -17,6 +17,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -84,10 +85,7 @@ public class MobMurder extends Minigame {
         }
 
         // Unregister listeners
-        EntityDeathEvent.getHandlerList().unregister(this);
-        EntityDamageByEntityEvent.getHandlerList().unregister(this);
-        CreatureSpawnEvent.getHandlerList().unregister(this);
-        BlockBreakEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
     }
 
     @Override

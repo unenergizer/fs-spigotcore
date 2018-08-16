@@ -8,9 +8,9 @@ import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.LobbySelectable;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
 import com.forgestorm.spigotcore.features.optional.minigame.world.PedestalMapping;
+import com.forgestorm.spigotcore.features.required.ScoreboardManager;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.util.display.Hologram;
-import com.forgestorm.spigotcore.util.scoreboard.ScoreboardManager;
 import com.forgestorm.spigotcore.util.text.CenterChatText;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
@@ -21,6 +21,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -105,8 +106,7 @@ public class TeamSelectable extends LobbySelectable {
         for (Hologram hologram : teamHolograms.values()) hologram.remove();
 
         // Unregister listeners
-        PlayerKickEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
 
         // Clear list and maps
         teamEntities.clear();

@@ -14,6 +14,7 @@ import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -64,9 +65,7 @@ public class PlayerMinigameManager implements Listener {
         }
 
         // Unregister Events
-        PlayerJoinEvent.getHandlerList().unregister(this);
-        PlayerKickEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
     }
 
     /**

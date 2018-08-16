@@ -32,12 +32,10 @@ abstract class FurnaceSkill {
 //
 //    @Override
 //    public void onEnable() {
-//        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
 //    }
 //
 //    @Override
 //    public void onDisable() {
-//        FurnaceExtractEvent.getHandlerList().unregister(this);
 //    }
 //
 //    @Override

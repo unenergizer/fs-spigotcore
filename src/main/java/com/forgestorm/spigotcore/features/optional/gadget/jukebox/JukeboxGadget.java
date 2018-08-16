@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore.features.optional.gadget;
+package com.forgestorm.spigotcore.features.optional.gadget.jukebox;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.required.world.worldobject.AsyncWorldObjectTick;
@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -65,8 +66,7 @@ class JukeboxGadget implements Listener {
     }
 
     public void onDisable() {
-        SongEndEvent.getHandlerList().unregister(this);
-        PlayerPickupItemEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
 
         if (disc != null && disc.isOnGround()) disc.remove();
 

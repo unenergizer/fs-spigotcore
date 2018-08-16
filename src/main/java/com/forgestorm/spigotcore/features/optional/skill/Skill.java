@@ -16,7 +16,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -37,7 +36,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
  * without the prior written permission of the owner.
  */
 
-public abstract class Skill<T> extends AbstractDatabaseFeature<T> implements Listener {
+public abstract class Skill<T> extends AbstractDatabaseFeature<T> {
 
     protected final SkillType skillType;
     protected final Experience experienceCalculator = new SkillExperience();

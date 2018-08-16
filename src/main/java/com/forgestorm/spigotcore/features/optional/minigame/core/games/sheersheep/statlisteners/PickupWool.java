@@ -1,7 +1,6 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.games.sheersheep.statlisteners;
 
 import com.forgestorm.spigotcore.SpigotCore;
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.StatType;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.statlisteners.StatListener;
@@ -11,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 /*********************************************************************************
@@ -33,12 +33,10 @@ public class PickupWool implements StatListener {
 
     @Override
     public void register() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void deregister() {
-        PlayerPickupItemEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

@@ -20,6 +20,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -112,11 +113,7 @@ public class GameLobby extends GameLocation {
 //        Console.sendMessage(Boolean.toString(skillToggle.isSkillsEnabled()));
 
         // Unregister stat listeners
-        EntityCombustEvent.getHandlerList().unregister(this);
-        FoodLevelChangeEvent.getHandlerList().unregister(this);
-        ItemSpawnEvent.getHandlerList().unregister(this);
-        PlayerDropItemEvent.getHandlerList().unregister(this);
-        WeatherChangeEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
 
         // All players quit
         allPlayersQuit(new LobbyAccess());

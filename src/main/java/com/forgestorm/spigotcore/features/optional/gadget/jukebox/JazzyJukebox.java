@@ -1,4 +1,4 @@
-package com.forgestorm.spigotcore.features.optional.gadget;
+package com.forgestorm.spigotcore.features.optional.gadget.jukebox;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;

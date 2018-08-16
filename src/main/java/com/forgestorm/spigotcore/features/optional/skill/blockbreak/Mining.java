@@ -68,7 +68,6 @@ public class Mining extends BlockBreakSkill<MiningProfileData> implements LoadsC
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         onDisable();
-        FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     @Override

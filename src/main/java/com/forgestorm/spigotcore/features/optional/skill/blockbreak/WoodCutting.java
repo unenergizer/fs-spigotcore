@@ -181,7 +181,6 @@ public class WoodCutting extends BlockBreakSkill<WoodCuttingProfileData> impleme
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         onDisable();
-        FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

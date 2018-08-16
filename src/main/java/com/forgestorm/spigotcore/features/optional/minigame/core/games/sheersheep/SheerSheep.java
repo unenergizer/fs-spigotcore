@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
@@ -73,9 +74,7 @@ public class SheerSheep extends Minigame {
         }
 
         // Unregister listeners
-        PlayerShearEntityEvent.getHandlerList().unregister(this);
-        PlayerPickupItemEvent.getHandlerList().unregister(this);
-        CreatureSpawnEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
     }
 
     @Override

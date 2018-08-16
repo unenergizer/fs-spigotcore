@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.skill.fishing;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.FilePaths;
 import com.forgestorm.spigotcore.constants.SkillType;
 import com.forgestorm.spigotcore.features.events.FeatureProfileDataLoadEvent;
@@ -11,13 +10,11 @@ import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.math.exp.SkillExperience;
 import com.forgestorm.spigotcore.util.text.Console;
 import com.forgestorm.spigotcore.util.text.Text;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +41,7 @@ import java.sql.SQLException;
  * without the prior written permission of the owner.
  */
 
-public class FishingSkill extends Skill<FishingProfileData> implements Listener {
+public class FishingSkill extends Skill<FishingProfileData> {
 
     public FishingSkill() {
         super(YamlConfiguration.loadConfiguration(new File(FilePaths.PROFESSION_FISHING.toString())),
@@ -53,12 +50,10 @@ public class FishingSkill extends Skill<FishingProfileData> implements Listener 
 
     @Override
     public void onEnable() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     @Override
     public void onDisable() {
-        PlayerFishEvent.getHandlerList().unregister(this);
     }
 
     /**
@@ -75,19 +70,19 @@ public class FishingSkill extends Skill<FishingProfileData> implements Listener 
         long experienceGained = 0;
         int tier = 0;
 
-        if (currentLevel < 20) {
+        if (20 > currentLevel) {
             //Tier 1 Fishing
             tier = 1;
             experienceGained = fileConfiguration.getLong(0 + ".exp");
-        } else if (currentLevel >= 20 && currentLevel < 40) {
+        } else if (currentLevel < 40) {
             //Tier 2 Fishing
             tier = 2;
             experienceGained = fileConfiguration.getLong(20 + ".exp");
-        } else if (currentLevel >= 40 && currentLevel < 60) {
+        } else if (currentLevel < 60) {
             //Tier 3 Fishing
             tier = 3;
             experienceGained = fileConfiguration.getLong(40 + ".exp");
-        } else if (currentLevel >= 60 && currentLevel < 80) {
+        } else if (currentLevel < 80) {
             //Tier 4 Fishing
             tier = 4;
             experienceGained = fileConfiguration.getLong(60 + ".exp");
@@ -171,7 +166,7 @@ public class FishingSkill extends Skill<FishingProfileData> implements Listener 
 
     @Override
     public boolean toolCheck(Player player, Material tool) {
-        return  tool == Material.FISHING_ROD;
+        return tool == Material.FISHING_ROD;
     }
 
     @Override
@@ -244,8 +239,6 @@ public class FishingSkill extends Skill<FishingProfileData> implements Listener 
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         onDisable();
-        FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler

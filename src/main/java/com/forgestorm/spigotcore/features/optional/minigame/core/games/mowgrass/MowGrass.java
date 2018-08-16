@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -53,7 +54,7 @@ public class MowGrass extends Minigame {
 
     @Override
     public void disableGame() {
-        BlockBreakEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
         for (Player player : Bukkit.getOnlinePlayers()) bossBarAnnouncer.removeBossBar(player);
     }
 

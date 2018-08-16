@@ -1,11 +1,12 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.score;
 
-import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
+import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.statlisteners.StatListener;
 import com.forgestorm.spigotcore.util.text.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,6 @@ import java.util.stream.Collectors;
 public class StatManager {
 
     private final GameManager gameManager = GameManager.getInstance();
-
     private final Map<Player, Map<StatType, Double>> playerStats = new HashMap<>();
     private final List<StatListener> statListeners = new ArrayList<>();
 
@@ -58,7 +58,12 @@ public class StatManager {
 
         // Save stat stat listeners
         for (StatType stat : statType) {
-            statListeners.add(stat.registerListener());
+            StatListener statListener = stat.registerListener();
+
+            // Automatically register event handlers
+            Bukkit.getPluginManager().registerEvents(statListener, SpigotCore.PLUGIN);
+
+            statListeners.add(statListener);
         }
     }
 
@@ -91,6 +96,7 @@ public class StatManager {
      */
     public void deregisterListeners() {
         statListeners.forEach(StatListener::deregister);
+        statListeners.forEach(HandlerList::unregisterAll); // Unregisters events
     }
 
     /**

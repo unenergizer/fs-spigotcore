@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.score.statlisteners;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.score.StatType;
 import org.bukkit.Bukkit;
@@ -31,7 +30,10 @@ public class FirstKill implements StatListener {
 
     @Override
     public void register() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
+    }
+
+    @Override
+    public void deregister() {
     }
 
     @EventHandler
@@ -46,11 +48,5 @@ public class FirstKill implements StatListener {
             GameManager.getInstance().getStatManager().addStat(StatType.FIRST_KILL, damager);
             Bukkit.broadcastMessage(ChatColor.YELLOW + damager.getName() + " got the first kill!");
         }
-    }
-
-    @SuppressWarnings("unused")
-    @Override
-    public void deregister() {
-        EntityDamageByEntityEvent.getHandlerList().unregister(this);
     }
 }

@@ -18,6 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -80,14 +81,7 @@ class Realm implements Listener {
         visitors.forEach(this::exitRealm);
 
         // Unregister listeners
-        EntityDamageEvent.getHandlerList().unregister(this);
-        WorldLoadEvent.getHandlerList().unregister(this);
-        PlayerPortalEvent.getHandlerList().unregister(this);
-        FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
-        BlockBreakEvent.getHandlerList().unregister(this);
-        BlockPlaceEvent.getHandlerList().unregister(this);
-        PlayerInteractEntityEvent.getHandlerList().unregister(this);
-        PlayerInteractEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
 
         // Close doorways
         realmDoorwayOutside.disable();

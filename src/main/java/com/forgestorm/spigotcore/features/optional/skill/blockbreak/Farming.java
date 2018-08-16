@@ -187,6 +187,5 @@ public class Farming extends BlockBreakSkill<FarmingProfileData> implements Load
     @Override
     public void onFeatureDisable(boolean manualDisable) {
         onDisable();
-        FeatureProfileDataLoadEvent.getHandlerList().unregister(this);
     }
 }

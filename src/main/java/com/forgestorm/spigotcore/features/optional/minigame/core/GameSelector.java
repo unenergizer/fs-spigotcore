@@ -23,6 +23,7 @@ import java.util.List;
  * without the prior written permission of the owner.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class GameSelector {
 
     private final List<String> gamesToPlay;
@@ -49,6 +50,6 @@ public class GameSelector {
         // Grab game selected.
         minigameType = GameType.valueOf(gamesToPlay.get(currentGameIndex));
         minigame = minigameType.getMinigame();
-        minigame.initMinigameLists();
+        if (minigame != null) minigame.initMinigameLists();
     }
 }

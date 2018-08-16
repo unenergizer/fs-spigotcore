@@ -31,7 +31,6 @@ Features:
   RealmManager: false
   GameTipAnnouncer: false #false when minigames enabled
   PlayerCompassMenu: true
-  ScoreboardTeams: false #false when minigames enabled
   PlayerNewChecker: false #false when minigames enabled
   PlayerOperator: true
   PlayerBanKicker: true

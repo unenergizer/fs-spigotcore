@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -125,14 +126,7 @@ public abstract class Minigame implements Listener {
         disableGame();
 
         // Unregister stat listeners
-        BlockBreakEvent.getHandlerList().unregister(this);
-        BlockPlaceEvent.getHandlerList().unregister(this);
-        EntityDamageEvent.getHandlerList().unregister(this);
-        EntityDamageByEntityEvent.getHandlerList().unregister(this);
-        FoodLevelChangeEvent.getHandlerList().unregister(this);
-        PlayerDropItemEvent.getHandlerList().unregister(this);
-        PlayerPickupItemEvent.getHandlerList().unregister(this);
-        CreatureSpawnEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
 
         // Show Scores
         GameManager.getInstance().getGameArena().setArenaState(ArenaState.ARENA_SHOW_SCORES);
