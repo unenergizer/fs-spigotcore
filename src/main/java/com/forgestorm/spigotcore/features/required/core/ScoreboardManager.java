@@ -1,9 +1,10 @@
-package com.forgestorm.spigotcore.features.required;
+package com.forgestorm.spigotcore.features.required.core;
 
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.PlayerRanks;
 import com.forgestorm.spigotcore.features.events.GlobalProfileDataLoadEvent;
 import com.forgestorm.spigotcore.features.events.PlayerRankChangeEvent;
+import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.PlayerAccount;
 import com.forgestorm.spigotcore.util.text.Text;
 import org.bukkit.Bukkit;

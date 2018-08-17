@@ -35,6 +35,7 @@ public class HiddenPaths implements FeatureOptional, Listener {
         EXPLODABLES.add(Material.LONG_GRASS);
         EXPLODABLES.add(Material.DEAD_BUSH);
         EXPLODABLES.add(Material.DOUBLE_PLANT);
+        EXPLODABLES.add(Material.BROWN_MUSHROOM);
         EXPLODABLES.add(Material.RED_MUSHROOM);
         EXPLODABLES.add(Material.RED_ROSE);
         EXPLODABLES.add(Material.SAPLING);

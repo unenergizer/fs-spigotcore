@@ -8,7 +8,7 @@ import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
 import com.forgestorm.spigotcore.features.optional.minigame.core.selectable.LobbySelectable;
 import com.forgestorm.spigotcore.features.optional.minigame.player.PlayerMinigameData;
 import com.forgestorm.spigotcore.features.optional.minigame.world.PedestalMapping;
-import com.forgestorm.spigotcore.features.required.ScoreboardManager;
+import com.forgestorm.spigotcore.features.required.core.ScoreboardManager;
 import com.forgestorm.spigotcore.features.required.database.global.player.data.GlobalPlayerData;
 import com.forgestorm.spigotcore.util.display.Hologram;
 import com.forgestorm.spigotcore.util.text.CenterChatText;

@@ -12,6 +12,7 @@ Games:
 - SHEER_SHEEP
 #- MOW_GRASS
 Features:
+  PlayerBreakables: true
   JazzyJukebox: true
   MinigameFramework: true
   PlayMidi: true

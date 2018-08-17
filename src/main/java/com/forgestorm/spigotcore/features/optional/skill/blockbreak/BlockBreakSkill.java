@@ -7,7 +7,7 @@ import com.forgestorm.spigotcore.features.optional.skill.Skill;
 import com.forgestorm.spigotcore.features.required.world.regen.BlockRegenerationManager;
 import com.forgestorm.spigotcore.util.math.RandomChance;
 import com.forgestorm.spigotcore.util.text.Text;
-import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,7 +15,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -39,7 +38,7 @@ import java.util.Map;
  * without the prior written permission of the owner.
  */
 
-abstract class BlockBreakSkill<T> extends Skill<T> {
+public abstract class BlockBreakSkill<T> extends Skill<T> {
 
     final BlockRegenerationManager blockRegen = SpigotCore.PLUGIN.getBlockRegenerationManager();
     final Map<String, SkillType> blockBreakTools = new HashMap<>();
@@ -204,8 +203,11 @@ abstract class BlockBreakSkill<T> extends Skill<T> {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        event.setCancelled(true);
         Player player = event.getPlayer();
+
+        if (player.getGameMode() == GameMode.CREATIVE) return;
+
+        event.setCancelled(true);
 
         // Call the event. If canceled, stop execution.
         if (skillToggleEvent(player)) return;

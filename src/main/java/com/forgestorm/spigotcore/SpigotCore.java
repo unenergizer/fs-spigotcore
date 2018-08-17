@@ -29,7 +29,7 @@ import com.forgestorm.spigotcore.features.optional.world.gameworld.GameWorldMana
 import com.forgestorm.spigotcore.features.optional.world.lantern.NewLantern;
 import com.forgestorm.spigotcore.features.optional.world.loot.ChestLoot;
 import com.forgestorm.spigotcore.features.optional.world.loot.DragonEggLoot;
-import com.forgestorm.spigotcore.features.required.ScoreboardManager;
+import com.forgestorm.spigotcore.features.required.core.ScoreboardManager;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
@@ -158,6 +158,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new PlayerBreakables());
         features.add(new JazzyJukebox());
         features.add(new MinigameFramework());
         features.add(new PlayMidi());
