@@ -9,6 +9,7 @@ import com.forgestorm.spigotcore.features.optional.chat.SimpleChat;
 import com.forgestorm.spigotcore.features.optional.citizen.CitizenManager;
 import com.forgestorm.spigotcore.features.optional.commands.PlayMidi;
 import com.forgestorm.spigotcore.features.optional.commands.Roll;
+import com.forgestorm.spigotcore.features.optional.discord.DiscordMessageRelay;
 import com.forgestorm.spigotcore.features.optional.gadget.jukebox.JazzyJukebox;
 import com.forgestorm.spigotcore.features.optional.lobby.DoubleJump;
 import com.forgestorm.spigotcore.features.optional.lobby.LobbyPlayer;
@@ -33,6 +34,7 @@ import com.forgestorm.spigotcore.features.required.core.ScoreboardManager;
 import com.forgestorm.spigotcore.features.required.database.DatabaseConnectionManager;
 import com.forgestorm.spigotcore.features.required.database.feature.FeatureDataManager;
 import com.forgestorm.spigotcore.features.required.database.global.GlobalDataManager;
+import com.forgestorm.spigotcore.features.required.discord.DiscordManager;
 import com.forgestorm.spigotcore.features.required.featuretoggle.FeatureToggleManager;
 import com.forgestorm.spigotcore.features.required.menu.MenuManager;
 import com.forgestorm.spigotcore.features.required.player.AccountManager;
@@ -67,6 +69,7 @@ public class SpigotCore extends JavaPlugin {
 
     public static SpigotCore PLUGIN;
 
+    private final DiscordManager discordManager = new DiscordManager();
     private final BungeeCord bungeeCord = new BungeeCord();
     private final ScoreboardManager scoreboardManager = new ScoreboardManager();
     private final AccountManager accountManager = new AccountManager();
@@ -98,6 +101,7 @@ public class SpigotCore extends JavaPlugin {
         titleManager = (TitleManagerAPI) Bukkit.getServer().getPluginManager().getPlugin("TitleManager");
 
         // Init required features & maintain startup order
+        discordManager.startup();
         bungeeCord.startup();
         scoreboardManager.startup();
         accountManager.startup();
@@ -135,6 +139,7 @@ public class SpigotCore extends JavaPlugin {
         accountManager.shutdown();
         scoreboardManager.shutdown();
         bungeeCord.shutdown();
+        discordManager.shutdown();
     }
 
     /**
@@ -158,6 +163,7 @@ public class SpigotCore extends JavaPlugin {
     private void initOptionalFeatures() {
         List<FeatureOptional> features = new ArrayList<>();
 
+        features.add(new DiscordMessageRelay());
         features.add(new PlayerBreakables());
         features.add(new JazzyJukebox());
         features.add(new MinigameFramework());

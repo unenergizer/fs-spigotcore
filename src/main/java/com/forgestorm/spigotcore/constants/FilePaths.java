@@ -11,6 +11,8 @@ public enum FilePaths {
     CITIZENS("citizen/Citizens.yml"),
     CITIZENS_MESSAGES("citizen/CitizenMessages.yml"),
 
+    DISCORD_MANAGER("discord/DiscordManager.yml"),
+
     JAZZY_JUKEBOX("gadget/JazzyJukebox.yml"),
 
     MOB_TYPES("mobs/MobTypes.yml"),

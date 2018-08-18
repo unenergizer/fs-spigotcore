@@ -131,6 +131,7 @@ repositories {
 
 dependencies {
 
+    compile 'net.dv8tion:JDA:3.7.1_395'
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'
     compile group: 'io.puharesource.mc', name: 'TitleManager', version: '2.0.0'
     compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
