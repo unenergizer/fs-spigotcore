@@ -16,7 +16,7 @@ import java.io.File;
 public class DiscordManager extends FeatureRequired implements LoadsConfig {
 
     @Getter
-    private JDA jda;
+    private JDA javaDiscordAPI;
     private String token;
     @Getter
     private String prefix;
@@ -27,7 +27,7 @@ public class DiscordManager extends FeatureRequired implements LoadsConfig {
 
         // Create connection to Discord Bog
         try {
-            jda = new JDABuilder(AccountType.BOT).setToken(token).build();
+            javaDiscordAPI = new JDABuilder(AccountType.BOT).setToken(token).build();
         } catch (LoginException e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class DiscordManager extends FeatureRequired implements LoadsConfig {
 
     @Override
     protected void initFeatureClose() {
-        jda.shutdown();
+        javaDiscordAPI.shutdown();
     }
 
 
@@ -47,10 +47,10 @@ public class DiscordManager extends FeatureRequired implements LoadsConfig {
     }
 
     public void addEventListener(Object object) {
-        jda.addEventListener(object);
+        javaDiscordAPI.addEventListener(object);
     }
 
     public void removeEventListener(Object object) {
-        jda.removeEventListener(object);
+        javaDiscordAPI.removeEventListener(object);
     }
 }

@@ -27,14 +27,15 @@ public class DiscordMessageRelay extends ListenerAdapter implements FeatureOptio
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(Text.color("&7[&eDiscord&7] " + event.getAuthor().getName() + "&8: &r" + event.getMessage().getContentRaw()));
+            player.sendMessage(Text.color("&7[&9Discord&7] " + event.getAuthor().getName() + "&8: &r" + event.getMessage().getContentRaw()));
         }
     }
 
     @EventHandler
     public void onSpigotChat(AsyncPlayerChatEvent event) {
-        List<TextChannel> channel = SpigotCore.PLUGIN.getDiscordManager().getJda().getTextChannelsByName("staff-text", true);
+        List<TextChannel> channel = SpigotCore.PLUGIN.getDiscordManager().getJavaDiscordAPI().getTextChannelsByName("staff-text", true);
 
         for (TextChannel textChannel : channel) {
             textChannel.sendMessage("[Minecraft] " + event.getPlayer().getName() + ": " + event.getMessage()).queue();
