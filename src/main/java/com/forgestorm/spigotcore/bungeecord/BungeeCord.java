@@ -1,7 +1,12 @@
 package com.forgestorm.spigotcore.bungeecord;
 
+import co.aikar.commands.PaperCommandManager;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
 import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.constants.Messages;
+import com.forgestorm.spigotcore.features.FeatureOptionalCommand;
+import com.forgestorm.spigotcore.features.InitCommands;
 import com.forgestorm.spigotcore.features.required.FeatureRequired;
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataInput;
@@ -14,20 +19,35 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
-public class BungeeCord extends FeatureRequired implements PluginMessageListener {
+public class BungeeCord extends FeatureRequired implements InitCommands, PluginMessageListener {
 
     private final Logger log = Logger.getLogger("Minecraft");
 
     @Override
     protected void initFeatureStart() {
+        Messenger messenger = Bukkit.getServer().getMessenger();
 
+        messenger.registerIncomingPluginChannel(SpigotCore.PLUGIN, "BungeeCord", this);
+        messenger.registerOutgoingPluginChannel(SpigotCore.PLUGIN, "BungeeCord");
     }
 
     @Override
     protected void initFeatureClose() {
+        Messenger messenger = Bukkit.getServer().getMessenger();
 
+        messenger.unregisterIncomingPluginChannel(SpigotCore.PLUGIN, "BungeeCord", this);
+        messenger.unregisterOutgoingPluginChannel(SpigotCore.PLUGIN, "BungeeCord");
+    }
+
+    @Override
+    public List<FeatureOptionalCommand> registerAllCommands() {
+        List<FeatureOptionalCommand> commands = new ArrayList<>();
+        commands.add(new ServerCommand());
+        return commands;
     }
 
     public void connectToBungeeServer(Player player, String server) {
@@ -97,6 +117,19 @@ public class BungeeCord extends FeatureRequired implements PluginMessageListener
 //				((GameSelectionMenu) plugin.getGameSelectionMenu()).setCreativePlayers(playerCount);
 //				break;
 //			}
+        }
+    }
+
+    @CommandAlias("server")
+    private class ServerCommand extends FeatureOptionalCommand {
+
+        @Override
+        public void setupCommand(PaperCommandManager paperCommandManager) {
+        }
+
+        @Default
+        public void onCmd(Player player, String serverName) {
+            connectToBungeeServer(player, serverName);
         }
     }
 }

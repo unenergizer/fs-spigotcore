@@ -1,6 +1,5 @@
 package com.forgestorm.spigotcore.features.optional.minigame.core.games;
 
-import com.forgestorm.spigotcore.SpigotCore;
 import com.forgestorm.spigotcore.features.optional.minigame.MinigameFramework;
 import com.forgestorm.spigotcore.features.optional.minigame.constants.ArenaState;
 import com.forgestorm.spigotcore.features.optional.minigame.core.GameManager;
@@ -85,10 +84,6 @@ public abstract class Minigame implements Listener {
         teamList = getTeams();
         kitList = getKits();
         statTypeList = getStatTypes();
-    }
-
-    public void initListeners() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, SpigotCore.PLUGIN);
     }
 
     public abstract void setupGame();

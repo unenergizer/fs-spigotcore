@@ -112,9 +112,9 @@ class JukeboxGadget implements Listener {
     private int getNextSong() {
         int randomSong = RandomChance.randomInt(1, songList.size());
         if (randomSong == lastSong) randomSong = randomSong + 1;
-        if (randomSong > songList.size()) randomSong = 0;
+        if (randomSong > songList.size()) randomSong = 1;
         lastSong = randomSong;
-        return randomSong;
+        return randomSong - 1; // Subtract "-1" to return an array index
     }
 
     void turnOn() {
@@ -122,7 +122,7 @@ class JukeboxGadget implements Listener {
         playing = true;
 
         // Play random song
-        setSong(songList.get(getNextSong() - 1));
+        setSong(songList.get(getNextSong()));
         spawnDisc();
     }
 

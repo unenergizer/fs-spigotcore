@@ -165,7 +165,7 @@ public class GameArena extends GameLocation {
             countdown = maxCountdown;
 
             // Lets start the minigame!
-            gameManager.getGameSelector().getMinigame().initListeners();
+            Bukkit.getPluginManager().registerEvents(gameManager.getGameSelector().getMinigame(), SpigotCore.PLUGIN);
             gameManager.getGameSelector().getMinigame().setupGame();
             gameManager.getGameSelector().getMinigame().setupPlayers();
         }

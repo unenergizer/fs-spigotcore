@@ -36,9 +36,6 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class WorldObjectManager extends FeatureRequired {
 
-    // Quick command to kill entites besides players. Will remove later.
-    //TODO: /kill @e[type=!Player]
-
     private static final int SPAWN_RADIUS_SQUARED = 32 * 32;
     private final Map<Location, BaseWorldObject> worldObjectMap = new ConcurrentHashMap<>();
     private final Queue<BaseWorldObject> baseWorldObjectQueue = new ConcurrentLinkedDeque<>();
@@ -130,7 +127,7 @@ public class WorldObjectManager extends FeatureRequired {
                 isPlayerNear = true;
 
                 // Player is near, but the BaseWorldObject is not spawned. Spawn it now!
-                if (!baseWorldObject.isSpawned()) baseWorldObjectQueue.add(baseWorldObject);
+                if (!baseWorldObject.isSpawned() && !baseWorldObjectQueue.contains(baseWorldObject)) baseWorldObjectQueue.add(baseWorldObject);
             }
         }
 
@@ -195,7 +192,7 @@ public class WorldObjectManager extends FeatureRequired {
     /**
      * Removes a BaseWorldObject. This BaseWorldObject can no longer be spawned in the world.
      *
-     * @param location The location the BaseWorldObject (Map key).
+     * @param location The location of the BaseWorldObject (Map key).
      */
     public void removeWorldObject(Location location) {
         BaseWorldObject baseWorldObject = worldObjectMap.get(location);
